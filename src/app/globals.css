@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-ivory: #fffcfa;
+  --color-ink: #171313;
+  --color-muted: #6d6261;
+  --color-ruby: #6f1028;
+  --color-ruby-dark: #3c0715;
+  --color-blush: #f6eef0;
+  --color-line: #e7dedc;
+  --shadow-soft: 0 24px 70px rgba(60, 7, 21, 0.08);
+  --radius: 8px;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ivory);
+  color: var(--color-ink);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ruby);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer components {
+  .amaree-h1 {
+    @apply font-newsreader text-5xl leading-[0.95] tracking-normal text-ink md:text-7xl;
+  }
+
+  .amaree-h2 {
+    @apply font-newsreader text-4xl leading-tight tracking-normal text-ink md:text-5xl;
+  }
+
+  .amaree-h3 {
+    @apply font-newsreader text-3xl leading-tight tracking-normal text-ink;
+  }
+
+  .amaree-subtitle {
+    @apply font-redhat text-sm font-medium uppercase tracking-[0.18em] text-ruby;
+  }
+
+  .amaree-body {
+    @apply font-cormorant text-xl leading-8 text-muted;
+  }
+
+  .amaree-ui {
+    @apply font-redhat text-sm font-semibold tracking-normal;
+  }
+
+  .page-shell {
+    @apply mx-auto w-full max-w-page px-5 md:px-8;
+  }
+}

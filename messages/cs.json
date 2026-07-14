@@ -1,0 +1,120 @@
+{
+  "brand": {
+    "name": "A M A R É E",
+    "est": "EST. 2025",
+    "claim": "Každý šperk má svůj příběh.",
+    "intro": "Minimalistická elegance, která podtrhne váš styl. Kvalitní materiály. Nadčasový design."
+  },
+  "nav": {
+    "home": "Úvod",
+    "collection": "Kolekce",
+    "about": "O nás",
+    "inspiration": "Inspirace",
+    "contact": "Kontakt",
+    "search": "Hledat",
+    "cart": "Košík",
+    "menu": "Menu"
+  },
+  "home": {
+    "announcement": "Doprava zdarma od 2 500 Kč • 30 dní na vrácení",
+    "cta": "Objevit kolekci",
+    "benefits": ["Kvalitní materiály", "Elegantní balení", "30 dní na vrácení", "Doprava zdarma"],
+    "categoriesTitle": "Kolekce pro každý okamžik",
+    "bestsellers": "Oblíbené šperky",
+    "storyTitle": "Rodinný projekt s citem pro detail",
+    "campaign": "Nová kolekce",
+    "campaignText": "Jemné linie, rubínový tón a šperky, které se stanou přirozenou součástí vašeho dne.",
+    "inspiration": "Inspirace",
+    "newsletterTitle": "Staňte se součástí světa A M A R É E",
+    "newsletterText": "Získejte exkluzivní nabídky a inspiraci přednostně do vašeho e-mailu.",
+    "subscribe": "Přihlásit"
+  },
+  "collection": {
+    "title": "Kolekce",
+    "all": "Všechny produkty",
+    "filter": "Filtrovat",
+    "availability": "Dostupnost",
+    "inStock": "Skladem",
+    "price": "Cena",
+    "sort": "Řazení",
+    "newest": "Nejnovější",
+    "priceAsc": "Cena vzestupně",
+    "priceDesc": "Cena sestupně",
+    "loadMore": "Načíst další",
+    "empty": "V této kombinaci filtrů zatím nejsou žádné produkty."
+  },
+  "product": {
+    "addToCart": "Přidat do košíku",
+    "quantity": "Množství",
+    "material": "Materiál",
+    "dimensions": "Rozměry",
+    "care": "Péče o šperk",
+    "shipping": "Doprava",
+    "returns": "Vrácení",
+    "recommended": "Doporučené produkty",
+    "demo": "Demonstrační produkt",
+    "inStock": "Skladem",
+    "soldOut": "Vyprodáno",
+    "shippingBody": "Zásilkovna, PPL nebo osobní odběr. Doprava zdarma od 2 500 Kč.",
+    "returnsBody": "30 dní na vrácení nepoužitého šperku v původním balení."
+  },
+  "cart": {
+    "title": "Košík",
+    "empty": "Váš košík je prázdný.",
+    "subtotal": "Mezisoučet",
+    "discount": "Sleva",
+    "shipping": "Doprava",
+    "total": "Celkem",
+    "coupon": "Slevový kód",
+    "checkout": "Pokračovat k objednávce",
+    "freeShippingLeft": "Do dopravy zdarma zbývá {amount}",
+    "freeShippingReached": "Máte dopravu zdarma."
+  },
+  "checkout": {
+    "title": "Objednávka",
+    "contact": "Kontaktní údaje",
+    "shipping": "Doprava",
+    "payment": "Platba",
+    "submit": "Přejít k platbě",
+    "thankYou": "Děkujeme za objednávku",
+    "email": "E-mail",
+    "phone": "Telefon",
+    "name": "Jméno a příjmení",
+    "packeta": "Zásilkovna",
+    "pickup": "Osobní odběr",
+    "providerNote": "Stripe Checkout je připraven přes /api/checkout. GoPay nebo Comgate lze doplnit jako další adaptér.",
+    "confirmation": "Potvrzení objednávky bude odesláno e-mailem po ověření platby webhookem.",
+    "backToCollection": "Zpět do kolekce"
+  },
+  "footer": {
+    "contact": "Kontakt",
+    "email": "info@amaree.cz",
+    "phone": "+420 737 076 249",
+    "address": "Příčná 129/3, Olomouc",
+    "rights": "Všechna práva vyhrazena.",
+    "legal": "Právní informace",
+    "terms": "Obchodní podmínky",
+    "privacy": "Ochrana osobních údajů",
+    "shipping": "Doprava a platba",
+    "care": "Péče o šperky"
+  },
+  "cookie": {
+    "message": "Používáme nezbytné cookies pro bezpečný provoz webu. Analytické a marketingové skripty zůstávají vypnuté, dokud s nimi nesouhlasíte.",
+    "accept": "Přijmout",
+    "necessary": "Pouze nezbytné"
+  },
+  "legal": {
+    "title": "Právní dokument",
+    "todo": "TODO: Doplnit finální právní údaje, provozující společnost, IČO, DIČ, bankovní spojení a plné znění dokumentu pro stránku {route}.",
+    "placeholder": "Nevymyšleno záměrně: zadání požaduje použít zástupné údaje, pokud finální právní informace nejsou k dispozici."
+  },
+  "admin": {
+    "title": "Administrace",
+    "protected": "Chráněná část pro správce",
+    "products": "Produkty",
+    "orders": "Objednávky",
+    "discounts": "Slevové kódy",
+    "subscribers": "Odběratelé",
+    "stock": "Sklad"
+  }
+}

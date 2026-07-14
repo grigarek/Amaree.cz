@@ -1,0 +1,120 @@
+{
+  "brand": {
+    "name": "A M A R É E",
+    "est": "EST. 2025",
+    "claim": "Every jewel has its story.",
+    "intro": "Minimalist elegance that elevates your style. Quality materials. Timeless design."
+  },
+  "nav": {
+    "home": "Home",
+    "collection": "Collection",
+    "about": "About Us",
+    "inspiration": "Inspiration",
+    "contact": "Contact",
+    "search": "Search",
+    "cart": "Cart",
+    "menu": "Menu"
+  },
+  "home": {
+    "announcement": "Free shipping over CZK 2,500 • 30-day returns",
+    "cta": "Discover the Collection",
+    "benefits": ["Quality materials", "Elegant packaging", "30-day returns", "Free shipping"],
+    "categoriesTitle": "Collections for every moment",
+    "bestsellers": "Favourite pieces",
+    "storyTitle": "A family project with an eye for detail",
+    "campaign": "New collection",
+    "campaignText": "Delicate lines, ruby accents and jewelry that becomes a natural part of your day.",
+    "inspiration": "Inspiration",
+    "newsletterTitle": "Become part of the A M A R É E world",
+    "newsletterText": "Receive exclusive offers and inspiration in your inbox first.",
+    "subscribe": "Subscribe"
+  },
+  "collection": {
+    "title": "Collection",
+    "all": "All Products",
+    "filter": "Filter",
+    "availability": "Availability",
+    "inStock": "In stock",
+    "price": "Price",
+    "sort": "Sort",
+    "newest": "Newest",
+    "priceAsc": "Price ascending",
+    "priceDesc": "Price descending",
+    "loadMore": "Load more",
+    "empty": "No products match this filter combination yet."
+  },
+  "product": {
+    "addToCart": "Add to cart",
+    "quantity": "Quantity",
+    "material": "Material",
+    "dimensions": "Dimensions",
+    "care": "Jewelry care",
+    "shipping": "Shipping",
+    "returns": "Returns",
+    "recommended": "Recommended products",
+    "demo": "Demo product",
+    "inStock": "In stock",
+    "soldOut": "Sold out",
+    "shippingBody": "Packeta, PPL or local pickup. Free shipping over CZK 2,500.",
+    "returnsBody": "Return an unused piece in its original packaging within 30 days."
+  },
+  "cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty.",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "shipping": "Shipping",
+    "total": "Total",
+    "coupon": "Discount code",
+    "checkout": "Continue to checkout",
+    "freeShippingLeft": "{amount} left for free shipping",
+    "freeShippingReached": "You have free shipping."
+  },
+  "checkout": {
+    "title": "Checkout",
+    "contact": "Contact details",
+    "shipping": "Shipping",
+    "payment": "Payment",
+    "submit": "Continue to payment",
+    "thankYou": "Thank you for your order",
+    "email": "E-mail",
+    "phone": "Phone",
+    "name": "Full name",
+    "packeta": "Packeta",
+    "pickup": "Local pickup",
+    "providerNote": "Stripe Checkout is ready through /api/checkout. GoPay or Comgate can be added as another adapter.",
+    "confirmation": "Your order confirmation will be sent by e-mail after the webhook verifies payment.",
+    "backToCollection": "Back to collection"
+  },
+  "footer": {
+    "contact": "Contact",
+    "email": "info@amaree.cz",
+    "phone": "+420 737 076 249",
+    "address": "Příčná 129/3, Olomouc",
+    "rights": "All rights reserved.",
+    "legal": "Legal",
+    "terms": "Terms and conditions",
+    "privacy": "Privacy policy",
+    "shipping": "Shipping and payment",
+    "care": "Jewelry care"
+  },
+  "cookie": {
+    "message": "We use essential cookies to operate the website securely. Analytics and marketing scripts remain disabled until you consent.",
+    "accept": "Accept",
+    "necessary": "Essential only"
+  },
+  "legal": {
+    "title": "Legal document",
+    "todo": "TODO: Add final legal details, operating company, registration and tax IDs, bank details and the complete document for {route}.",
+    "placeholder": "Intentionally left as a placeholder because final legal information is not yet available."
+  },
+  "admin": {
+    "title": "Admin",
+    "protected": "Protected administrator area",
+    "products": "Products",
+    "orders": "Orders",
+    "discounts": "Discount codes",
+    "subscribers": "Subscribers",
+    "stock": "Stock"
+  }
+}

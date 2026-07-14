@@ -1,0 +1,120 @@
+{
+  "brand": {
+    "name": "A M A R É E",
+    "est": "EST. 2025",
+    "claim": "Jedes Schmuckstück hat seine Geschichte.",
+    "intro": "Minimalistische Eleganz, die Ihren Stil unterstreicht. Hochwertige Materialien. Zeitloses Design."
+  },
+  "nav": {
+    "home": "Startseite",
+    "collection": "Kollektion",
+    "about": "Über uns",
+    "inspiration": "Inspiration",
+    "contact": "Kontakt",
+    "search": "Suchen",
+    "cart": "Warenkorb",
+    "menu": "Menü"
+  },
+  "home": {
+    "announcement": "Kostenloser Versand ab 2.500 CZK • 30 Tage Rückgabe",
+    "cta": "Kollektion entdecken",
+    "benefits": ["Hochwertige Materialien", "Elegante Verpackung", "30 Tage Rückgabe", "Kostenloser Versand"],
+    "categoriesTitle": "Kollektionen für jeden Moment",
+    "bestsellers": "Beliebte Schmuckstücke",
+    "storyTitle": "Ein Familienprojekt mit Sinn für Detail",
+    "campaign": "Neue Kollektion",
+    "campaignText": "Feine Linien, rubinfarbene Akzente und Schmuck, der zum natürlichen Teil Ihres Tages wird.",
+    "inspiration": "Inspiration",
+    "newsletterTitle": "Werden Sie Teil der A M A R É E Welt",
+    "newsletterText": "Erhalten Sie exklusive Angebote und Inspiration zuerst per E-Mail.",
+    "subscribe": "Anmelden"
+  },
+  "collection": {
+    "title": "Kollektion",
+    "all": "Alle Produkte",
+    "filter": "Filtern",
+    "availability": "Verfügbarkeit",
+    "inStock": "Auf Lager",
+    "price": "Preis",
+    "sort": "Sortieren",
+    "newest": "Neueste",
+    "priceAsc": "Preis aufsteigend",
+    "priceDesc": "Preis absteigend",
+    "loadMore": "Mehr laden",
+    "empty": "Für diese Filterkombination gibt es noch keine Produkte."
+  },
+  "product": {
+    "addToCart": "In den Warenkorb",
+    "quantity": "Menge",
+    "material": "Material",
+    "dimensions": "Maße",
+    "care": "Schmuckpflege",
+    "shipping": "Versand",
+    "returns": "Rückgabe",
+    "recommended": "Empfohlene Produkte",
+    "demo": "Demo-Produkt",
+    "inStock": "Auf Lager",
+    "soldOut": "Ausverkauft",
+    "shippingBody": "Packeta, PPL oder Abholung. Kostenloser Versand ab 2.500 CZK.",
+    "returnsBody": "Unbenutzten Schmuck in der Originalverpackung innerhalb von 30 Tagen zurückgeben."
+  },
+  "cart": {
+    "title": "Warenkorb",
+    "empty": "Ihr Warenkorb ist leer.",
+    "subtotal": "Zwischensumme",
+    "discount": "Rabatt",
+    "shipping": "Versand",
+    "total": "Gesamt",
+    "coupon": "Rabattcode",
+    "checkout": "Weiter zur Bestellung",
+    "freeShippingLeft": "Noch {amount} bis zum kostenlosen Versand",
+    "freeShippingReached": "Sie haben kostenlosen Versand."
+  },
+  "checkout": {
+    "title": "Bestellung",
+    "contact": "Kontaktdaten",
+    "shipping": "Versand",
+    "payment": "Zahlung",
+    "submit": "Weiter zur Zahlung",
+    "thankYou": "Vielen Dank für Ihre Bestellung",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "name": "Vor- und Nachname",
+    "packeta": "Packeta",
+    "pickup": "Abholung",
+    "providerNote": "Stripe Checkout ist über /api/checkout vorbereitet. GoPay oder Comgate kann als weiterer Adapter ergänzt werden.",
+    "confirmation": "Die Bestellbestätigung wird nach der Zahlungsprüfung per Webhook per E-Mail versendet.",
+    "backToCollection": "Zurück zur Kollektion"
+  },
+  "footer": {
+    "contact": "Kontakt",
+    "email": "info@amaree.cz",
+    "phone": "+420 737 076 249",
+    "address": "Příčná 129/3, Olomouc",
+    "rights": "Alle Rechte vorbehalten.",
+    "legal": "Rechtliches",
+    "terms": "Geschäftsbedingungen",
+    "privacy": "Datenschutz",
+    "shipping": "Versand und Zahlung",
+    "care": "Schmuckpflege"
+  },
+  "cookie": {
+    "message": "Wir verwenden notwendige Cookies für den sicheren Betrieb der Website. Analyse- und Marketing-Skripte bleiben bis zu Ihrer Zustimmung deaktiviert.",
+    "accept": "Akzeptieren",
+    "necessary": "Nur notwendige"
+  },
+  "legal": {
+    "title": "Rechtliches Dokument",
+    "todo": "TODO: Finale rechtliche Angaben, Betreiber, Register- und Steuerdaten, Bankverbindung und den vollständigen Text für {route} ergänzen.",
+    "placeholder": "Bewusst als Platzhalter belassen, da die finalen rechtlichen Informationen noch nicht vorliegen."
+  },
+  "admin": {
+    "title": "Administration",
+    "protected": "Geschützter Bereich für Administratoren",
+    "products": "Produkte",
+    "orders": "Bestellungen",
+    "discounts": "Rabattcodes",
+    "subscribers": "Abonnenten",
+    "stock": "Lager"
+  }
+}
