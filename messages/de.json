@@ -44,7 +44,8 @@
     "priceAsc": "Preis aufsteigend",
     "priceDesc": "Preis absteigend",
     "loadMore": "Mehr laden",
-    "empty": "Für diese Filterkombination gibt es noch keine Produkte."
+    "empty": "Für diese Filterkombination gibt es noch keine Produkte.",
+    "filtersDemo": "Demo-Modus: Filterung und Sortierung werden nach Anbindung des Produktkatalogs verfügbar."
   },
   "product": {
     "addToCart": "In den Warenkorb",

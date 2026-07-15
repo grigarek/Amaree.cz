@@ -44,7 +44,8 @@
     "priceAsc": "Price ascending",
     "priceDesc": "Price descending",
     "loadMore": "Load more",
-    "empty": "No products match this filter combination yet."
+    "empty": "No products match this filter combination yet.",
+    "filtersDemo": "Demo mode: filtering and sorting will be available after the product catalogue is connected."
   },
   "product": {
     "addToCart": "Add to cart",

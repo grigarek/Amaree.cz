@@ -206,7 +206,7 @@ async function CollectionPage({ locale, categorySlug }: { locale: Locale; catego
       <div className="mt-8 grid gap-4 border-y border-line py-5 md:grid-cols-4">
         <label className="amaree-ui">
           {t("filter")}
-          <select className="mt-2 w-full rounded-brand border border-line bg-white px-3 py-3" name="category">
+          <select className="mt-2 w-full cursor-not-allowed rounded-brand border border-line bg-white px-3 py-3 opacity-60" disabled name="category">
             <option>{t("all")}</option>
             {categories.map((item) => (
               <option key={item.id}>{item.name[locale]}</option>
@@ -215,22 +215,23 @@ async function CollectionPage({ locale, categorySlug }: { locale: Locale; catego
         </label>
         <label className="amaree-ui">
           {t("availability")}
-          <select className="mt-2 w-full rounded-brand border border-line bg-white px-3 py-3" name="availability">
+          <select className="mt-2 w-full cursor-not-allowed rounded-brand border border-line bg-white px-3 py-3 opacity-60" disabled name="availability">
             <option>{t("inStock")}</option>
           </select>
         </label>
         <label className="amaree-ui">
           {t("price")}
-          <input className="mt-2 w-full rounded-brand border border-line px-3 py-3" inputMode="numeric" name="priceRange" placeholder="0 - 5000 Kč" />
+          <input className="mt-2 w-full cursor-not-allowed rounded-brand border border-line px-3 py-3 opacity-60" disabled inputMode="numeric" name="priceRange" placeholder="0 - 5000 Kč" />
         </label>
         <label className="amaree-ui">
           {t("sort")}
-          <select className="mt-2 w-full rounded-brand border border-line bg-white px-3 py-3" name="sort">
+          <select className="mt-2 w-full cursor-not-allowed rounded-brand border border-line bg-white px-3 py-3 opacity-60" disabled name="sort">
             <option>{t("newest")}</option>
             <option>{t("priceAsc")}</option>
             <option>{t("priceDesc")}</option>
           </select>
         </label>
+        <p className="font-redhat text-sm text-muted md:col-span-4">{t("filtersDemo")}</p>
       </div>
       {products.length ? (
         <div className="mt-10 grid gap-8 md:grid-cols-3">

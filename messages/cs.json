@@ -44,7 +44,8 @@
     "priceAsc": "Cena vzestupně",
     "priceDesc": "Cena sestupně",
     "loadMore": "Načíst další",
-    "empty": "V této kombinaci filtrů zatím nejsou žádné produkty."
+    "empty": "V této kombinaci filtrů zatím nejsou žádné produkty.",
+    "filtersDemo": "Demonstrační režim: filtrování a řazení bude dostupné po napojení produktového katalogu."
   },
   "product": {
     "addToCart": "Přidat do košíku",
