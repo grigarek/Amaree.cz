@@ -12,8 +12,10 @@
     "inspiration": "Inspiration",
     "contact": "Contact",
     "search": "Search",
+    "searchUnavailable": "Search will be available after the product catalogue is connected.",
     "cart": "Cart",
-    "menu": "Menu"
+    "menu": "Menu",
+    "close": "Close"
   },
   "home": {
     "announcement": "Free shipping over CZK 2,500 • 30-day returns",
@@ -27,7 +29,8 @@
     "inspiration": "Inspiration",
     "newsletterTitle": "Become part of the A M A R É E world",
     "newsletterText": "Receive exclusive offers and inspiration in your inbox first.",
-    "subscribe": "Subscribe"
+    "subscribe": "Subscribe",
+    "newsletterDemo": "Subscription will be available after the e-mail service is connected securely."
   },
   "collection": {
     "title": "Collection",
@@ -68,7 +71,10 @@
     "coupon": "Discount code",
     "checkout": "Continue to checkout",
     "freeShippingLeft": "{amount} left for free shipping",
-    "freeShippingReached": "You have free shipping."
+    "freeShippingReached": "You have free shipping.",
+    "remove": "Remove",
+    "close": "Close cart",
+    "quantity": "Quantity"
   },
   "checkout": {
     "title": "Checkout",
@@ -82,7 +88,7 @@
     "name": "Full name",
     "packeta": "Packeta",
     "pickup": "Local pickup",
-    "providerNote": "Stripe Checkout is ready through /api/checkout. GoPay or Comgate can be added as another adapter.",
+    "providerNote": "Demo mode: payment is disabled until test credentials for the provider are configured securely.",
     "confirmation": "Your order confirmation will be sent by e-mail after the webhook verifies payment.",
     "backToCollection": "Back to collection"
   },

@@ -50,7 +50,13 @@ export function Header({ locale }: { locale: Locale }) {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <button aria-label={t("nav.search")} className="rounded-brand border border-line p-2">
+            <button
+              aria-label={t("nav.search")}
+              title={t("nav.searchUnavailable")}
+              className="cursor-not-allowed rounded-brand border border-line p-2 opacity-50"
+              disabled
+              type="button"
+            >
               <Search size={18} />
             </button>
             <div className="hidden items-center gap-1 md:flex">
@@ -65,7 +71,7 @@ export function Header({ locale }: { locale: Locale }) {
                 </Link>
               ))}
             </div>
-            <button aria-label={t("nav.cart")} className="relative rounded-brand border border-line p-2" onClick={openCart}>
+            <button aria-label={t("nav.cart")} className="relative rounded-brand border border-line p-2" onClick={openCart} type="button">
               <ShoppingBag size={18} />
               <span className="absolute -right-2 -top-2 grid h-5 min-w-5 place-items-center rounded-full bg-ruby px-1 text-[11px] font-semibold text-white">
                 {count}
@@ -78,7 +84,7 @@ export function Header({ locale }: { locale: Locale }) {
         <div className="fixed inset-0 z-50 bg-ivory p-5 md:hidden">
           <div className="flex items-center justify-between">
             <span className="font-newsreader text-2xl tracking-[0.18em]">{t("brand.name")}</span>
-            <button aria-label="Close" className="rounded-brand border border-line p-2" onClick={() => setMenuOpen(false)}>
+            <button aria-label={t("nav.close")} className="rounded-brand border border-line p-2" onClick={() => setMenuOpen(false)} type="button">
               <X size={20} />
             </button>
           </div>

@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { ProductCard } from "@/components/shop/product-card";
 import { AddToCartButton } from "@/components/shop/add-to-cart-button";
-import { isLocale, localizedPaths, locales, type Locale } from "@/i18n/routing";
+import { getLocalizedAlternates, isLocale, localizedPaths, locales, type Locale } from "@/i18n/routing";
 import { categories, getCategoryByLocalizedSlug, getFeaturedProducts, getProductBySlug, getProductsByCategory, getRecommendedProducts } from "@/lib/products";
 import { formatMoney } from "@/lib/money";
 
@@ -43,25 +43,51 @@ export async function generateMetadata({
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const path = `/${locale}${slug.length ? `/${slug.join("/")}` : ""}`;
   const product = getProductBySlug(slug[1] ?? "");
+  const category = routeCategory(locale, path, slug[1]);
+  const pageTitle = getPageTitle(locale, path, product?.name[locale], category?.name[locale]);
+  const description = product?.shortDescription[locale] ?? category?.description[locale] ?? getPageDescription(locale);
 
   return {
-    title: product ? product.name[locale] : "A M A R É E",
-    description: product?.shortDescription[locale] ?? "Minimalistická elegance, která podtrhne váš styl.",
+    title: slug.length === 0 ? { absolute: "A M A R É E" } : pageTitle,
+    description,
     alternates: {
       canonical: path,
-      languages: {
-        cs: path.replace(/^\/(cs|en|de)/, "/cs"),
-        en: path.replace(/^\/(cs|en|de)/, "/en"),
-        de: path.replace(/^\/(cs|en|de)/, "/de")
-      }
+      languages: getLocalizedAlternates(path)
     },
     openGraph: {
       url: new URL(path, siteUrl).toString(),
-      title: product ? product.name[locale] : "A M A R É E",
-      description: product?.shortDescription[locale],
+      title: pageTitle,
+      description,
       images: product?.images[0]?.url ? [product.images[0].url] : [heroImage]
     }
   };
+}
+
+function routeCategory(locale: Locale, path: string, categorySlug?: string) {
+  return path.startsWith(`${localizedPaths[locale].collection}/`)
+    ? getCategoryByLocalizedSlug(locale, categorySlug)
+    : undefined;
+}
+
+function getPageTitle(locale: Locale, path: string, productName?: string, categoryName?: string) {
+  if (productName) return productName;
+  if (categoryName) return categoryName;
+
+  const titles: Record<Locale, Partial<Record<keyof (typeof localizedPaths)[Locale], string>>> = {
+    cs: { home: "A M A R É E", collection: "Kolekce", about: "O nás", inspiration: "Inspirace", contact: "Kontakt", cart: "Košík", checkout: "Objednávka", thankYou: "Děkujeme za objednávku", terms: "Obchodní podmínky", privacy: "Ochrana osobních údajů", returns: "Reklamace a vrácení", shipping: "Doprava a platba", care: "Péče o šperky" },
+    en: { home: "A M A R É E", collection: "Collection", about: "About Us", inspiration: "Inspiration", contact: "Contact", cart: "Cart", checkout: "Checkout", thankYou: "Thank you for your order", terms: "Terms and Conditions", privacy: "Privacy Policy", returns: "Returns and Complaints", shipping: "Shipping and Payment", care: "Jewelry Care" },
+    de: { home: "A M A R É E", collection: "Kollektion", about: "Über uns", inspiration: "Inspiration", contact: "Kontakt", cart: "Warenkorb", checkout: "Bestellung", thankYou: "Vielen Dank für Ihre Bestellung", terms: "Geschäftsbedingungen", privacy: "Datenschutz", returns: "Reklamation und Rückgabe", shipping: "Versand und Zahlung", care: "Schmuckpflege" }
+  };
+  const routeKey = Object.entries(localizedPaths[locale]).find(([, route]) => route === path)?.[0] as keyof (typeof localizedPaths)[Locale] | undefined;
+  return (routeKey && titles[locale][routeKey]) || "A M A R É E";
+}
+
+function getPageDescription(locale: Locale) {
+  return {
+    cs: "Minimalistická elegance, která podtrhne váš styl. Kvalitní materiály. Nadčasový design.",
+    en: "Minimalist elegance that elevates your style. Quality materials. Timeless design.",
+    de: "Minimalistische Eleganz, die Ihren Stil unterstreicht. Hochwertige Materialien. Zeitloses Design."
+  }[locale];
 }
 
 export default async function LocalizedPage({ params }: { params: Promise<PageParams> }) {
@@ -180,7 +206,7 @@ async function CollectionPage({ locale, categorySlug }: { locale: Locale; catego
       <div className="mt-8 grid gap-4 border-y border-line py-5 md:grid-cols-4">
         <label className="amaree-ui">
           {t("filter")}
-          <select className="mt-2 w-full rounded-brand border border-line bg-white px-3 py-3">
+          <select className="mt-2 w-full rounded-brand border border-line bg-white px-3 py-3" name="category">
             <option>{t("all")}</option>
             {categories.map((item) => (
               <option key={item.id}>{item.name[locale]}</option>
@@ -189,17 +215,17 @@ async function CollectionPage({ locale, categorySlug }: { locale: Locale; catego
         </label>
         <label className="amaree-ui">
           {t("availability")}
-          <select className="mt-2 w-full rounded-brand border border-line bg-white px-3 py-3">
+          <select className="mt-2 w-full rounded-brand border border-line bg-white px-3 py-3" name="availability">
             <option>{t("inStock")}</option>
           </select>
         </label>
         <label className="amaree-ui">
           {t("price")}
-          <input className="mt-2 w-full rounded-brand border border-line px-3 py-3" placeholder="0 - 5000 Kč" />
+          <input className="mt-2 w-full rounded-brand border border-line px-3 py-3" inputMode="numeric" name="priceRange" placeholder="0 - 5000 Kč" />
         </label>
         <label className="amaree-ui">
           {t("sort")}
-          <select className="mt-2 w-full rounded-brand border border-line bg-white px-3 py-3">
+          <select className="mt-2 w-full rounded-brand border border-line bg-white px-3 py-3" name="sort">
             <option>{t("newest")}</option>
             <option>{t("priceAsc")}</option>
             <option>{t("priceDesc")}</option>
@@ -215,9 +241,6 @@ async function CollectionPage({ locale, categorySlug }: { locale: Locale; catego
       ) : (
         <p className="amaree-body mt-12">{t("empty")}</p>
       )}
-      <div className="mt-12 text-center">
-        <button className="rounded-brand border border-ruby px-6 py-3 font-redhat text-sm font-semibold text-ruby">{t("loadMore")}</button>
-      </div>
     </section>
   );
 }
@@ -369,9 +392,9 @@ function InspirationPage({ locale }: { locale: Locale }) {
 
 function ContactPage({ locale }: { locale: Locale }) {
   const labels = {
-    cs: { title: "Kontakt", message: "Zpráva", consent: "Souhlasím se zpracováním osobních údajů. TODO doplnit finální právní text.", send: "Odeslat" },
-    en: { title: "Contact", message: "Message", consent: "I agree to personal data processing. TODO add final legal copy.", send: "Send" },
-    de: { title: "Kontakt", message: "Nachricht", consent: "Ich stimme der Verarbeitung personenbezogener Daten zu. TODO finalen Rechtstext ergänzen.", send: "Senden" }
+    cs: { title: "Kontakt", message: "Zpráva", consent: "Souhlasím se zpracováním osobních údajů. TODO doplnit finální právní text.", send: "Odeslat", demo: "Demonstrační režim: formulář bude dostupný po bezpečném napojení e-mailové služby." },
+    en: { title: "Contact", message: "Message", consent: "I agree to personal data processing. TODO add final legal copy.", send: "Send", demo: "Demo mode: the form will be available after the e-mail service is connected securely." },
+    de: { title: "Kontakt", message: "Nachricht", consent: "Ich stimme der Verarbeitung personenbezogener Daten zu. TODO finalen Rechtstext ergänzen.", send: "Senden", demo: "Demo-Modus: Das Formular wird nach sicherer Anbindung des E-Mail-Dienstes verfügbar." }
   }[locale];
 
   return (
@@ -384,15 +407,18 @@ function ContactPage({ locale }: { locale: Locale }) {
           <p>Příčná 129/3, Olomouc</p>
         </div>
       </div>
-      <form className="grid gap-4 rounded-brand border border-line bg-white p-6">
-        <input className="rounded-brand border border-line px-4 py-3" placeholder="E-mail" type="email" />
-        <textarea className="min-h-36 rounded-brand border border-line px-4 py-3" placeholder={labels.message} />
+      <div aria-describedby="contact-demo-note" className="grid gap-4 rounded-brand border border-line bg-white p-6" role="group">
+        <label className="sr-only" htmlFor="contact-email">E-mail</label>
+        <input autoComplete="email" className="rounded-brand border border-line px-4 py-3" id="contact-email" name="email" placeholder="E-mail" type="email" />
+        <label className="sr-only" htmlFor="contact-message">{labels.message}</label>
+        <textarea className="min-h-36 rounded-brand border border-line px-4 py-3" id="contact-message" name="message" placeholder={labels.message} />
         <label className="flex gap-3 font-redhat text-sm text-muted">
-          <input required type="checkbox" />
+          <input name="privacyConsent" required type="checkbox" />
           {labels.consent}
         </label>
-        <button className="rounded-brand bg-ruby px-5 py-3 font-redhat text-sm font-semibold text-white">{labels.send}</button>
-      </form>
+        <p className="font-redhat text-sm text-muted" id="contact-demo-note">{labels.demo}</p>
+        <button className="cursor-not-allowed rounded-brand bg-ruby px-5 py-3 font-redhat text-sm font-semibold text-white opacity-50" disabled type="button">{labels.send}</button>
+      </div>
     </section>
   );
 }
@@ -415,31 +441,34 @@ async function CheckoutPage({ locale }: { locale: Locale }) {
   return (
     <section className="page-shell py-12">
       <h1 className="amaree-h1">{t("title")}</h1>
-      <form className="mt-10 grid gap-8 md:grid-cols-[1fr_360px]">
+      <div aria-describedby="checkout-provider-note" className="mt-10 grid gap-8 md:grid-cols-[1fr_360px]">
         <div className="grid gap-6">
           <fieldset className="rounded-brand border border-line bg-white p-6">
             <legend className="amaree-subtitle">{t("contact")}</legend>
             <div className="mt-5 grid gap-4 md:grid-cols-2">
-              <input className="rounded-brand border border-line px-4 py-3" placeholder={t("email")} type="email" required />
-              <input className="rounded-brand border border-line px-4 py-3" placeholder={t("phone")} required />
-              <input className="rounded-brand border border-line px-4 py-3 md:col-span-2" placeholder={t("name")} required />
+              <label className="sr-only" htmlFor="checkout-email">{t("email")}</label>
+              <input autoComplete="email" className="rounded-brand border border-line px-4 py-3" id="checkout-email" name="email" placeholder={t("email")} type="email" required />
+              <label className="sr-only" htmlFor="checkout-phone">{t("phone")}</label>
+              <input autoComplete="tel" className="rounded-brand border border-line px-4 py-3" id="checkout-phone" name="phone" placeholder={t("phone")} required />
+              <label className="sr-only" htmlFor="checkout-name">{t("name")}</label>
+              <input autoComplete="name" className="rounded-brand border border-line px-4 py-3 md:col-span-2" id="checkout-name" name="name" placeholder={t("name")} required />
             </div>
           </fieldset>
           <fieldset className="rounded-brand border border-line bg-white p-6">
             <legend className="amaree-subtitle">{t("shipping")}</legend>
             <div className="mt-5 grid gap-3 font-redhat text-sm">
-              <label><input name="shipping" type="radio" defaultChecked /> {t("packeta")}</label>
-              <label><input name="shipping" type="radio" /> PPL</label>
-              <label><input name="shipping" type="radio" /> {t("pickup")}</label>
+              <label><input name="shipping" type="radio" value="zasilkovna" defaultChecked /> {t("packeta")}</label>
+              <label><input name="shipping" type="radio" value="ppl" /> PPL</label>
+              <label><input name="shipping" type="radio" value="pickup" /> {t("pickup")}</label>
             </div>
           </fieldset>
         </div>
         <aside className="rounded-brand border border-line bg-white p-6">
           <p className="amaree-subtitle">{t("payment")}</p>
-          <p className="mt-4 font-redhat text-sm text-muted">{t("providerNote")}</p>
-          <button className="mt-6 w-full rounded-brand bg-ruby px-5 py-3 font-redhat text-sm font-semibold text-white">{t("submit")}</button>
+          <p className="mt-4 font-redhat text-sm text-muted" id="checkout-provider-note">{t("providerNote")}</p>
+          <button className="mt-6 w-full cursor-not-allowed rounded-brand bg-ruby px-5 py-3 font-redhat text-sm font-semibold text-white opacity-50" disabled type="button">{t("submit")}</button>
         </aside>
-      </form>
+      </div>
     </section>
   );
 }
@@ -480,12 +509,14 @@ async function Newsletter({ locale }: { locale: Locale }) {
           <h2 className="amaree-h2">{t("newsletterTitle")}</h2>
           <p className="amaree-body mt-4">{t("newsletterText")}</p>
         </div>
-        <form className="flex flex-col gap-3 self-center sm:flex-row">
-          <input className="min-h-12 flex-1 rounded-brand border border-line px-4" placeholder="E-mail" type="email" />
-          <button className="rounded-brand bg-ruby px-5 py-3 font-redhat text-sm font-semibold text-white">
+        <div aria-describedby="newsletter-demo-note" className="flex flex-col gap-3 self-center sm:flex-row" role="group">
+          <label className="sr-only" htmlFor={`newsletter-email-${locale}`}>E-mail</label>
+          <input autoComplete="email" className="min-h-12 flex-1 rounded-brand border border-line px-4" id={`newsletter-email-${locale}`} name="email" placeholder="E-mail" type="email" />
+          <button className="cursor-not-allowed rounded-brand bg-ruby px-5 py-3 font-redhat text-sm font-semibold text-white opacity-50" disabled type="button">
             {t("subscribe")}
           </button>
-        </form>
+          <span className="sr-only" id="newsletter-demo-note">{t("newsletterDemo")}</span>
+        </div>
       </div>
     </section>
   );

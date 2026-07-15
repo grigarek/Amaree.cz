@@ -21,7 +21,6 @@ export async function ProductCard({ product, locale }: { product: Product; local
             src={first.url}
             alt={first.alt[locale]}
             fill
-            loading="eager"
             sizes="(min-width: 768px) 33vw, 90vw"
             className="object-cover transition duration-500 group-hover:opacity-0"
           />

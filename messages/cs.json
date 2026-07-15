@@ -12,8 +12,10 @@
     "inspiration": "Inspirace",
     "contact": "Kontakt",
     "search": "Hledat",
+    "searchUnavailable": "Vyhledávání bude dostupné po napojení produktového katalogu.",
     "cart": "Košík",
-    "menu": "Menu"
+    "menu": "Menu",
+    "close": "Zavřít"
   },
   "home": {
     "announcement": "Doprava zdarma od 2 500 Kč • 30 dní na vrácení",
@@ -27,7 +29,8 @@
     "inspiration": "Inspirace",
     "newsletterTitle": "Staňte se součástí světa A M A R É E",
     "newsletterText": "Získejte exkluzivní nabídky a inspiraci přednostně do vašeho e-mailu.",
-    "subscribe": "Přihlásit"
+    "subscribe": "Přihlásit",
+    "newsletterDemo": "Přihlášení bude dostupné po bezpečném napojení e-mailové služby."
   },
   "collection": {
     "title": "Kolekce",
@@ -68,7 +71,10 @@
     "coupon": "Slevový kód",
     "checkout": "Pokračovat k objednávce",
     "freeShippingLeft": "Do dopravy zdarma zbývá {amount}",
-    "freeShippingReached": "Máte dopravu zdarma."
+    "freeShippingReached": "Máte dopravu zdarma.",
+    "remove": "Odebrat",
+    "close": "Zavřít košík",
+    "quantity": "Množství"
   },
   "checkout": {
     "title": "Objednávka",
@@ -82,7 +88,7 @@
     "name": "Jméno a příjmení",
     "packeta": "Zásilkovna",
     "pickup": "Osobní odběr",
-    "providerNote": "Stripe Checkout je připraven přes /api/checkout. GoPay nebo Comgate lze doplnit jako další adaptér.",
+    "providerNote": "Demonstrační režim: platba je vypnutá, dokud nebudou bezpečně doplněny testovací údaje poskytovatele.",
     "confirmation": "Potvrzení objednávky bude odesláno e-mailem po ověření platby webhookem.",
     "backToCollection": "Zpět do kolekce"
   },

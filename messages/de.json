@@ -12,8 +12,10 @@
     "inspiration": "Inspiration",
     "contact": "Kontakt",
     "search": "Suchen",
+    "searchUnavailable": "Die Suche wird nach Anbindung des Produktkatalogs verfügbar.",
     "cart": "Warenkorb",
-    "menu": "Menü"
+    "menu": "Menü",
+    "close": "Schließen"
   },
   "home": {
     "announcement": "Kostenloser Versand ab 2.500 CZK • 30 Tage Rückgabe",
@@ -27,7 +29,8 @@
     "inspiration": "Inspiration",
     "newsletterTitle": "Werden Sie Teil der A M A R É E Welt",
     "newsletterText": "Erhalten Sie exklusive Angebote und Inspiration zuerst per E-Mail.",
-    "subscribe": "Anmelden"
+    "subscribe": "Anmelden",
+    "newsletterDemo": "Die Anmeldung wird nach sicherer Anbindung des E-Mail-Dienstes verfügbar."
   },
   "collection": {
     "title": "Kollektion",
@@ -68,7 +71,10 @@
     "coupon": "Rabattcode",
     "checkout": "Weiter zur Bestellung",
     "freeShippingLeft": "Noch {amount} bis zum kostenlosen Versand",
-    "freeShippingReached": "Sie haben kostenlosen Versand."
+    "freeShippingReached": "Sie haben kostenlosen Versand.",
+    "remove": "Entfernen",
+    "close": "Warenkorb schließen",
+    "quantity": "Menge"
   },
   "checkout": {
     "title": "Bestellung",
@@ -82,7 +88,7 @@
     "name": "Vor- und Nachname",
     "packeta": "Packeta",
     "pickup": "Abholung",
-    "providerNote": "Stripe Checkout ist über /api/checkout vorbereitet. GoPay oder Comgate kann als weiterer Adapter ergänzt werden.",
+    "providerNote": "Demo-Modus: Die Zahlung bleibt deaktiviert, bis Testzugangsdaten des Anbieters sicher konfiguriert sind.",
     "confirmation": "Die Bestellbestätigung wird nach der Zahlungsprüfung per Webhook per E-Mail versendet.",
     "backToCollection": "Zurück zur Kollektion"
   },

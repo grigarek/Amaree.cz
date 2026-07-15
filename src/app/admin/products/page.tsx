@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { AdminShell } from "@/components/admin/admin-shell";
 import { products } from "@/lib/products";
 import { formatMoney } from "@/lib/money";
 
-export default function AdminProductsPage() {
+export default async function AdminProductsPage() {
   return (
-    <main className="mx-auto max-w-page px-5 py-10">
+    <AdminShell>
+      <main className="mx-auto max-w-page px-5 py-10">
       <div className="flex items-end justify-between gap-4">
         <div>
           <p className="font-redhat text-sm font-semibold uppercase tracking-[0.18em] text-ruby">Produkty</p>
@@ -14,7 +16,7 @@ export default function AdminProductsPage() {
           Vytvořit produkt
         </Link>
       </div>
-      <div className="mt-8 overflow-hidden rounded-brand border border-line bg-white">
+      <div className="mt-8 overflow-x-auto rounded-brand border border-line bg-white">
         <table className="w-full border-collapse text-left font-redhat text-sm">
           <thead className="bg-blush">
             <tr>
@@ -42,6 +44,7 @@ export default function AdminProductsPage() {
           </tbody>
         </table>
       </div>
-    </main>
+      </main>
+    </AdminShell>
   );
 }

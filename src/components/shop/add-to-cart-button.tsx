@@ -13,6 +13,7 @@ export function AddToCartButton({ productId, disabled = false }: { productId: st
       className="inline-flex items-center justify-center gap-2 rounded-brand bg-ruby px-5 py-3 font-redhat text-sm font-semibold text-white transition hover:bg-rubyDark disabled:cursor-not-allowed disabled:opacity-50"
       disabled={disabled}
       onClick={() => addItem(productId)}
+      type="button"
     >
       <ShoppingBag size={18} />
       {t("addToCart")}

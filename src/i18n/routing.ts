@@ -106,3 +106,7 @@ export function getAlternatePath(locale: Locale, path: string): string {
 
   return localizedPaths[locale].home;
 }
+
+export function getLocalizedAlternates(path: string): Record<Locale, string> {
+  return Object.fromEntries(locales.map((locale) => [locale, getAlternatePath(locale, path)])) as Record<Locale, string>;
+}

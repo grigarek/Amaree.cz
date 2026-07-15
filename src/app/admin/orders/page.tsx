@@ -1,5 +1,11 @@
-export default function AdminOrdersPage() {
-  return <AdminPlaceholder title="Objednávky" body="Seznam objednávek, detail objednávky a změna stavů jsou připraveny pro napojení na Supabase tabulky orders a order_items." />;
+import { AdminShell } from "@/components/admin/admin-shell";
+
+export default async function AdminOrdersPage() {
+  return (
+    <AdminShell>
+      <AdminPlaceholder title="Objednávky" body="Seznam objednávek, detail objednávky a změna stavů jsou připraveny pro napojení na Supabase tabulky orders a order_items." />
+    </AdminShell>
+  );
 }
 
 function AdminPlaceholder({ title, body }: { title: string; body: string }) {
