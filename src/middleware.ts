@@ -52,6 +52,7 @@ async function protectAdmin(request: NextRequest) {
 
 export default async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/admin")) return protectAdmin(request);
+  if (request.nextUrl.pathname.startsWith("/auth/")) return withIndexingProtection(NextResponse.next());
   const requestedLocale = request.nextUrl.pathname.split("/")[1] ?? "";
 
   if (isLocale(requestedLocale) && requestedLocale !== defaultLocale) {
