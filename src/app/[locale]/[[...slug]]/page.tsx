@@ -240,7 +240,7 @@ async function HomePage({ locale }: { locale: Locale }) {
             </div>
             <div>
               <p className="amaree-subtitle">{t("home.storyTitle")}</p>
-              <AboutCopy locale={locale} compact />
+              <AboutCopy locale={locale} />
               <Link href={localizedPaths[locale].about} className="mt-7 inline-flex min-h-12 items-center gap-3 rounded-brand bg-ruby px-6 py-3 font-redhat text-sm font-semibold text-white transition hover:bg-rubyDark">
                 <span>{t("home.aboutCta")}</span>
                 <ArrowRight aria-hidden="true" size={17} strokeWidth={1.8} />
@@ -439,14 +439,13 @@ function ProductDisclosure({ title, body, defaultOpen = false }: { title: string
   );
 }
 
-function AboutCopy({ locale = "cs", compact = false }: { locale?: Locale; compact?: boolean }) {
+function AboutCopy({ locale = "cs" }: { locale?: Locale }) {
   const copy = {
     cs: [
-      "Amarée je rodinný projekt, který vznikl z přirozené blízkosti ke světu šperků.",
-      "Naše ženy měly vždy cit pro eleganci a detail - a právě jejich vnímání stylu nás přivedlo k myšlence vytvořit vlastní značku.",
-      "Chtěli jsme nabídnout šperky, které nejsou jen doplňkem, ale přirozenou součástí každodenního stylu.",
-      "Věříme v jednoduchost, kvalitní materiály a nadčasový design, který vydrží.",
-      "- Tým Amarée"
+      "Amarée je rodinný projekt, který vznikl z přirozené blízkosti ke světu šperků, eleganci a smyslu pro detail.",
+      "Od začátku jsme chtěli vytvořit značku, která nabízí šperky jako přirozenou součást každodenního stylu — ne pouze jako doplněk pro výjimečné příležitosti.",
+      "Vybíráme kousky, které spojují jemný design, kvalitní materiály a nadčasový charakter. Takové, které dokážou podtrhnout osobnost, připomenout důležitý okamžik a zachovat si své kouzlo i po letech.",
+      "AMARÉE"
     ],
     en: [
       "Amarée is a family project born from a natural closeness to the world of jewelry.",
@@ -466,8 +465,13 @@ function AboutCopy({ locale = "cs", compact = false }: { locale?: Locale; compac
 
   return (
     <div className="amaree-body mt-6 grid gap-5">
-      {(compact ? copy[locale].slice(0, 2) : copy[locale]).map((paragraph) => (
-        <p key={paragraph}>{paragraph}</p>
+      {copy[locale].map((paragraph, index) => (
+        <p
+          className={locale === "cs" && index === 0 ? "font-semibold text-ink" : locale === "cs" && index === copy.cs.length - 1 ? "font-redhat font-bold text-ruby" : undefined}
+          key={paragraph}
+        >
+          {paragraph}
+        </p>
       ))}
     </div>
   );
