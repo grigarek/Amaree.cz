@@ -144,7 +144,7 @@ export function ProductForm({ initial, productId }: { initial: AdminProductInput
           {productId ? <button className="inline-flex min-h-11 items-center gap-2 border border-line bg-white px-4 font-redhat text-sm font-semibold" disabled={saving} onClick={() => lifecycle(initial.active ? "deactivate" : "activate")} type="button">{initial.active ? <Power size={17} /> : <Check size={17} />}{initial.active ? "Deaktivovat" : "Aktivovat"}</button> : null}
           {productId ? <button className="inline-flex min-h-11 items-center gap-2 border border-line bg-white px-4 font-redhat text-sm font-semibold" disabled={saving} onClick={() => lifecycle("archive")} type="button"><Archive size={17} />Archivovat</button> : null}
         </div>
-        <button className="inline-flex min-h-11 items-center gap-2 rounded-brand bg-ruby px-6 font-redhat text-sm font-semibold text-white disabled:opacity-50" disabled={saving} type="submit">{saving ? <LoaderCircle className="animate-spin" size={18} /> : <Save size={18} />}Uložit produkt</button>
+        <button className="inline-flex min-h-11 items-center gap-2 rounded-brand bg-ruby px-6 font-redhat text-sm font-semibold text-white disabled:opacity-50" disabled={saving} type="submit">{saving ? <LoaderCircle className="animate-spin" size={18} /> : <Save size={18} />}{productId ? "Uložit produkt" : "Uložit a přidat fotografie"}</button>
       </div>
     </form>
   );

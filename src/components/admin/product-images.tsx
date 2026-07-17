@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import { Archive, GripVertical, ImagePlus, LoaderCircle, Save, Star, Trash2, Upload } from "lucide-react";
+import { Archive, ChevronLeft, ChevronRight, GripVertical, ImagePlus, LoaderCircle, Save, Star, Trash2, Upload } from "lucide-react";
 import type { AdminProductImage } from "@/lib/admin/products";
 
 export function ProductImages({ productId, initialImages, defaultAlt }: {
@@ -68,6 +68,16 @@ export function ProductImages({ productId, initialImages, defaultAlt }: {
     }
   }
 
+  function moveImage(imageId: string, direction: -1 | 1) {
+    const from = images.findIndex((image) => image.id === imageId);
+    const to = from + direction;
+    if (from < 0 || to < 0 || to >= images.length) return;
+    const next = [...images];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    void persistOrder(next, next.find((image) => image.isPrimary)?.id ?? next[0].id);
+  }
+
   async function editImage(imageId: string, action: "archive" | "delete") {
     if (action === "delete" && !window.confirm("Opravdu trvale smazat fotografii ze Storage?")) return;
     setBusy(true);
@@ -109,10 +119,10 @@ export function ProductImages({ productId, initialImages, defaultAlt }: {
   }
 
   return (
-    <section className="mt-12 border-t border-line pt-8">
+    <section className="mt-8 scroll-mt-28 border-y border-line py-8" id="product-images">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div><p className="font-redhat text-sm font-semibold uppercase tracking-[0.16em] text-ruby">Supabase Storage</p><h2 className="mt-2 font-newsreader text-4xl">Fotografie produktu</h2></div>
-        <p className="max-w-xl font-redhat text-sm leading-6 text-muted">JPG, PNG nebo WebP, nejvýše 12 MB a minimálně 800 × 800 px. Přetažením změníte pořadí.</p>
+        <p className="max-w-xl font-redhat text-sm leading-6 text-muted">JPG, PNG nebo WebP, nejvýše 12 MB a minimálně 800 × 800 px. Pořadí změníte přetažením nebo šipkami.</p>
       </div>
 
       <div
@@ -127,7 +137,7 @@ export function ProductImages({ productId, initialImages, defaultAlt }: {
       </div>
       {files.length ? <div className="mt-4 flex flex-wrap items-center justify-between gap-3"><p className="font-redhat text-sm">Vybráno: {files.map((file) => file.name).join(", ")}</p><button className="inline-flex min-h-11 items-center gap-2 rounded-brand bg-ruby px-5 font-redhat text-sm font-semibold text-white disabled:opacity-50" disabled={busy} onClick={upload} type="button">{busy ? <LoaderCircle className="animate-spin" size={18} /> : <Upload size={18} />}Nahrát</button></div> : null}
 
-      {images.length ? <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{images.map((image) => (
+      {images.length ? <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{images.map((image, index) => (
         <article
           className="border border-line bg-white"
           draggable={!busy}
@@ -147,10 +157,15 @@ export function ProductImages({ productId, initialImages, defaultAlt }: {
         >
           <div className="relative aspect-[4/3] bg-blush"><Image alt={image.alt.cs} className="object-cover" fill sizes="(min-width: 1024px) 30vw, 50vw" src={image.url} /></div>
           <div className="p-4">
-            <div className="flex items-center justify-between gap-3"><span className="inline-flex items-center gap-2 font-redhat text-xs font-semibold text-muted"><GripVertical size={16} />{image.width} × {image.height}</span>{image.isPrimary ? <span className="inline-flex items-center gap-1 font-redhat text-xs font-semibold text-ruby"><Star size={15} fill="currentColor" />Hlavní</span> : null}</div>
+            <div className="flex items-center justify-between gap-3">
+              <span className="inline-flex items-center gap-2 font-redhat text-xs font-semibold text-muted"><GripVertical size={16} />Pořadí {index + 1} · {image.width} × {image.height}</span>
+              {image.isPrimary ? <span className="inline-flex items-center gap-1 font-redhat text-xs font-semibold text-ruby"><Star size={15} fill="currentColor" />Hlavní</span> : null}
+            </div>
             <p className="mt-3 truncate font-redhat text-sm font-semibold" title={image.filename}>{image.filename}</p>
             <ImageAltEditor alt={image.alt} busy={busy} onSave={(alt) => saveAlt(image.id, alt)} />
             <div className="mt-4 flex items-center gap-1">
+              <button aria-label="Posunout fotografii doleva" className="p-2 text-ink hover:text-ruby disabled:cursor-not-allowed disabled:opacity-30" disabled={busy || index === 0} onClick={() => moveImage(image.id, -1)} title="Posunout doleva" type="button"><ChevronLeft size={18} /></button>
+              <button aria-label="Posunout fotografii doprava" className="p-2 text-ink hover:text-ruby disabled:cursor-not-allowed disabled:opacity-30" disabled={busy || index === images.length - 1} onClick={() => moveImage(image.id, 1)} title="Posunout doprava" type="button"><ChevronRight size={18} /></button>
               {!image.isPrimary ? <button aria-label="Nastavit jako hlavní" className="p-2 text-ink hover:text-ruby" onClick={() => persistOrder(images, image.id)} title="Nastavit jako hlavní" type="button"><Star size={18} /></button> : null}
               <button aria-label="Archivovat fotografii" className="p-2 text-ink hover:text-ruby" onClick={() => editImage(image.id, "archive")} title="Archivovat" type="button"><Archive size={18} /></button>
               <button aria-label="Trvale smazat fotografii" className="p-2 text-ink hover:text-red-700" onClick={() => editImage(image.id, "delete")} title="Trvale smazat" type="button"><Trash2 size={18} /></button>
