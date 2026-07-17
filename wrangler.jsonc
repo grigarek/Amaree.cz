@@ -11,10 +11,6 @@
     "binding": "ASSETS",
     "run_worker_first": false
   },
-  "limits": {
-    "cpu_ms": 10,
-    "subrequests": 50
-  },
   "vars": {
     "DEPLOY_TARGET": "cloudflare",
     "APP_ENV": "development",
@@ -37,7 +33,7 @@
         "DEPLOY_TARGET": "cloudflare",
         "APP_ENV": "staging",
         "NEXT_PUBLIC_APP_ENV": "staging",
-        "NEXT_PUBLIC_SITE_URL": "https://amaree-staging.REPLACE_ME.workers.dev",
+        "NEXT_PUBLIC_SITE_URL": "https://amaree-staging.amaree-cz.workers.dev",
         "SUPABASE_ENVIRONMENT": "development",
         "ALLOW_LOCAL_ADMIN": "false",
         "GOPAY_ENVIRONMENT": "sandbox",
