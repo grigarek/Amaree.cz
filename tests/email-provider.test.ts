@@ -10,6 +10,18 @@ afterEach(() => {
 });
 
 describe("transactional e-mail", () => {
+  it("never contacts Ecomail while sending is disabled", async () => {
+    const fetcher = vi.fn();
+
+    await expect(sendEcomailTransactional({
+      to: "customer@example.test",
+      subject: "Test",
+      text: "Test message"
+    }, fetcher)).resolves.toMatchObject({ mode: "preview" });
+
+    expect(fetcher).not.toHaveBeenCalled();
+  });
+
   it("uses the documented Ecomail message fields", async () => {
     process.env.ECOMAIL_SEND_ENABLED = "true";
     process.env.ECOMAIL_ENVIRONMENT = "test";

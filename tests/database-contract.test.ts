@@ -36,6 +36,8 @@ describe("development database baseline", () => {
   it("deduplicates transactional e-mail records", () => {
     expect(migration).toContain("dedupe_key text not null unique");
     expect(migration).toContain("create table public.email_messages");
+    expect(migration).toContain("body_text text not null");
+    expect(migration).toContain("body_html text not null");
   });
 
   it("keeps reservation expiry and free-tier usage checks service-role only", () => {

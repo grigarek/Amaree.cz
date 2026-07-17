@@ -18,7 +18,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   const order = await getAdminOrder(id);
   if (!order) return NextResponse.json({ error: "Objednávka nebyla nalezena." }, { status: 404 });
   try {
-    return NextResponse.json(buildOrderStatusEmail(order, template.data));
+    return NextResponse.json({ recipient: order.email, ...buildOrderStatusEmail(order, template.data) });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Náhled nelze sestavit." }, { status: 422 });
   }

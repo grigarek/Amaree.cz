@@ -31,6 +31,8 @@ export async function sendComplaintStatusEmail(complaintId: string, template: Co
     recipient: complaint.customer_email,
     locale: "cs",
     subject: content.subject,
+    body_text: content.text,
+    body_html: content.html,
     dedupe_key: dedupeKey,
     status: "queued",
     payload: { complaintNumber: complaint.complaint_number, manualResend }
@@ -39,7 +41,7 @@ export async function sendComplaintStatusEmail(complaintId: string, template: Co
   if (insertError || !message) throw new Error(insertError?.message ?? "complaint_email_record_failed");
   try {
     const sent = await sendEcomailTransactional({ to: complaint.customer_email, subject: content.subject, text: content.text, html: content.html, metadata: { complaint_id: complaintId, template } });
-    await supabase.from("email_messages").update({ status: sent.mode === "sent" ? "sent" : "queued", provider_message_id: sent.providerMessageId, sent_at: sent.mode === "sent" ? new Date().toISOString() : null }).eq("id", message.id);
+    await supabase.from("email_messages").update({ status: sent.mode === "sent" ? "sent" : "suppressed", provider_message_id: sent.providerMessageId, sent_at: sent.mode === "sent" ? new Date().toISOString() : null }).eq("id", message.id);
     return { status: sent.mode };
   } catch (sendError) {
     await supabase.from("email_messages").update({ status: "failed", error_message: sendError instanceof Error ? sendError.message : "send_failed" }).eq("id", message.id);

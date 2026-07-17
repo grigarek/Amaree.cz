@@ -37,7 +37,7 @@ export type AdminOrderDetail = AdminOrderListItem & {
   payments: Array<{ id: string; provider: string; providerPaymentId: string | null; status: string; amountMinor: number; createdAt: string }>;
   shipment: { id: string; status: string; providerPacketId: string | null; trackingNumber: string | null; trackingUrl: string | null; labelStoragePath: string | null } | null;
   history: Array<{ id: number; previousStatus: string | null; newStatus: string; actorUserId: string | null; note: string | null; emailRequested: boolean; emailMessageId: string | null; createdAt: string }>;
-  emails: Array<{ id: string; templateKey: string; recipient: string; subject: string; status: string; sentAt: string | null; createdAt: string; errorMessage: string | null }>;
+  emails: Array<{ id: string; templateKey: string; recipient: string; subject: string; text: string; html: string; status: string; sentAt: string | null; createdAt: string; errorMessage: string | null }>;
   audit: Array<{ id: number; action: string; actorUserId: string | null; oldValues: Record<string, unknown> | null; newValues: Record<string, unknown> | null; createdAt: string }>;
 };
 
@@ -130,7 +130,8 @@ export async function getAdminOrder(id: string, options: { service?: boolean } =
     })),
     emails: emails.sort((a, b) => String(b.created_at).localeCompare(String(a.created_at))).map((email) => ({
       id: String(email.id), templateKey: String(email.template_key), recipient: String(email.recipient), subject: String(email.subject), status: String(email.status),
-      sentAt: email.sent_at ? String(email.sent_at) : null, createdAt: String(email.created_at), errorMessage: email.error_message ? String(email.error_message) : null
+      text: String(email.body_text), html: String(email.body_html), sentAt: email.sent_at ? String(email.sent_at) : null,
+      createdAt: String(email.created_at), errorMessage: email.error_message ? String(email.error_message) : null
     })),
     audit: (auditRows ?? []).map((entry) => ({ id: Number(entry.id), action: entry.action, actorUserId: entry.actor_user_id, oldValues: entry.old_values, newValues: entry.new_values, createdAt: entry.created_at }))
   };

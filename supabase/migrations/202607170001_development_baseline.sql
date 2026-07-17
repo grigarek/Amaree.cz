@@ -355,6 +355,8 @@ create table public.email_messages (
   recipient text not null,
   locale text not null check (locale in ('cs', 'en', 'de')),
   subject text not null,
+  body_text text not null,
+  body_html text not null,
   provider text not null default 'ecomail',
   provider_message_id text,
   dedupe_key text not null unique,

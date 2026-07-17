@@ -11,7 +11,7 @@ export function OrderActions({ orderId, currentStatus }: { orderId: string; curr
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
-  const [preview, setPreview] = useState<{ subject: string; text: string; templateKey: OrderTemplateKey } | null>(null);
+  const [preview, setPreview] = useState<{ recipient: string; subject: string; text: string; html: string; templateKey: OrderTemplateKey } | null>(null);
 
   async function changeStatus(sendEmail: boolean) {
     setBusy(true); setMessage("");
@@ -33,9 +33,9 @@ export function OrderActions({ orderId, currentStatus }: { orderId: string; curr
     setBusy(true); setMessage("");
     try {
       const response = await fetch(`/api/admin/orders/${orderId}/email-preview?template=${template}`);
-      const result = await response.json() as { subject?: string; text?: string; templateKey?: OrderTemplateKey; error?: string };
-      if (!response.ok || !result.subject || !result.text || !result.templateKey) throw new Error(result.error ?? "Náhled nelze zobrazit.");
-      setPreview({ subject: result.subject, text: result.text, templateKey: result.templateKey });
+      const result = await response.json() as { recipient?: string; subject?: string; text?: string; html?: string; templateKey?: OrderTemplateKey; error?: string };
+      if (!response.ok || !result.recipient || !result.subject || !result.text || !result.html || !result.templateKey) throw new Error(result.error ?? "Náhled nelze zobrazit.");
+      setPreview({ recipient: result.recipient, subject: result.subject, text: result.text, html: result.html, templateKey: result.templateKey });
     } catch (error) { setMessage(error instanceof Error ? error.message : "Náhled nelze zobrazit."); }
     finally { setBusy(false); }
   }
@@ -65,7 +65,7 @@ export function OrderActions({ orderId, currentStatus }: { orderId: string; curr
         <button className="inline-flex min-h-11 items-center gap-2 border border-line bg-white px-4 font-redhat text-sm font-semibold" disabled={busy} onClick={showPreview} type="button"><Eye size={17} />Náhled e-mailu</button>
       </div>
       {message ? <p className="mt-4 font-redhat text-sm font-semibold" role="status">{message}</p> : null}
-      {preview ? <div className="mt-6 border border-line bg-white p-5"><div className="flex items-center justify-between gap-3"><h3 className="font-redhat font-semibold">{preview.subject}</h3><button aria-label="Znovu odeslat" className="p-2 text-ruby" onClick={() => resend(preview.templateKey)} title="Znovu odeslat" type="button"><RefreshCcw size={18} /></button></div><pre className="mt-4 whitespace-pre-wrap font-redhat text-sm leading-6 text-muted">{preview.text}</pre></div> : null}
+      {preview ? <div className="mt-6 border border-line bg-white p-5"><div className="flex items-center justify-between gap-3"><div><p className="font-redhat text-xs font-semibold uppercase text-ruby">{preview.templateKey}</p><h3 className="mt-1 font-redhat font-semibold">{preview.subject}</h3><p className="mt-1 font-redhat text-xs text-muted">Příjemce: {preview.recipient}</p></div><button aria-label="Znovu odeslat" className="p-2 text-ruby" onClick={() => resend(preview.templateKey)} title="Znovu odeslat" type="button"><RefreshCcw size={18} /></button></div><details className="mt-4"><summary className="cursor-pointer font-redhat text-sm font-semibold">Textová verze</summary><pre className="mt-3 whitespace-pre-wrap font-redhat text-sm leading-6 text-muted">{preview.text}</pre></details><details className="mt-4" open><summary className="cursor-pointer font-redhat text-sm font-semibold">Finální HTML</summary><iframe className="mt-3 min-h-96 w-full border border-line bg-white" sandbox="" srcDoc={preview.html} title={`Náhled e-mailu ${preview.subject}`} /></details></div> : null}
     </section>
   );
 }

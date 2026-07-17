@@ -60,6 +60,8 @@ export async function sendOrderStatusEmail(orderId: string, templateKey: OrderTe
     recipient: order.email,
     locale: order.locale,
     subject: content.subject,
+    body_text: content.text,
+    body_html: content.html,
     dedupe_key: dedupeKey,
     status: "queued",
     payload: { orderNumber: order.orderNumber, manualResend: Boolean(options.manualResend) }
@@ -82,7 +84,7 @@ export async function sendOrderStatusEmail(orderId: string, templateKey: OrderTe
       metadata: { order_id: order.id, order_number: order.orderNumber, template: templateKey }
     });
     await supabase.from("email_messages").update({
-      status: result.mode === "sent" ? "sent" : "queued",
+      status: result.mode === "sent" ? "sent" : "suppressed",
       provider_message_id: result.providerMessageId,
       sent_at: result.mode === "sent" ? new Date().toISOString() : null
     }).eq("id", email.id);
