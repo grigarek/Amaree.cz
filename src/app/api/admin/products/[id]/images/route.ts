@@ -24,12 +24,28 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     return NextResponse.json({ error: error instanceof Error ? error.message : "Neplatná dávka fotografií." }, { status: 422 });
   }
 
-  const alt = {
+  const fallbackAlt = {
     cs: String(formData.get("altCs") ?? "").trim(),
     en: String(formData.get("altEn") ?? "").trim(),
     de: String(formData.get("altDe") ?? "").trim()
   };
-  if (Object.values(alt).some((value) => value.length < 3)) return NextResponse.json({ error: "Doplňte ALT text ve všech jazycích." }, { status: 422 });
+  let metadata: Array<{ alt: typeof fallbackAlt }> | null = null;
+  const rawMetadata = formData.get("metadata");
+  if (typeof rawMetadata === "string" && rawMetadata) {
+    try {
+      const parsed = JSON.parse(rawMetadata) as unknown;
+      if (!Array.isArray(parsed) || parsed.length !== files.length) throw new Error();
+      metadata = parsed.map((item) => {
+        if (!item || typeof item !== "object" || !("alt" in item) || !item.alt || typeof item.alt !== "object") throw new Error();
+        const alt = item.alt as Record<string, unknown>;
+        return { alt: { cs: String(alt.cs ?? "").trim(), en: String(alt.en ?? "").trim(), de: String(alt.de ?? "").trim() } };
+      });
+    } catch {
+      return NextResponse.json({ error: "Metadata fotografií nejsou platná." }, { status: 422 });
+    }
+  }
+  const allAlt = metadata?.map((item) => item.alt) ?? [fallbackAlt];
+  if (allAlt.some((alt) => Object.values(alt).some((value) => value.length < 3))) return NextResponse.json({ error: "Doplňte ALT text ve všech jazycích." }, { status: 422 });
 
   const supabase = await createSupabaseServerClient();
   const { count } = await supabase.from("product_images").select("id", { count: "exact", head: true }).eq("product_id", productId).is("archived_at", null);
@@ -37,7 +53,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   const created: Array<{ id: string; storagePath: string }> = [];
 
   try {
-    for (const file of files) {
+    for (const [fileIndex, file] of files.entries()) {
+      const alt = metadata?.[fileIndex]?.alt ?? fallbackAlt;
       const buffer = Buffer.from(await file.arrayBuffer());
       const inspected = inspectImage(buffer);
       const storagePath = `products/${productId}/${randomUUID()}.${inspected.extension}`;

@@ -4,8 +4,15 @@ import { ProductForm } from "@/components/admin/product-form";
 import { ProductImages } from "@/components/admin/product-images";
 import { getAdminProduct, listAdminProductImages } from "@/lib/admin/products";
 
-export default async function AdminProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function AdminProductDetailPage({
+  params,
+  searchParams
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ imageUpload?: string }>;
+}) {
   const { id } = await params;
+  const { imageUpload } = await searchParams;
   const product = await getAdminProduct(id);
   if (!product) notFound();
   const images = await listAdminProductImages(id);
@@ -15,6 +22,11 @@ export default async function AdminProductDetailPage({ params }: { params: Promi
       <main className="mx-auto max-w-page px-5 py-10">
       <p className="font-redhat text-sm font-semibold uppercase tracking-[0.18em] text-ruby">Editace produktu</p>
       <h1 className="mt-3 font-newsreader text-5xl">{product.translations.cs.name}</h1>
+      {imageUpload === "failed" ? (
+        <p className="mt-5 border border-red-200 bg-red-50 px-4 py-3 font-redhat text-sm font-semibold text-red-700" role="alert">
+          Produkt byl vytvořen, ale fotografie se nepodařilo nahrát. Vyberte je znovu níže; další produkt už nevytvářejte.
+        </p>
+      ) : null}
       <nav aria-label="Sekce produktu" className="mt-6 flex flex-wrap gap-2 font-redhat text-sm font-semibold">
         <a className="rounded-brand bg-ruby px-4 py-2.5 text-white" href="#product-images">Fotografie ({images.length})</a>
         <a className="rounded-brand border border-line bg-white px-4 py-2.5 text-ink" href="#product-details">Údaje produktu</a>

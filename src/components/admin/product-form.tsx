@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Archive, Check, Copy, LoaderCircle, Power, Save } from "lucide-react";
+import { NewProductImages, type NewProductImageDraft } from "@/components/admin/new-product-images";
 import { parseAdminProductFormData } from "@/lib/products/admin-product-form";
 import type { AdminProductInput } from "@/lib/products/admin-product-schema";
 
@@ -18,6 +19,8 @@ export function ProductForm({ initial, productId }: { initial: AdminProductInput
   const [locale, setLocale] = useState<(typeof locales)[number]>("cs");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const [imageDrafts, setImageDrafts] = useState<NewProductImageDraft[]>([]);
+  const [imageError, setImageError] = useState("");
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -25,6 +28,11 @@ export function ProductForm({ initial, productId }: { initial: AdminProductInput
     const parsed = parseAdminProductFormData(formData);
     if (!parsed.success) {
       setMessage({ type: "error", text: parsed.error.issues[0]?.message ?? "Zkontrolujte vyplněná pole." });
+      return;
+    }
+    if (!productId && !imageDrafts.length) {
+      setImageError("Přidejte alespoň jednu produktovou fotografii.");
+      document.getElementById("new-product-images")?.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
 
@@ -38,7 +46,26 @@ export function ProductForm({ initial, productId }: { initial: AdminProductInput
       });
       const result = await response.json() as { id?: string; error?: string };
       if (!response.ok || !result.id) throw new Error(result.error ?? "Produkt se nepodařilo uložit.");
-      setMessage({ type: "success", text: "Produkt byl bezpečně uložen." });
+      if (!productId) {
+        const imageData = new FormData();
+        imageDrafts.forEach((draft) => imageData.append("files", draft.file));
+        imageData.set("metadata", JSON.stringify(imageDrafts.map((draft) => ({
+          alt: {
+            cs: draft.alt.cs.trim() || parsed.data.translations.cs.name,
+            en: draft.alt.en.trim() || parsed.data.translations.en.name,
+            de: draft.alt.de.trim() || parsed.data.translations.de.name
+          }
+        }))));
+        const imageResponse = await fetch(`/api/admin/products/${result.id}/images`, { method: "POST", body: imageData });
+        const imageResult = await imageResponse.json() as { error?: string };
+        if (!imageResponse.ok) {
+          setMessage({ type: "error", text: `Produkt byl uložen, ale fotografie se nepodařilo nahrát: ${imageResult.error ?? "neznámá chyba"}` });
+          router.push(`/admin/products/${result.id}?imageUpload=failed`);
+          router.refresh();
+          return;
+        }
+      }
+      setMessage({ type: "success", text: "Produkt i fotografie byly bezpečně uloženy." });
       router.push(`/admin/products/${result.id}`);
       router.refresh();
     } catch (error) {
@@ -93,6 +120,8 @@ export function ProductForm({ initial, productId }: { initial: AdminProductInput
         </div>
       </section>
 
+      {!productId ? <NewProductImages drafts={imageDrafts} error={imageError} onChange={setImageDrafts} onError={setImageError} /> : null}
+
       <section className="border-b border-line pb-7">
         <h2 className="font-newsreader text-3xl">Ceny</h2>
         <div className="mt-5 grid gap-5 md:grid-cols-4">
@@ -144,7 +173,7 @@ export function ProductForm({ initial, productId }: { initial: AdminProductInput
           {productId ? <button className="inline-flex min-h-11 items-center gap-2 border border-line bg-white px-4 font-redhat text-sm font-semibold" disabled={saving} onClick={() => lifecycle(initial.active ? "deactivate" : "activate")} type="button">{initial.active ? <Power size={17} /> : <Check size={17} />}{initial.active ? "Deaktivovat" : "Aktivovat"}</button> : null}
           {productId ? <button className="inline-flex min-h-11 items-center gap-2 border border-line bg-white px-4 font-redhat text-sm font-semibold" disabled={saving} onClick={() => lifecycle("archive")} type="button"><Archive size={17} />Archivovat</button> : null}
         </div>
-        <button className="inline-flex min-h-11 items-center gap-2 rounded-brand bg-ruby px-6 font-redhat text-sm font-semibold text-white disabled:opacity-50" disabled={saving} type="submit">{saving ? <LoaderCircle className="animate-spin" size={18} /> : <Save size={18} />}{productId ? "Uložit produkt" : "Uložit a přidat fotografie"}</button>
+        <button className="inline-flex min-h-11 items-center gap-2 rounded-brand bg-ruby px-6 font-redhat text-sm font-semibold text-white disabled:opacity-50" disabled={saving} type="submit">{saving ? <LoaderCircle className="animate-spin" size={18} /> : <Save size={18} />}{productId ? "Uložit produkt" : "Vytvořit produkt s fotografiemi"}</button>
       </div>
     </form>
   );
