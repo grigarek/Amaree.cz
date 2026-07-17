@@ -1,0 +1,66 @@
+name: Supabase Free encrypted backup
+
+on:
+  schedule:
+    - cron: "17 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - run: npm ci
+      - name: Validate backup secrets
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          BACKUP_ENCRYPTION_PASSWORD: ${{ secrets.BACKUP_ENCRYPTION_PASSWORD }}
+        run: test -n "$SUPABASE_DB_URL" && test -n "$BACKUP_ENCRYPTION_PASSWORD"
+      - name: Dump database
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          mkdir -p backup/database
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f backup/database/roles.sql --role-only
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f backup/database/schema.sql
+          supabase db dump --db-url "$SUPABASE_DB_URL" -f backup/database/data.sql --data-only --use-copy
+      - name: Export critical tables and Storage files
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run supabase:export -- backup/critical
+      - name: Check Supabase Free limits
+        id: limits
+        continue-on-error: true
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: npm run supabase:limits
+      - name: Encrypt backup
+        env:
+          BACKUP_ENCRYPTION_PASSWORD: ${{ secrets.BACKUP_ENCRYPTION_PASSWORD }}
+        run: |
+          tar -czf - backup | openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:BACKUP_ENCRYPTION_PASSWORD -out "amaree-supabase-${GITHUB_RUN_ID}.tar.gz.enc"
+          shasum -a 256 "amaree-supabase-${GITHUB_RUN_ID}.tar.gz.enc" > "amaree-supabase-${GITHUB_RUN_ID}.sha256"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: amaree-supabase-${{ github.run_id }}
+          path: |
+            amaree-supabase-${{ github.run_id }}.tar.gz.enc
+            amaree-supabase-${{ github.run_id }}.sha256
+          retention-days: 30
+          if-no-files-found: error
+      - name: Fail after preserving backup when limits are close
+        if: steps.limits.outcome == 'failure'
+        run: exit 1
