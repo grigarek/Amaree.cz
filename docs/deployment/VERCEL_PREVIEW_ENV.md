@@ -57,10 +57,10 @@ ECOMAIL_SEND_ENABLED=false
 ECOMAIL_API_KEY=<testovací klíč, server only>
 ECOMAIL_TRANSACTIONAL_ENDPOINT=<potvrzený testovací endpoint>
 ECOMAIL_LIST_ID=<testovací seznam>
-ECOMAIL_FROM_EMAIL=<ověřená testovací adresa>
+ECOMAIL_FROM_EMAIL=info@amaree.cz
 ECOMAIL_FROM_NAME=AMARÉE
 ```
 
-`ECOMAIL_SEND_ENABLED` zůstane `false`, dokud nebude ověřená odesílací doména a testovací doručitelnost.
+`ECOMAIL_SEND_ENABLED` zůstane `false`, dokud nebude v Ecomailu ověřená doména `amaree.cz` a testovací doručitelnost. Schránku `info@amaree.cz` nadále hostuje Active24; její heslo ani SMTP údaje se do aplikace nebo Cloudflare secrets neukládají.
 
 Preview nesmí obsahovat žádný produkční klíč. Kontroluje to také `/api/health` podle explicitních `*_ENVIRONMENT` hodnot.

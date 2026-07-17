@@ -6,6 +6,8 @@ Původní migrace nebylo bezpečné aplikovat za sebou. Obě byly přesunuty do 
 
 Migrace nebyla spuštěna v žádném Supabase projektu.
 
+`supabase/seed.sql` je záměrně prázdný. Původní seed používal archivované schéma kategorií a při `supabase db reset` by selhal. Povinné kategorie, dopravu a platby vkládá baseline; produkty a slevové kódy se ověřují přes `/admin`.
+
 ## Původní migrace
 
 ### `202607140001_initial_schema.sql`

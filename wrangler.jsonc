@@ -26,7 +26,9 @@
     "PACKETA_ENVIRONMENT": "test",
     "PACKETA_API_ENABLED": "false",
     "ECOMAIL_ENVIRONMENT": "test",
-    "ECOMAIL_SEND_ENABLED": "false"
+    "ECOMAIL_SEND_ENABLED": "false",
+    "ECOMAIL_FROM_EMAIL": "info@amaree.cz",
+    "ECOMAIL_FROM_NAME": "AMARÉE"
   },
   "env": {
     "staging": {
@@ -43,7 +45,9 @@
         "PACKETA_ENVIRONMENT": "test",
         "PACKETA_API_ENABLED": "false",
         "ECOMAIL_ENVIRONMENT": "test",
-        "ECOMAIL_SEND_ENABLED": "false"
+        "ECOMAIL_SEND_ENABLED": "false",
+        "ECOMAIL_FROM_EMAIL": "info@amaree.cz",
+        "ECOMAIL_FROM_NAME": "AMARÉE"
       },
       "triggers": {
         "crons": ["*/15 * * * *"]
@@ -65,7 +69,9 @@
         "PACKETA_ENVIRONMENT": "production",
         "PACKETA_API_ENABLED": "false",
         "ECOMAIL_ENVIRONMENT": "production",
-        "ECOMAIL_SEND_ENABLED": "false"
+        "ECOMAIL_SEND_ENABLED": "false",
+        "ECOMAIL_FROM_EMAIL": "info@amaree.cz",
+        "ECOMAIL_FROM_NAME": "AMARÉE"
       },
       "triggers": {
         "crons": ["*/15 * * * *"]

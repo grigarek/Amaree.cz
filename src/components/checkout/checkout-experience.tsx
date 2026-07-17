@@ -1,7 +1,7 @@
 "use client";
 
 import Script from "next/script";
-import { Banknote, CreditCard, Landmark, MapPin } from "lucide-react";
+import { Banknote, CreditCard, Globe2, Landmark, MapPin, Store, Truck } from "lucide-react";
 import { useMemo, useRef, useState, type FormEvent } from "react";
 import type { Locale } from "@/i18n/routing";
 import {
@@ -38,7 +38,6 @@ const copy = {
     changePoint: "Změnit výdejní místo", validating: "Ověřuji výdejní místo…", validationFailed: "Výdejní místo se nepodařilo ověřit.",
     widgetFailed: "Widget Zásilkovny se zatím nenačetl.", mock: "Lokální testovací režim: skutečná zásilka nevznikne.",
     pickupReady: "Objednávku si můžete vyzvednout až po obdržení potvrzení, že je připravena k osobnímu odběru.",
-    cod: "Příplatek za dobírku je 39 Kč.",
     bank: "Objednávka bude odeslána až po přijetí platby. Platební údaje a variabilní symbol obdržíte v potvrzení objednávky.",
     bankAccount: "Účet", itemSubtotal: "Mezisoučet", discount: "Sleva", shippingPrice: "Doprava", paymentFee: "Platební poplatek",
     total: "Celkem", selectedShipping: "Zvolená doprava", selectedPayment: "Zvolená platba", selectedPoint: "Vybrané místo",
@@ -56,7 +55,7 @@ const copy = {
     selectPoint: "Select a pickup point or Z-BOX", changePoint: "Change pickup point", validating: "Validating pickup point…",
     validationFailed: "The pickup point could not be validated.", widgetFailed: "The Packeta widget has not loaded yet.", mock: "Local test mode: no real shipment will be created.",
     pickupReady: "Collect your order only after receiving confirmation that it is ready for pickup.",
-    cod: "Cash on delivery surcharge is CZK 39.", bank: "The order will be dispatched after payment is received. Payment details and the variable symbol will be sent in the confirmation.",
+    bank: "The order will be dispatched after payment is received. Payment details and the variable symbol will be sent in the confirmation.",
     bankAccount: "Account", itemSubtotal: "Subtotal", discount: "Discount", shippingPrice: "Shipping", paymentFee: "Payment fee", total: "Total",
     selectedShipping: "Selected shipping", selectedPayment: "Selected payment", selectedPoint: "Selected point", empty: "Your cart is empty.",
     pricePending: "Awaiting confirmed EUR product prices",
@@ -71,7 +70,7 @@ const copy = {
     selectPoint: "Abholstelle oder Z-BOX auswählen", changePoint: "Abholstelle ändern", validating: "Abholstelle wird geprüft…",
     validationFailed: "Die Abholstelle konnte nicht geprüft werden.", widgetFailed: "Das Packeta-Widget wurde noch nicht geladen.", mock: "Lokaler Testmodus: Es wird keine echte Sendung erstellt.",
     pickupReady: "Holen Sie die Bestellung erst ab, nachdem Sie die Bestätigung der Abholbereitschaft erhalten haben.",
-    cod: "Der Nachnahmezuschlag beträgt 39 CZK.", bank: "Der Versand erfolgt erst nach Zahlungseingang. Zahlungsdaten und Verwendungszweck erhalten Sie in der Bestätigung.",
+    bank: "Der Versand erfolgt erst nach Zahlungseingang. Zahlungsdaten und Verwendungszweck erhalten Sie in der Bestätigung.",
     bankAccount: "Konto", itemSubtotal: "Zwischensumme", discount: "Rabatt", shippingPrice: "Versand", paymentFee: "Zahlungsgebühr", total: "Gesamt",
     selectedShipping: "Gewählter Versand", selectedPayment: "Gewählte Zahlung", selectedPoint: "Gewählte Abholstelle", empty: "Ihr Warenkorb ist leer.",
     pricePending: "Bestätigte EUR-Produktpreise stehen noch aus",
@@ -216,12 +215,26 @@ export function CheckoutExperience({ locale }: { locale: Locale }) {
 
           <CheckoutSection legend={c.shipping}>
             <div className="grid gap-3">
-              {shippingMethods.map((method) => (
-                <label key={method} className="flex items-start justify-between gap-4 rounded-brand border border-line p-4 font-redhat text-sm">
-                  <span className="flex gap-3"><input checked={shippingMethodId === method} name="shipping" onChange={() => changeShipping(method)} type="radio" />{shippingLabels[method][locale]}</span>
-                  <strong>{formatMoney(getShippingQuote(method, countryCode).amount, locale, getShippingQuote(method, countryCode).currency)}</strong>
-                </label>
-              ))}
+              {shippingMethods.map((method) => {
+                const Icon = method === "packeta_home"
+                  ? Truck
+                  : method === "packeta_pickup"
+                    ? MapPin
+                    : method === "personal_pickup"
+                      ? Store
+                      : Globe2;
+
+                return (
+                  <label key={method} className="flex items-center justify-between gap-4 rounded-brand border border-line p-4 font-redhat text-sm">
+                    <span className="flex min-w-0 items-center gap-3">
+                      <input className="shrink-0" checked={shippingMethodId === method} name="shipping" onChange={() => changeShipping(method)} type="radio" />
+                      <Icon aria-hidden="true" className="shrink-0 text-ruby" size={19} strokeWidth={1.7} />
+                      <span>{shippingLabels[method][locale]}</span>
+                    </span>
+                    <strong className="shrink-0">{formatMoney(getShippingQuote(method, countryCode).amount, locale, getShippingQuote(method, countryCode).currency)}</strong>
+                  </label>
+                );
+              })}
             </div>
             {shippingMethodId === "personal_pickup" ? <div className="mt-4 font-redhat text-sm text-muted">{companyAddressLines.map((line) => <p key={line}>{line}</p>)}<p className="mt-3 font-semibold text-ink">{c.pickupReady}</p></div> : null}
             {!domestic ? <p className="mt-4 font-redhat text-sm text-ruby">{c.euPending}</p> : null}
@@ -253,7 +266,6 @@ export function CheckoutExperience({ locale }: { locale: Locale }) {
                       </span>
                       {method === "cash_on_delivery" ? <strong>{formatMoney(getPaymentQuote(method, countryCode).amount, locale, getPaymentQuote(method, countryCode).currency)}</strong> : null}
                     </span>
-                    {method === "cash_on_delivery" ? <span className="mt-2 block pl-[3.75rem] text-muted">{c.cod}</span> : null}
                     {method === "bank_transfer" ? <span className="mt-2 block pl-[3.75rem] text-muted">{c.bank}</span> : null}
                     {method === "gopay" && enabledGoPayMethods.length ? <span className="mt-2 block pl-[3.75rem] text-muted">{enabledGoPayMethods.map((methodName) => c.methods[methodName as keyof typeof c.methods]).filter(Boolean).join(" · ")}</span> : null}
                     {method === "bank_transfer" ? <span className="mt-2 block pl-[3.75rem] font-semibold">{c.bankAccount}: {company.bankAccount}</span> : null}
