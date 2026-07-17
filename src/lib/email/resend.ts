@@ -1,6 +1,7 @@
 import "server-only";
 import { Resend } from "resend";
 import type { EmailProvider, OrderEmailInput } from "./provider";
+import { buildOrderConfirmationText } from "./order-confirmation";
 
 export class ResendEmailProvider implements EmailProvider {
   private resend: Resend;
@@ -15,7 +16,7 @@ export class ResendEmailProvider implements EmailProvider {
       from: process.env.RESEND_FROM_EMAIL ?? "AMARÉE <orders@amaree.cz>",
       to: input.to,
       subject: `AMARÉE - objednávka ${input.orderNumber}`,
-      text: `Děkujeme za objednávku ${input.orderNumber}. Celkem: ${input.total}.`
+      text: buildOrderConfirmationText(input)
     });
   }
 }

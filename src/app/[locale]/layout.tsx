@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { isLocale, locales } from "@/i18n/routing";
+import { enabledLocales, isLocale } from "@/i18n/routing";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { CookieConsent } from "@/components/site/cookie-consent";
 import { DocumentLocale } from "@/components/site/document-locale";
+import { company } from "@/lib/config/company";
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+  return enabledLocales.map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -25,12 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     },
     description: "Minimalistická elegance, která podtrhne váš styl. Kvalitní materiály. Nadčasový design.",
     alternates: {
-      canonical: `/${locale}`,
-      languages: {
-        cs: "/cs",
-        en: "/en",
-        de: "/de"
-      }
+      canonical: `/${locale}`
     },
     openGraph: {
       type: "website",
@@ -55,6 +51,24 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "OnlineStore",
+          name: company.brand,
+          legalName: company.legalName,
+          identifier: { "@type": "PropertyValue", name: "IČO", value: company.companyId },
+          additionalProperty: [
+            { "@type": "PropertyValue", name: "Obchodní rejstřík", value: company.registerEntry },
+            { "@type": "PropertyValue", name: "Den zápisu", value: company.registeredAt },
+            { "@type": "PropertyValue", name: "Plátce DPH", value: company.vatPayer }
+          ],
+          email: company.email,
+          telephone: company.phone,
+          address: { "@type": "PostalAddress", streetAddress: `${company.address.street}, ${company.address.district}`, postalCode: company.address.postalCode, addressLocality: company.address.city, addressCountry: company.address.countryCode }
+        }) }}
+      />
       <DocumentLocale locale={locale} />
       <Header locale={locale} />
       <main>{children}</main>

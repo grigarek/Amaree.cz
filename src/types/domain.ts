@@ -2,7 +2,7 @@ import type { Locale } from "@/i18n/routing";
 
 export type { Locale };
 
-export type Currency = "CZK";
+export type Currency = "CZK" | "EUR";
 export type CategorySlug = "earrings" | "necklaces" | "bracelets";
 
 export type LocalizedText = Record<Locale, string>;
@@ -36,7 +36,9 @@ export interface Product {
   sku: string;
   stockQuantity: number;
   material: LocalizedText;
+  color?: LocalizedText;
   dimensions: LocalizedText;
+  weightGrams?: number;
   care: LocalizedText;
   active: boolean;
   featured: boolean;
@@ -49,6 +51,8 @@ export interface Product {
 export interface CartLine {
   productId: string;
   quantity: number;
+  /** Client-side display snapshot only. Checkout always reloads prices from the database. */
+  product?: Product;
 }
 
 export interface PricedCartLine {
@@ -70,7 +74,19 @@ export interface DiscountCode {
   usageCount: number;
 }
 
-export type ShippingMethodId = "zasilkovna" | "ppl" | "pickup";
+export type ShippingMethodId = "packeta_home" | "packeta_pickup" | "personal_pickup" | "eu_delivery";
+export type PaymentMethodId = "gopay" | "cash_on_delivery" | "bank_transfer";
+export type OrderStatus =
+  | "new"
+  | "awaiting_payment"
+  | "paid"
+  | "processing"
+  | "ready_for_pickup"
+  | "shipped"
+  | "delivered"
+  | "cancelled"
+  | "refunded"
+  | "archived";
 
 export interface ShippingMethod {
   id: ShippingMethodId;

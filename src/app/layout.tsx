@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Newsreader, Red_Hat_Text } from "next/font/google";
+import { Cormorant_Garamond, Montserrat, Newsreader, Playfair_Display, Red_Hat_Text } from "next/font/google";
 import { headers } from "next/headers";
 import { defaultLocale, isLocale } from "@/i18n/routing";
+import { isIndexingAllowed } from "@/lib/environment";
 import "./globals.css";
 
 const newsreader = Newsreader({
@@ -25,9 +26,26 @@ const redHat = Red_Hat_Text({
   display: "swap"
 });
 
+const playfair = Playfair_Display({
+  subsets: ["latin-ext"],
+  weight: ["600"],
+  variable: "--font-playfair",
+  display: "swap"
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin-ext"],
+  weight: ["500"],
+  variable: "--font-montserrat",
+  display: "swap"
+});
+
 export const metadata: Metadata = {
   title: "A M A R É E",
-  description: "Minimalistická elegance, která podtrhne váš styl. Kvalitní materiály. Nadčasový design."
+  description: "Minimalistická elegance, která podtrhne váš styl. Kvalitní materiály. Nadčasový design.",
+  robots: isIndexingAllowed()
+    ? { index: true, follow: true }
+    : { index: false, follow: false, noarchive: true, nocache: true }
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -35,7 +53,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const locale = requestedLocale && isLocale(requestedLocale) ? requestedLocale : defaultLocale;
 
   return (
-    <html lang={locale} data-scroll-behavior="smooth" className={`${newsreader.variable} ${cormorant.variable} ${redHat.variable}`}>
+    <html
+      lang={locale}
+      data-scroll-behavior="smooth"
+      className={`${newsreader.variable} ${cormorant.variable} ${redHat.variable} ${playfair.variable} ${montserrat.variable}`}
+    >
       <body className="font-redhat antialiased">{children}</body>
     </html>
   );

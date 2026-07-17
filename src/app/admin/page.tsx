@@ -1,15 +1,30 @@
 import Link from "next/link";
 import { AdminShell } from "@/components/admin/admin-shell";
-import { products } from "@/lib/products";
-
-const tiles = [
-  { label: "Produkty", href: "/admin/products", value: products.length },
-  { label: "Objednávky", href: "/admin/orders", value: 0 },
-  { label: "Slevové kódy", href: "/admin/discounts", value: 1 },
-  { label: "Odběratelé", href: "/admin/subscribers", value: 0 }
-];
+import { listAdminProducts } from "@/lib/admin/products";
+import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export default async function AdminPage() {
+  const admin = await requireAdmin();
+  const productCount = (await listAdminProducts()).length;
+  let orderCount = 0;
+  let discountCount = 0;
+  if (isSupabaseConfigured()) {
+    const supabase = await createSupabaseServerClient();
+    const [orders, discounts] = await Promise.all([
+      supabase.from("orders").select("id", { count: "exact", head: true }),
+      supabase.from("discount_codes").select("id", { count: "exact", head: true }).eq("active", true)
+    ]);
+    orderCount = orders.count ?? 0;
+    discountCount = discounts.count ?? 0;
+  }
+  const tiles = [
+    { label: "Produkty", href: "/admin/products", value: productCount },
+    ...(admin.role === "admin" ? [
+      { label: "Objednávky", href: "/admin/orders", value: orderCount },
+      { label: "Aktivní slevy", href: "/admin/discounts", value: discountCount }
+    ] : [])
+  ];
   return (
     <AdminShell>
       <main className="mx-auto max-w-page px-5 py-10">

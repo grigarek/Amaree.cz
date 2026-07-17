@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { localizedPaths, type Locale } from "@/i18n/routing";
 import { calculateOrderTotal } from "@/lib/cart";
+import { commerceConfig } from "@/lib/commerce/config";
 import { formatMoney } from "@/lib/money";
 import { useCartStore } from "@/store/cart-store";
 
@@ -13,7 +14,7 @@ export function CartDrawer({ locale }: { locale: Locale }) {
   const t = useTranslations("cart");
   const { isOpen, close, lines, setQuantity, removeItem, discountCode, setDiscountCode } = useCartStore();
   const totals = calculateOrderTotal(lines, discountCode);
-  const freeLeft = Math.max(250000 - (totals.subtotal - totals.discount), 0);
+  const freeLeft = Math.max(commerceConfig.freeShipping.threshold - (totals.subtotal - totals.discount), 0);
 
   return (
     <aside
@@ -93,6 +94,12 @@ export function CartDrawer({ locale }: { locale: Locale }) {
               <dt>{t("shipping")}</dt>
               <dd>{formatMoney(totals.shipping, locale)}</dd>
             </div>
+            {totals.paymentFee > 0 ? (
+              <div className="flex justify-between">
+                <dt>{t("paymentFee")}</dt>
+                <dd>{formatMoney(totals.paymentFee, locale)}</dd>
+              </div>
+            ) : null}
             <div className="flex justify-between border-t border-line pt-3 text-base font-semibold">
               <dt>{t("total")}</dt>
               <dd>{formatMoney(totals.total, locale)}</dd>

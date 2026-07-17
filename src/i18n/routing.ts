@@ -1,10 +1,11 @@
 export const locales = ["cs", "en", "de"] as const;
 export type Locale = (typeof locales)[number];
 
-export const defaultLocale: Locale = "cs";
+export const defaultLocale = "cs" as const satisfies Locale;
+export const enabledLocales = [defaultLocale] as const;
 
 export const localeNames: Record<Locale, string> = {
-  cs: "Česky",
+  cs: "Čeština",
   en: "English",
   de: "Deutsch"
 };
@@ -22,7 +23,6 @@ export const localizedPaths = {
     category: "/cs/kolekce",
     product: "/cs/produkt",
     about: "/cs/o-nas",
-    inspiration: "/cs/inspirace",
     contact: "/cs/kontakt",
     cart: "/cs/kosik",
     checkout: "/cs/objednavka",
@@ -39,7 +39,6 @@ export const localizedPaths = {
     category: "/en/collection",
     product: "/en/product",
     about: "/en/about-us",
-    inspiration: "/en/inspiration",
     contact: "/en/contact",
     cart: "/en/cart",
     checkout: "/en/checkout",
@@ -56,7 +55,6 @@ export const localizedPaths = {
     category: "/de/kollektion",
     product: "/de/produkt",
     about: "/de/ueber-uns",
-    inspiration: "/de/inspiration",
     contact: "/de/kontakt",
     cart: "/de/warenkorb",
     checkout: "/de/bestellung",

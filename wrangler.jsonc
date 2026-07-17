@@ -1,0 +1,75 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "amaree-development",
+  "main": "./custom-worker.ts",
+  "compatibility_date": "2026-07-17",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "preview_urls": true,
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+    "run_worker_first": false
+  },
+  "limits": {
+    "cpu_ms": 10,
+    "subrequests": 50
+  },
+  "vars": {
+    "DEPLOY_TARGET": "cloudflare",
+    "APP_ENV": "development",
+    "NEXT_PUBLIC_APP_ENV": "development",
+    "SUPABASE_ENVIRONMENT": "development",
+    "ALLOW_LOCAL_ADMIN": "false",
+    "GOPAY_ENVIRONMENT": "sandbox",
+    "GOPAY_CHECKOUT_ENABLED": "false",
+    "PACKETA_ENVIRONMENT": "test",
+    "PACKETA_API_ENABLED": "false",
+    "ECOMAIL_ENVIRONMENT": "test",
+    "ECOMAIL_SEND_ENABLED": "false"
+  },
+  "env": {
+    "staging": {
+      "name": "amaree-staging",
+      "vars": {
+        "DEPLOY_TARGET": "cloudflare",
+        "APP_ENV": "staging",
+        "NEXT_PUBLIC_APP_ENV": "staging",
+        "NEXT_PUBLIC_SITE_URL": "https://amaree-staging.REPLACE_ME.workers.dev",
+        "SUPABASE_ENVIRONMENT": "development",
+        "ALLOW_LOCAL_ADMIN": "false",
+        "GOPAY_ENVIRONMENT": "sandbox",
+        "GOPAY_CHECKOUT_ENABLED": "false",
+        "PACKETA_ENVIRONMENT": "test",
+        "PACKETA_API_ENABLED": "false",
+        "ECOMAIL_ENVIRONMENT": "test",
+        "ECOMAIL_SEND_ENABLED": "false"
+      },
+      "triggers": {
+        "crons": ["*/15 * * * *"]
+      }
+    },
+    "production": {
+      "name": "amaree-production",
+      "workers_dev": false,
+      "preview_urls": false,
+      "vars": {
+        "DEPLOY_TARGET": "cloudflare",
+        "APP_ENV": "production",
+        "NEXT_PUBLIC_APP_ENV": "production",
+        "NEXT_PUBLIC_SITE_URL": "https://amaree.cz",
+        "SUPABASE_ENVIRONMENT": "production",
+        "ALLOW_LOCAL_ADMIN": "false",
+        "GOPAY_ENVIRONMENT": "production",
+        "GOPAY_CHECKOUT_ENABLED": "false",
+        "PACKETA_ENVIRONMENT": "production",
+        "PACKETA_API_ENABLED": "false",
+        "ECOMAIL_ENVIRONMENT": "production",
+        "ECOMAIL_SEND_ENABLED": "false"
+      },
+      "triggers": {
+        "crons": ["*/15 * * * *"]
+      }
+    }
+  }
+}

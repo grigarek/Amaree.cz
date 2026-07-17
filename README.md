@@ -1,31 +1,18 @@
 # AMARÉE e-shop
 
-Produkčně připravený základ vlastního e-shopu pro českou značku šperků **A M A R É E**, postavený na Next.js App Routeru, TypeScriptu, Tailwind CSS a připravený pro Supabase, Stripe a Resend.
+Vlastní e-shop značky AMARÉE postavený na Next.js App Routeru, TypeScriptu, Tailwind CSS a připraveném Supabase backendu. Aktuální větev je produkční příprava, nikoli produkční nasazení.
 
-## Analýza referenčního webu
-
-Referenční Webnode web `https://amaree-cz-05c3ad.webnode.cz/` potvrzuje:
-
-- wordmark `A M A R É E` a claim `EST. 2025`,
-- českou navigaci: Úvod, Kolekce, O nás, Inspirace, Kontakt,
-- hlavní text: „Minimalistická elegance, která podtrhne váš styl. Kvalitní materiály. Nadčasový design.“,
-- elegantní bílý layout s tmavě rubínovým akcentem,
-- e-shopovou strukturu s košíkem a měnou CZK,
-- Webnode footer a branding, který se v nové aplikaci nepoužívá,
-- dostupné vlastní vizuály přes CDN, použité dočasně jako migrované referenční obrázky.
-
-Obsah ze zadání má přednost tam, kde se liší od referenčního webu. Produktová data v repozitáři jsou označená jako demonstrační a musí se před ostrým spuštěním ověřit.
+Přesný stav hotových, vypnutých a navazujících částí je v `docs/PROJECT_STATUS.md`.
 
 ## Technologie
 
-- Next.js 15, App Router, React 19
-- TypeScript
-- Tailwind CSS
-- next-intl se soubory `messages/cs.json`, `messages/en.json`, `messages/de.json`
-- Supabase PostgreSQL, Storage a Authentication
-- Modulární platební vrstva se Stripe adaptérem
-- Modulární e-mailová vrstva s Resend adaptérem
-- Vitest testy pro ceny, košík, checkout, i18n, admin přístup a webhook idempotenci
+- Next.js 16, React 19, TypeScript a Tailwind CSS,
+- Supabase Auth, PostgreSQL, RLS a Storage,
+- GoPay serverový sandbox adaptér,
+- Packeta Widget v6 a REST/XML serverový adaptér,
+- Ecomail Transactional API adaptér,
+- OpenNext adaptér pro paralelní Cloudflare Workers staging,
+- Vitest pro obchodní, bezpečnostní a integrační kontrakty.
 
 ## Lokální spuštění
 
@@ -35,96 +22,94 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Výchozí stránka přesměruje na `/cs`. Jazykové verze jsou `/cs`, `/en`, `/de`. Administrace je na `/admin`.
+Web běží na `/cs`, administrace na `/admin`. Veřejné EN/DE přepínání je dočasně vypnuté, datový model však překlady CS/EN/DE zachovává.
 
-## Proměnné prostředí
+Lokální demo katalog se použije pouze při `APP_ENV=development`, když Supabase není nakonfigurovaný. Staging ani production demo produkty jako fallback nezobrazí.
 
-Nikdy necommitujte skutečné tajné klíče. Použijte `.env.local` podle `.env.example`.
-
-- `NEXT_PUBLIC_SITE_URL`
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `STRIPE_SECRET_KEY`
-- `STRIPE_WEBHOOK_SECRET`
-- `RESEND_API_KEY`
-- `RESEND_FROM_EMAIL`
-- `ADMIN_EMAILS`
-- `FREE_SHIPPING_THRESHOLD_CZK`
-
-## Supabase
-
-1. Vytvořte projekt v Supabase.
-2. Spusťte migraci `supabase/migrations/202607140001_initial_schema.sql`.
-3. Vytvořte Storage bucket pro produktové fotografie, například `product-images`.
-4. Nastavte RLS policies podle produkčních admin e-mailů. Migrace obsahuje základní veřejné čtení aktivních produktů.
-5. Spusťte seed:
-
-```bash
-npm run seed
-```
-
-Poznámka: obrázky jsou zatím linkované z původního CDN. Pro ostrý provoz je nahrajte do Supabase Storage a aktualizujte URL v administraci nebo seed datech.
-
-## Platby
-
-Checkout endpoint je připravený na `/api/checkout`. Před vytvořením objednávky znovu počítá ceny ze serverového katalogu a validuje sklad.
-
-Stripe webhook je na:
-
-```text
-/api/webhooks/stripe
-```
-
-Produkční dokončení:
-
-- vytvořit pending objednávku v Supabase transakčně,
-- zavolat `getPaymentProvider("stripe").createCheckoutSession()`,
-- ukládat `payment_provider_reference`,
-- ukládat webhook event ID do `payment_webhook_events`,
-- po potvrzení platby odečíst sklad a odeslat e-mail.
-
-GoPay nebo Comgate lze doplnit implementací rozhraní `PaymentProvider`.
-
-## E-maily
-
-E-mailová abstrakce je v `src/lib/email`. Resend adaptér připravuje potvrzení objednávky. Před ostrým provozem ověřte odesílací doménu a SPF/DKIM/DMARC.
-
-## Právní obsah
-
-Právní stránky obsahují jasné `TODO`. Záměrně nejsou doplněné IČO, DIČ, provozující společnost, bankovní spojení ani kontaktní osoby, protože finální údaje nebyly v zadání dodané.
-
-## Testy a kontroly
+## Povinné kontroly
 
 ```bash
 npm run typecheck
 npm run lint
 npm run test
+npm run products:validate
 npm run build
 ```
 
-V tomto prostředí nebyl dostupný `npm`, proto kontroly spusťte po instalaci závislostí v běžném Node.js prostředí.
+Kontrola osiřelých Storage objektů je ve výchozím stavu pouze dry-run:
 
-## Nasazení na Vercel
+```bash
+npm run storage:orphans
+```
 
-1. Připojte GitHub repozitář do Vercelu.
-2. Nastavte env proměnné pro production i preview.
-3. Nastavte `NEXT_PUBLIC_SITE_URL` na produkční doménu.
-4. Ověřte Supabase URL, anon key a service role key.
-5. Nastavte Stripe webhook endpoint.
-6. Nastavte Resend doménu.
-7. Připojte doménu `amaree.cz` nebo cílovou doménu.
-8. Spusťte production build.
+Mazání vyžaduje současně argument `--apply` a `CONFIRM_ORPHAN_DELETE=true`.
 
-## Checklist před ostrým spuštěním
+## Supabase
 
-- Nahradit všechna demonstrační produktová data skutečnými názvy, cenami, popisy a skladovostí.
-- Přenést fotografie z referenčního webu do Supabase Storage.
-- Zkontrolovat EN a DE pracovní překlady rodilým mluvčím.
-- Doplnit právní dokumenty a firemní údaje.
-- Ověřit Stripe webhook v testovacím režimu.
-- Ověřit odečítání skladu až po potvrzení platby.
-- Ověřit transakční e-maily.
-- Otestovat checkout na mobilu.
-- Ověřit sitemap, robots, canonical a hreflang.
-- Přidat analytiku až po souhlasu s cookies.
+Jediná aktivní migrace je `supabase/migrations/202607170001_development_baseline.sql`. Je určena pouze pro prázdný vývojový projekt a nebyla spuštěna. Audit je v `docs/supabase/MIGRATION_AUDIT_2026-07-17.md`, bezpečný postup v `docs/supabase/MIGRATION_PLAN.md`.
+
+Po spuštění baseline a vytvoření schváleného admin účtu umí `/admin`:
+
+- plný CRUD produktů včetně CS/EN/DE, CZK/EUR, skladu, SEO a lifecycle,
+- fotografie v Supabase Storage včetně pořadí, hlavní fotografie a ALT,
+- seznam/detail objednávek, interní poznámku, historii stavů, e-mailů a audit,
+- stavové e-maily a samostatné Packeta akce.
+
+Postup prvního produktu je v `docs/admin/FIRST_TEST_PRODUCT.md`.
+
+## Checkout a sklad
+
+Checkout podporuje pouze Česko a Slovensko. Serverové RPC vždy znovu načte aktivní produkty a ceny z databáze, vypočte dopravu/slevu/poplatek, vytvoří objednávku a rezervuje sklad pod idempotency key. Peníze jsou v databázi integer v nejmenších jednotkách měny.
+
+- GoPay: rezervace 30 minut,
+- bankovní převod: rezervace 3 dny,
+- dobírka: sklad se při vytvoření objednávky potvrdí,
+- opakovaný checkout/webhook nesmí vytvořit druhou objednávku ani odečet.
+
+Cloudflare konfigurace obsahuje Cron Trigger pro expiraci rezervací po 15 minutách. Není aktivní, dokud není schválen a nasazen staging Worker.
+
+## Integrace
+
+### GoPay
+
+Staging používá pouze sandbox. Integrace je vypnutá přes `GOPAY_CHECKOUT_ENABLED=false`, dokud neproběhne databázový a end-to-end test.
+
+```text
+https://test.amaree.cz/cs/objednavka/vysledek
+https://test.amaree.cz/api/payments/gopay/notification
+```
+
+### Packeta
+
+Widget key je veřejný identifikátor, API password je pouze serverové tajemství. Packeta nemá sandbox; staging musí používat majitelem potvrzené údaje a odděleného testovacího odesílatele. Serverové volání je vypnuté přes `PACKETA_API_ENABLED=false`.
+
+Majitelem potvrzený Packeta widget/API klíč lze používat ve stagingu. Veřejný
+widget klíč patří pouze do `NEXT_PUBLIC_PACKETA_WIDGET_API_KEY`; serverové API
+heslo musí zůstat výhradně v ignorovaném `.env.local` nebo v serverových secrets hostingu.
+
+### Ecomail
+
+Transakční odesílání je vypnuté přes `ECOMAIL_SEND_ENABLED=false`. Před zapnutím je potřeba placený/testovací účet, ověřená odesílací doména a doručovací test. Marketingový newsletter je oddělený od provozních zpráv.
+
+## Staging hosting
+
+Cloudflare Workers přes OpenNext je připravený jako levná cílová varianta. Vercel konfigurace zůstává beze změny jako dosavadní fallback, dokud Cloudflare staging neprojde end-to-end kontrolou. Staging používá development Supabase a pouze testovací integrace, vrací `noindex, nofollow`, nemá sitemap URL a poskytuje `/api/health`.
+
+- Cloudflare audit: `docs/deployment/CLOUDFLARE_COMPATIBILITY_AUDIT.md`,
+- Workers staging: `docs/deployment/CLOUDFLARE_WORKERS.md`,
+- Supabase Free provoz: `docs/operations/SUPABASE_FREE_OPERATIONS.md`,
+- proměnné: `docs/deployment/VERCEL_PREVIEW_ENV.md`,
+- Vercel + Active24 DNS: `docs/deployment/STAGING_VERCEL_ACTIVE24.md`.
+
+Doména `amaree.cz`, production klíče, produkční databáze ani DNS se v této fázi nemění.
+
+## Před produkcí
+
+- schválit a otestovat baseline na prázdném development Supabase,
+- vytvořit první skutečný produkt pouze přes `/admin`,
+- ověřit souběžný sklad, platby, zásilky a e-maily end-to-end,
+- zapnout zálohy a provést zkušební obnovu,
+- dokončit retry worker, expiraci rezervací a tracking synchronizaci,
+- právně zkontrolovat české texty a následně překlady,
+- dokončit bezpečnostní, mobilní, přístupnostní a vizuální QA,
+- produkční nasazení provést až po výslovném schválení majitele.

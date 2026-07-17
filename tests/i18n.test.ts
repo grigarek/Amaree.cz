@@ -2,6 +2,11 @@ import { describe, expect, it } from "vitest";
 import { getAlternatePath, getLocalizedAlternates } from "@/i18n/routing";
 
 describe("language switcher", () => {
+  it("maps paused foreign-language routes back to Czech", () => {
+    expect(getAlternatePath("cs", "/en/contact")).toBe("/cs/kontakt");
+    expect(getAlternatePath("cs", "/de/kollektion/ohrringe")).toBe("/cs/kolekce/nausnice");
+  });
+
   it("keeps product slug when switching language", () => {
     expect(getAlternatePath("en", "/cs/produkt/luna-nausnice")).toBe("/en/product/luna-nausnice");
   });

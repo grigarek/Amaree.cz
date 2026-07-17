@@ -1,6 +1,8 @@
 import { AdminShell } from "@/components/admin/admin-shell";
+import { requireOrderAdmin } from "@/lib/admin-auth";
 
 export default async function AdminDiscountsPage() {
+  await requireOrderAdmin();
   return (
     <AdminShell>
       <main className="mx-auto max-w-page px-5 py-10">

@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { LogOut } from "lucide-react";
 import { requireAdmin } from "@/lib/admin-auth";
+import { logoutAdmin } from "@/app/admin/login/actions";
 
 export async function AdminShell({ children }: { children: React.ReactNode }) {
   const admin = await requireAdmin();
@@ -7,11 +9,21 @@ export async function AdminShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <header className="border-b border-line bg-white">
-        <div className="mx-auto flex max-w-page items-center justify-between px-5 py-5">
-          <Link href="/admin" className="font-newsreader text-2xl tracking-[0.18em]">
-            A M A R É E
+        <div className="mx-auto flex max-w-page items-center justify-between gap-5 px-5 py-5">
+          <Link href="/admin" className="amaree-wordmark text-2xl">
+            AMARÉE
           </Link>
-          <span className="font-redhat text-sm text-muted">{admin.email}</span>
+          <nav className="hidden items-center gap-6 font-redhat text-sm font-semibold md:flex">
+            <Link className="hover:text-ruby" href="/admin/products">Produkty</Link>
+            {admin.role === "admin" ? <Link className="hover:text-ruby" href="/admin/orders">Objednávky</Link> : null}
+            {admin.role === "admin" ? <Link className="hover:text-ruby" href="/admin/discounts">Slevy</Link> : null}
+          </nav>
+          <div className="flex items-center gap-3">
+            <span className="hidden font-redhat text-xs text-muted sm:inline">{admin.email} · {admin.role}</span>
+            <form action={logoutAdmin}>
+              <button aria-label="Odhlásit se" className="p-2 text-ink transition hover:text-ruby" title="Odhlásit se" type="submit"><LogOut size={19} /></button>
+            </form>
+          </div>
         </div>
       </header>
       {children}

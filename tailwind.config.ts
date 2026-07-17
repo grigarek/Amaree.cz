@@ -7,19 +7,21 @@ const config: Config = {
       fontFamily: {
         newsreader: ["var(--font-newsreader)", "serif"],
         cormorant: ["var(--font-cormorant)", "serif"],
-        redhat: ["var(--font-redhat)", "sans-serif"]
+        redhat: ["var(--font-redhat)", "sans-serif"],
+        playfair: ["var(--font-playfair)", "serif"],
+        montserrat: ["var(--font-montserrat)", "sans-serif"]
       },
       colors: {
-        ivory: "#FFFCFA",
+        ivory: "#FFFFFF",
         ink: "#171313",
-        muted: "#6D6261",
-        ruby: "#6F1028",
-        rubyDark: "#3C0715",
-        blush: "#F6EEF0",
-        line: "#E7DEDC"
+        muted: "#6B6461",
+        ruby: "#AF2124",
+        rubyDark: "#A71D22",
+        blush: "#F7F5F2",
+        line: "#E6E2DF"
       },
       boxShadow: {
-        soft: "0 24px 70px rgba(60, 7, 21, 0.08)",
+        soft: "0 24px 70px rgba(23, 19, 19, 0.08)",
         product: "0 18px 45px rgba(23, 19, 19, 0.08)"
       },
       borderRadius: {
