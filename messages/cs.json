@@ -118,8 +118,9 @@
     "remove": "Odebrat",
     "close": "Zavřít košík",
     "quantity": "Množství"
-    ,"giftCardTitle": "Přidat kartičku s věnováním"
-    ,"giftCardDescription": "Vyberte si motiv za 30 Kč. Kartičku vložíme do balíčku."
+    ,"giftCardTitle": "Dárková kartička s věnováním"
+    ,"giftCardDescription": "Přidejte k objednávce jednu kartičku za 30 Kč. Vybraný motiv vložíme do balíčku."
+    ,"giftCardSingleChoice": "Vyberte jeden motiv"
     ,"giftCardChoose": "Vybrat"
     ,"giftCardHide": "Skrýt motivy"
     ,"giftCardRemove": "Odebrat kartičku"

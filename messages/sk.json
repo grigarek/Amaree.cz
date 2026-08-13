@@ -118,8 +118,9 @@
     "remove": "Odstrániť",
     "close": "Zavrieť košík",
     "quantity": "Množstvo"
-    ,"giftCardTitle": "Pridať kartičku s venovaním"
-    ,"giftCardDescription": "Vyberte si motív za 1,20 €. Kartičku vložíme do balíčka."
+    ,"giftCardTitle": "Darčeková kartička s venovaním"
+    ,"giftCardDescription": "Pridajte k objednávke jednu kartičku za 1,20 €. Vybraný motív vložíme do balíčka."
+    ,"giftCardSingleChoice": "Vyberte jeden motív"
     ,"giftCardChoose": "Vybrať"
     ,"giftCardHide": "Skryť motívy"
     ,"giftCardRemove": "Odstrániť kartičku"

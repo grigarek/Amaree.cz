@@ -114,8 +114,9 @@
     "remove": "Entfernen",
     "close": "Warenkorb schließen",
     "quantity": "Menge"
-    ,"giftCardTitle": "Grußkarte hinzufügen"
-    ,"giftCardDescription": "Wählen Sie ein Motiv für 1,20 €. Wir legen die Karte dem Paket bei."
+    ,"giftCardTitle": "Geschenkkarte mit Gruß"
+    ,"giftCardDescription": "Fügen Sie Ihrer Bestellung eine Karte für 1,20 € hinzu. Wir legen das gewählte Motiv dem Paket bei."
+    ,"giftCardSingleChoice": "Ein Motiv auswählen"
     ,"giftCardChoose": "Auswählen"
     ,"giftCardHide": "Motive ausblenden"
     ,"giftCardRemove": "Karte entfernen"

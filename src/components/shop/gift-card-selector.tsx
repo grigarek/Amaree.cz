@@ -10,7 +10,6 @@ import { formatMoney } from "@/lib/money";
 
 export function GiftCardSelector({ locale, selectedId, onSelect }: { locale: Locale; selectedId: GiftCardDesignId | null; onSelect: (id: GiftCardDesignId | null) => void }) {
   const t = useTranslations("cart");
-  const [expanded, setExpanded] = useState(Boolean(selectedId));
   const [previewId, setPreviewId] = useState<GiftCardDesignId | null>(null);
   const currency = locale === "sk" ? "EUR" : "CZK";
   const selected = giftCardDesigns.find((design) => design.id === selectedId);
@@ -26,18 +25,18 @@ export function GiftCardSelector({ locale, selectedId, onSelect }: { locale: Loc
   }, [previewId]);
 
   return (
-    <section aria-labelledby="gift-card-title" className="border-t border-line pt-5">
+    <section aria-labelledby="gift-card-title" className="rounded-brand border border-ruby/25 bg-blush/45 p-4">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="flex items-center gap-2 font-redhat text-sm font-semibold" id="gift-card-title">
+          <h3 className="flex items-center gap-2 font-redhat text-base font-semibold" id="gift-card-title">
             <Gift aria-hidden="true" className="text-ruby" size={18} />
             {t("giftCardTitle")}
           </h3>
-          <p className="mt-1 font-redhat text-xs text-muted">{t("giftCardDescription")}</p>
+          <p className="mt-1 font-redhat text-xs leading-5 text-muted">{t("giftCardDescription")}</p>
         </div>
-        <button className="shrink-0 font-redhat text-xs font-semibold text-ruby" onClick={() => setExpanded((value) => !value)} type="button">
-          {expanded ? t("giftCardHide") : t("giftCardChoose")}
-        </button>
+        <span className="shrink-0 rounded-full bg-ruby px-2.5 py-1 font-redhat text-xs font-semibold text-white">
+          {formatMoney(getGiftCardPrice(currency), locale, currency)}
+        </span>
       </div>
 
       {selected ? (
@@ -53,25 +52,24 @@ export function GiftCardSelector({ locale, selectedId, onSelect }: { locale: Loc
         </div>
       ) : null}
 
-      {expanded ? (
-        <div className="mt-4 grid grid-cols-2 gap-3">
-          {giftCardDesigns.map((design) => {
-            const active = selectedId === design.id;
-            return (
-              <div className={`relative overflow-hidden rounded-brand border bg-white transition ${active ? "border-ruby ring-1 ring-ruby" : "border-line hover:border-ruby/50"}`} key={design.id}>
-                <button aria-label={t("giftCardSelect", { name: design.message })} className="block w-full text-left" onClick={() => onSelect(active ? null : design.id)} type="button">
-                  <span className="relative block aspect-square overflow-hidden bg-white">
-                    <Image alt={design.message} className="object-cover" fill sizes="(max-width: 440px) 50vw, 180px" src={design.imageUrl} />
-                  </span>
-                  <span className="block min-h-14 px-2.5 py-2 font-redhat text-xs font-semibold leading-4">{design.message}</span>
-                </button>
-                <button aria-label={t("giftCardPreview", { name: design.message })} className="absolute right-2 top-2 rounded-full border border-line bg-white/95 p-2 text-ink shadow-sm transition hover:text-ruby" onClick={() => setPreviewId(design.id)} type="button"><Maximize2 size={15} /></button>
-                {active ? <span className="absolute left-2 top-2 rounded-full bg-ruby p-1.5 text-white"><Check size={14} /></span> : null}
-              </div>
-            );
-          })}
-        </div>
-      ) : null}
+      <p className="mt-4 font-redhat text-xs font-semibold uppercase tracking-widest text-ruby">{t("giftCardSingleChoice")}</p>
+      <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2">
+        {giftCardDesigns.map((design) => {
+          const active = selectedId === design.id;
+          return (
+            <div className={`relative overflow-hidden rounded-brand border bg-white transition ${active ? "border-ruby ring-2 ring-ruby/25" : "border-line hover:border-ruby/60"}`} key={design.id}>
+              <button aria-pressed={active} aria-label={t("giftCardSelect", { name: design.message })} className="block w-full text-left" onClick={() => onSelect(active ? null : design.id)} type="button">
+                <span className="relative block aspect-square overflow-hidden bg-white">
+                  <Image alt={design.message} className="object-cover" fill sizes="(max-width: 440px) 50vw, 180px" src={design.imageUrl} />
+                </span>
+                <span className="block min-h-12 px-2 py-2 font-redhat text-[11px] font-semibold leading-4">{design.message}</span>
+              </button>
+              <button aria-label={t("giftCardPreview", { name: design.message })} className="absolute right-2 top-2 rounded-full border border-line bg-white/95 p-2 text-ink shadow-sm transition hover:text-ruby" onClick={() => setPreviewId(design.id)} type="button"><Maximize2 size={15} /></button>
+              {active ? <span className="absolute left-2 top-2 rounded-full bg-ruby p-1.5 text-white"><Check size={14} /></span> : null}
+            </div>
+          );
+        })}
+      </div>
 
       {preview ? (
         <div aria-label={t("giftCardPreview", { name: preview.message })} aria-modal="true" className="fixed inset-0 z-[80] grid place-items-center bg-black/65 p-4" onClick={() => setPreviewId(null)} role="dialog">

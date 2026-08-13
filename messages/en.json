@@ -114,8 +114,9 @@
     "remove": "Remove",
     "close": "Close cart",
     "quantity": "Quantity"
-    ,"giftCardTitle": "Add a gift message card"
-    ,"giftCardDescription": "Choose a design for €1.20. We will place it in the parcel."
+    ,"giftCardTitle": "Gift message card"
+    ,"giftCardDescription": "Add one card to your order for €1.20. We will place the selected design in the parcel."
+    ,"giftCardSingleChoice": "Choose one design"
     ,"giftCardChoose": "Choose"
     ,"giftCardHide": "Hide designs"
     ,"giftCardRemove": "Remove card"

@@ -69,7 +69,6 @@ export function CartDrawer({ locale }: { locale: Locale }) {
             <p className="amaree-body">{t("empty")}</p>
           ) : (
             <div className="grid gap-5">
-              <GiftCardSelector locale={locale} onSelect={setGiftCardDesign} selectedId={giftCardDesignId} />
               {totals.lines.map((line) => (
                 <div key={line.product.id} className="grid grid-cols-[84px_1fr] gap-4">
                   <div className="relative aspect-square overflow-hidden rounded-brand bg-blush">
@@ -95,6 +94,7 @@ export function CartDrawer({ locale }: { locale: Locale }) {
                   </div>
                 </div>
               ))}
+              <GiftCardSelector locale={locale} onSelect={setGiftCardDesign} selectedId={giftCardDesignId} />
               <section aria-labelledby="cart-discount-title" className="border-t border-line pt-5">
                 <div className="flex items-center justify-between gap-3">
                   <h3 className="flex items-center gap-2 font-redhat text-sm font-semibold" id="cart-discount-title">

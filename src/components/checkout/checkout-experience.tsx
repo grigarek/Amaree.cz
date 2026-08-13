@@ -24,6 +24,7 @@ import { disabledPacketaCodCapabilities, isPacketaCodSupported, type PacketaCodC
 import { useCartStore } from "@/store/cart-store";
 import type { PaymentMethodId, ShippingMethodId } from "@/types/domain";
 import { getGiftCardLineName } from "@/lib/gift-cards";
+import { GiftCardSelector } from "@/components/shop/gift-card-selector";
 
 type PacketaWidgetPoint = { id?: string; name?: string; street?: string; city?: string; zip?: string; country?: string; group?: string };
 
@@ -122,7 +123,7 @@ export function CheckoutExperience({ gopayEnabled = false, locale, packetaCodCap
   const c = copy[locale];
   const cartCopy = useTranslations("cart");
   const consentCopy = consentLinkCopy[locale];
-  const { lines, giftCardDesignId, discountCode, discountAmount, discountFreeShipping, discountMessage, discountValid, clear, clearDiscount, setDiscountCode, setDiscountResult } = useCartStore();
+  const { lines, giftCardDesignId, setGiftCardDesign, discountCode, discountAmount, discountFreeShipping, discountMessage, discountValid, clear, clearDiscount, setDiscountCode, setDiscountResult } = useCartStore();
   const marketCountry: DeliveryCountryCode = locale === "sk" ? "SK" : "CZ";
   const [countryCode] = useState<DeliveryCountryCode>(marketCountry);
   const [shippingMethodId, setShippingMethodId] = useState<ShippingMethodId>("packeta_pickup");
@@ -392,6 +393,7 @@ export function CheckoutExperience({ gopayEnabled = false, locale, packetaCodCap
           <h2 className="amaree-subtitle">{c.summary}</h2>
           {totals.lines.length ? <div className="mt-5 grid gap-3">{totals.lines.map((line) => <div className="flex justify-between gap-4 font-redhat text-sm" key={line.product.id}><span>{line.quantity}× {line.product.name[locale]}</span><strong>{formatMoney(line.lineTotal, locale, totals.currency)}</strong></div>)}</div> : <p className="mt-5 font-redhat text-sm text-muted">{c.empty}</p>}
           {giftCardDesignId && totals.giftCard ? <div className="mt-3 flex items-center justify-between gap-4 font-redhat text-sm"><span>1× {getGiftCardLineName(giftCardDesignId, locale)}</span><strong>{formatMoney(totals.giftCardPrice, locale, totals.currency)}</strong></div> : null}
+          {totals.lines.length ? <div className="mt-5"><GiftCardSelector locale={locale} onSelect={setGiftCardDesign} selectedId={giftCardDesignId} /></div> : null}
           <section aria-labelledby="checkout-discount-title" className="mt-5 border-t border-line pt-5">
             <div className="flex items-center justify-between gap-3">
               <h3 className="flex items-center gap-2 font-redhat text-sm font-semibold" id="checkout-discount-title">
