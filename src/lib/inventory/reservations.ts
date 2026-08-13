@@ -22,7 +22,7 @@ export function createStockReservation(input: {
 }): StockReservation {
   const now = input.now ?? new Date();
   const minutes = commerceConfig.reservationMinutes[input.paymentMethodId];
-  const commitsImmediately = input.paymentMethodId === "cash_on_delivery";
+  const commitsImmediately = input.paymentMethodId === "cash_on_delivery" || input.paymentMethodId === "cash_on_pickup";
 
   return {
     ...input,

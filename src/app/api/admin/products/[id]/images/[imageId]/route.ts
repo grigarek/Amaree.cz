@@ -5,7 +5,7 @@ import { getAdminSession } from "@/lib/admin/session";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const updateSchema = z.object({
-  alt: z.object({ cs: z.string().trim().min(3), en: z.string().trim().min(3), de: z.string().trim().min(3) }).optional(),
+  alt: z.object({ cs: z.string().trim().min(3), sk: z.string().trim().min(3), en: z.string().trim().min(3), de: z.string().trim().min(3) }).optional(),
   action: z.enum(["archive", "delete"]).optional()
 });
 
@@ -19,7 +19,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
 
   try {
     if (parsed.data.alt) {
-      const rows = (["cs", "en", "de"] as const).map((locale) => ({ image_id: imageId, locale, alt_text: parsed.data.alt?.[locale] ?? "" }));
+      const rows = (["cs", "sk", "en", "de"] as const).map((locale) => ({ image_id: imageId, locale, alt_text: parsed.data.alt?.[locale] ?? "" }));
       const { error } = await supabase.from("product_image_translations").upsert(rows, { onConflict: "image_id,locale" });
       if (error) throw error;
     }
@@ -41,12 +41,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
           const { error: primaryError } = await supabase.from("product_images").update({ is_primary: true }).eq("id", replacement.id);
           if (primaryError) throw primaryError;
         } else {
-          await supabase.rpc("admin_set_product_active", { p_product_id: productId, p_active: false });
+          await supabase.rpc("admin_set_product_status", { p_product_id: productId, p_status: "draft" });
         }
       }
     }
     revalidatePath(`/admin/products/${productId}`);
     revalidatePath("/cs");
+    revalidatePath("/sk");
     return NextResponse.json({ ok: true });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Fotografii se nepodařilo upravit." }, { status: 500 });

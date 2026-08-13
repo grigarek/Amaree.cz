@@ -16,12 +16,16 @@ const tables = [
   "shipments", "order_status_history", "email_messages", "discount_codes", "discount_redemptions",
   "complaints", "complaint_status_history", "shipping_options", "payment_options"
 ];
+const optionalTables = ["integration_settings", "product_slug_aliases"];
 
-async function exportTable(table: string) {
+async function exportTable(table: string, optional = false) {
   const rows: unknown[] = [];
   for (let from = 0; ; from += 1000) {
     const { data, error } = await supabase.from(table).select("*").range(from, from + 999);
-    if (error) throw new Error(`${table}: ${error.message}`);
+    if (error) {
+      if (optional && error.code === "PGRST205") return null;
+      throw new Error(`${table}: ${error.message}`);
+    }
     rows.push(...(data ?? []));
     if (!data || data.length < 1000) break;
   }
@@ -51,10 +55,18 @@ async function exportStorage(path = ""): Promise<number> {
   return count;
 }
 
-await mkdir(join(outputDirectory, "tables"), { recursive: true });
-const tableCounts: Record<string, number> = {};
-for (const table of tables) tableCounts[table] = await exportTable(table);
-const storageObjects = await exportStorage();
-const manifest = { createdAt: new Date().toISOString(), projectUrl: url, tableCounts, storageObjects };
-await writeFile(join(outputDirectory, "manifest.json"), JSON.stringify(manifest, null, 2));
-console.log(JSON.stringify(manifest, null, 2));
+async function main() {
+  await mkdir(join(outputDirectory, "tables"), { recursive: true });
+  const tableCounts: Record<string, number | null> = {};
+  for (const table of tables) tableCounts[table] = await exportTable(table);
+  for (const table of optionalTables) tableCounts[table] = await exportTable(table, true);
+  const storageObjects = await exportStorage();
+  const manifest = { createdAt: new Date().toISOString(), projectUrl: url, tableCounts, storageObjects };
+  await writeFile(join(outputDirectory, "manifest.json"), JSON.stringify(manifest, null, 2));
+  console.log(JSON.stringify(manifest, null, 2));
+}
+
+main().catch((error: unknown) => {
+  console.error(error);
+  process.exitCode = 1;
+});

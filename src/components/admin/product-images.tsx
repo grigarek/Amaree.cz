@@ -6,10 +6,12 @@ import { useRef, useState } from "react";
 import { Archive, ChevronLeft, ChevronRight, GripVertical, ImagePlus, LoaderCircle, Save, Star, Trash2, Upload } from "lucide-react";
 import type { AdminProductImage } from "@/lib/admin/products";
 
-export function ProductImages({ productId, initialImages, defaultAlt }: {
+export function ProductImages({ productId, initialImages, defaultAlt, onCountChange, onNotice }: {
   productId: string;
   initialImages: AdminProductImage[];
-  defaultAlt: { cs: string; en: string; de: string };
+  defaultAlt: { cs: string; sk: string; en: string; de: string };
+  onCountChange?: (count: number) => void;
+  onNotice?: (message: string) => void;
 }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -22,6 +24,10 @@ export function ProductImages({ productId, initialImages, defaultAlt }: {
   function selectFiles(selected: FileList | null) {
     if (!selected) return;
     const next = Array.from(selected).slice(0, 12);
+    if (images.length + next.length > 12) {
+      setError(`K produktu lze přidat ještě nejvýše ${Math.max(0, 12 - images.length)} fotografií.`);
+      return;
+    }
     setFiles(next);
     setError("");
   }
@@ -33,6 +39,7 @@ export function ProductImages({ productId, initialImages, defaultAlt }: {
     const data = new FormData();
     files.forEach((file) => data.append("files", file));
     data.set("altCs", defaultAlt.cs);
+    data.set("altSk", defaultAlt.sk);
     data.set("altEn", defaultAlt.en);
     data.set("altDe", defaultAlt.de);
     try {
@@ -40,6 +47,8 @@ export function ProductImages({ productId, initialImages, defaultAlt }: {
       const result = await response.json() as { error?: string };
       if (!response.ok) throw new Error(result.error ?? "Nahrání se nezdařilo.");
       setFiles([]);
+      onCountChange?.(images.length + files.length);
+      onNotice?.("Fotografie byly nahrány.");
       router.refresh();
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : "Nahrání se nezdařilo.");
@@ -60,6 +69,7 @@ export function ProductImages({ productId, initialImages, defaultAlt }: {
       const result = await response.json() as { error?: string };
       if (!response.ok) throw new Error(result.error ?? "Pořadí se nepodařilo uložit.");
       setImages(next.map((image, index) => ({ ...image, sortOrder: index, isPrimary: image.id === primaryId })));
+      onNotice?.("Pořadí fotografií bylo uloženo.");
       router.refresh();
     } catch (orderError) {
       setError(orderError instanceof Error ? orderError.message : "Pořadí se nepodařilo uložit.");
@@ -91,6 +101,8 @@ export function ProductImages({ productId, initialImages, defaultAlt }: {
       const result = await response.json() as { error?: string };
       if (!response.ok) throw new Error(result.error ?? "Fotografii se nepodařilo upravit.");
       setImages((current) => current.filter((image) => image.id !== imageId));
+      onCountChange?.(Math.max(0, images.length - 1));
+      onNotice?.(action === "delete" ? "Fotografie byla smazána." : "Fotografie byla archivována.");
       router.refresh();
     } catch (imageError) {
       setError(imageError instanceof Error ? imageError.message : "Fotografii se nepodařilo upravit.");
@@ -111,6 +123,7 @@ export function ProductImages({ productId, initialImages, defaultAlt }: {
       const result = await response.json() as { error?: string };
       if (!response.ok) throw new Error(result.error ?? "ALT texty se nepodařilo uložit.");
       setImages((current) => current.map((image) => image.id === imageId ? { ...image, alt } : image));
+      onNotice?.("Alternativní text byl uložen.");
     } catch (altError) {
       setError(altError instanceof Error ? altError.message : "ALT texty se nepodařilo uložit.");
     } finally {
@@ -119,7 +132,7 @@ export function ProductImages({ productId, initialImages, defaultAlt }: {
   }
 
   return (
-    <section className="mt-8 scroll-mt-28 border-y border-line py-8" id="product-images">
+    <section id="product-images">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div><p className="font-redhat text-sm font-semibold uppercase tracking-[0.16em] text-ruby">Supabase Storage</p><h2 className="mt-2 font-newsreader text-4xl">Fotografie produktu</h2></div>
         <p className="max-w-xl font-redhat text-sm leading-6 text-muted">JPG, PNG nebo WebP, nejvýše 12 MB a minimálně 800 × 800 px. Pořadí změníte přetažením nebo šipkami.</p>
@@ -182,7 +195,7 @@ function ImageAltEditor({ alt, busy, onSave }: { alt: AdminProductImage["alt"]; 
   const [values, setValues] = useState(alt);
   return (
     <div className="mt-3 grid gap-2">
-      {(["cs", "en", "de"] as const).map((locale) => <label className="grid grid-cols-[2rem_1fr] items-center gap-2 font-redhat text-xs" key={locale}><span className="font-semibold uppercase text-ruby">{locale}</span><input className="min-h-9 border border-line px-2" minLength={3} onChange={(event) => setValues((current) => ({ ...current, [locale]: event.target.value }))} value={values[locale]} /></label>)}
+      {(["cs", "sk", "en", "de"] as const).map((locale) => <label className="grid grid-cols-[2rem_1fr] items-center gap-2 font-redhat text-xs" key={locale}><span className="font-semibold uppercase text-ruby">{locale}</span><input className="min-h-9 border border-line px-2" minLength={3} onChange={(event) => setValues((current) => ({ ...current, [locale]: event.target.value }))} value={values[locale]} /></label>)}
       <button className="inline-flex min-h-9 items-center justify-center gap-2 border border-line font-redhat text-xs font-semibold disabled:opacity-50" disabled={busy || Object.values(values).some((value) => value.trim().length < 3)} onClick={() => onSave(values)} type="button"><Save size={15} />Uložit ALT</button>
     </div>
   );

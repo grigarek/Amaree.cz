@@ -47,20 +47,19 @@ PACKETA_HOME_CARRIER_ID_CZ=<potvrzené ID služby>
 PACKETA_HOME_CARRIER_ID_SK=<potvrzené ID služby>
 ```
 
-Packeta nemá oddělený sandbox endpoint. `test` zde znamená účet s odděleným testovacím odesílatelem a aplikační pojistku. Majitelem potvrzený původní widget/API klíč lze použít. `PACKETA_API_ENABLED` zůstane `false`, dokud nejsou API heslo, odesílatel a služby ručně ověřené. API heslo nesmí být vystavené jako `NEXT_PUBLIC_*` ani uložené v repozitáři.
+Packeta nemá oddělený sandbox endpoint. `test` zde znamená pouze aplikační pojistku. Majitelem potvrzený původní widget/API klíč lze použít. `PACKETA_API_ENABLED` zůstane `false` do řízeného testu první zásilky, protože povolené volání může vytvořit skutečný záznam v účtu Packety. API heslo nesmí být vystavené jako `NEXT_PUBLIC_*` ani uložené v repozitáři.
 
-## Ecomail test
+## Resend test
 
 ```text
-ECOMAIL_ENVIRONMENT=test
-ECOMAIL_SEND_ENABLED=false
-ECOMAIL_API_KEY=<testovací klíč, server only>
-ECOMAIL_TRANSACTIONAL_ENDPOINT=<potvrzený testovací endpoint>
-ECOMAIL_LIST_ID=<testovací seznam>
-ECOMAIL_FROM_EMAIL=info@amaree.cz
-ECOMAIL_FROM_NAME=AMARÉE
+TRANSACTIONAL_EMAIL_PROVIDER=resend
+TRANSACTIONAL_EMAIL_SEND_ENABLED=false
+TRANSACTIONAL_EMAIL_TEST_RECIPIENT=<povolený testovací příjemce>
+RESEND_API_KEY=<testovací klíč, server only>
+RESEND_FROM_EMAIL=AMARÉE <objednavky@notify.amaree.cz>
+TRANSACTIONAL_EMAIL_REPLY_TO=info@amaree.cz
 ```
 
-`ECOMAIL_SEND_ENABLED` zůstane `false`, dokud nebude v Ecomailu ověřená doména `amaree.cz` a testovací doručitelnost. Schránku `info@amaree.cz` nadále hostuje Active24; její heslo ani SMTP údaje se do aplikace nebo Cloudflare secrets neukládají.
+Subdoména `notify.amaree.cz` je v Resendu ověřená. `TRANSACTIONAL_EMAIL_SEND_ENABLED` zůstane `false` do úspěšného staging testu omezeného přes `TRANSACTIONAL_EMAIL_TEST_RECIPIENT=info@amaree.cz`. Schránku `info@amaree.cz` nadále hostuje Active24; její heslo ani SMTP údaje se do aplikace nebo Cloudflare secrets neukládají.
 
 Preview nesmí obsahovat žádný produkční klíč. Kontroluje to také `/api/health` podle explicitních `*_ENVIRONMENT` hodnot.

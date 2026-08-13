@@ -4,7 +4,7 @@ export const company = {
   companyId: "25882384",
   vatPayer: false,
   email: "info@amaree.cz",
-  phone: "+420 737 076 249",
+  phone: "+420 777 705 682",
   bankAccount: "3361675015/3030",
   registeredAt: "2001-06-21",
   registerEntry: "Krajský soud v Ostravě, oddíl C, vložka 24429",

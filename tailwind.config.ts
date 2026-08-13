@@ -6,7 +6,6 @@ const config: Config = {
     extend: {
       fontFamily: {
         newsreader: ["var(--font-newsreader)", "serif"],
-        cormorant: ["var(--font-cormorant)", "serif"],
         redhat: ["var(--font-redhat)", "sans-serif"],
         playfair: ["var(--font-playfair)", "serif"],
         montserrat: ["var(--font-montserrat)", "sans-serif"]

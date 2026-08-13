@@ -10,7 +10,7 @@ describe("order confirmation", () => {
       total: "1 600",
       currency: "CZK",
       paymentMethodId: "bank_transfer",
-      shippingMethodId: "personal_pickup",
+      shippingMethodId: "packeta_home",
       variableSymbol: "20260001",
       bankTransferDueDate: "18. 7. 2026"
     });
@@ -28,7 +28,7 @@ describe("order confirmation", () => {
       total: "1 600",
       currency: "CZK",
       paymentMethodId: "bank_transfer",
-      shippingMethodId: "personal_pickup"
+      shippingMethodId: "packeta_home"
     })).toThrow("bank_transfer_details_missing");
   });
 });

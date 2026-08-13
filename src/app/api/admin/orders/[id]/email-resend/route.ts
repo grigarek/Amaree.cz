@@ -3,11 +3,13 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getAdminSession } from "@/lib/admin/session";
 import { sendOrderStatusEmail } from "@/lib/email/order-status";
+import { retryRecordedEmail } from "@/lib/email/delivery";
+import { orderTemplateKeys } from "@/lib/orders/statuses";
 
-const schema = z.object({ template: z.enum([
-  "order_received", "awaiting_bank_transfer", "payment_confirmed", "payment_failed",
-  "order_processing", "ready_for_pickup", "order_shipped", "order_cancelled", "payment_refunded"
-]) });
+const schema = z.union([
+  z.object({ template: z.enum(orderTemplateKeys), messageId: z.never().optional() }),
+  z.object({ messageId: z.string().uuid(), template: z.never().optional() })
+]);
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const admin = await getAdminSession();
@@ -16,7 +18,12 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   if (!parsed.success) return NextResponse.json({ error: "Neplatná šablona." }, { status: 422 });
   const { id } = await params;
   try {
-    const result = await sendOrderStatusEmail(id, parsed.data.template, { manualResend: true });
+    const result = "messageId" in parsed.data && parsed.data.messageId
+      ? await retryRecordedEmail(id, parsed.data.messageId, admin.userId)
+      : "template" in parsed.data && parsed.data.template
+        ? await sendOrderStatusEmail(id, parsed.data.template, { manualResend: true, triggeredBy: admin.userId, triggerSource: "admin_manual" })
+        : null;
+    if (!result) return NextResponse.json({ error: "Neplatná žádost o odeslání." }, { status: 422 });
     revalidatePath(`/admin/orders/${id}`);
     return NextResponse.json(result);
   } catch (error) {

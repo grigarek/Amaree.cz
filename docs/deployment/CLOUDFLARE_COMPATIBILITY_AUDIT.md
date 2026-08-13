@@ -18,7 +18,7 @@ Původní `proxy.ts` byl jediná přímá blokace: Next.js 16 jej vždy spoušt�
 | Supabase klienti, cookies a Auth | kompatibilní | `@supabase/ssr` používá HTTP/cookies; autorizaci stále vynucuje server a RLS. |
 | Fotografie | kompatibilní s limitem dávky | 12 MB na soubor, 48 MB na požadavek; originál se nekomprimuje. Později lze přejít na signed direct upload. |
 | `next/image` | kompatibilní bez placených Images | Cloudflare build nastaví `unoptimized`; originály obslouží Supabase Storage. |
-| GoPay, Packeta a Ecomail | kompatibilní | Integrace jsou založené na odchozím HTTPS `fetch`; pro staging zůstávají vypnuté/testovací. |
+| GoPay, Packeta, Resend a budoucí Ecomail newsletter | kompatibilní | Integrace jsou založené na odchozím HTTPS `fetch`; pro staging zůstávají vypnuté/testovací. |
 | Packeta PDF štítky | kompatibilní | `Buffer`/base64 fungují přes `nodejs_compat`; štítky se negenerují na lokálním disku. |
 | Expirace rezervací | připravená | Cron Trigger po 15 minutách volá service-role RPC s limitem 100 objednávek. |
 | ISR a revalidace | bez externí cache | Katalog je dynamický ze Supabase. Pokud se později zapne ISR, bude potřeba R2/D1 cache. |

@@ -15,11 +15,14 @@ export async function GET(request: Request) {
 
   try {
     const payment = await getPaymentProvider("gopay").getPaymentStatus(paymentId);
-    const target = new URL(localizedPaths[locale].thankYou, url.origin);
+    const target = new URL(`${localizedPaths[locale].checkout}/vysledek`, url.origin);
     target.searchParams.set("paymentStatus", payment.status);
     target.searchParams.set("paymentId", payment.providerReference);
     return NextResponse.redirect(target);
   } catch {
-    return NextResponse.redirect(new URL(`${localizedPaths[locale].checkout}?paymentStatus=unavailable`, url.origin));
+    const target = new URL(`${localizedPaths[locale].checkout}/vysledek`, url.origin);
+    target.searchParams.set("paymentStatus", "unavailable");
+    target.searchParams.set("paymentId", paymentId);
+    return NextResponse.redirect(target);
   }
 }

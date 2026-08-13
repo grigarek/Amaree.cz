@@ -1,6 +1,6 @@
 # Packeta / Zásilkovna
 
-Stav: widget, serverová validace, vytvoření zásilky, PUDO/home-delivery štítek a tracking jsou implementované, ale bezpečně vypnuté. Bez nového API passwordu a testovacího odesílatele integrace zásilku nevytvoří.
+Stav: widget, serverová validace, vytvoření zásilky, PUDO/home-delivery štítek a tracking jsou implementované, ale tvorba skutečné zásilky zůstává bezpečně vypnutá do řízeného testu. Potvrzené API heslo je uložené pouze jako Cloudflare secret, odesílatel `AMARÉE.CZ` má ID `563773` a home carrier ID jsou `106` pro Česko a `131` pro Slovensko.
 
 ## Navržený tok
 
@@ -35,12 +35,20 @@ PACKETA_HOME_CARRIER_ID_CZ=
 PACKETA_HOME_CARRIER_ID_SK=
 ```
 
-Widget API key je identifikátor určený widgetu v prohlížeči. API password je serverové tajemství. Packeta nemá sandbox; staging proto smí používat pouze nový password a samostatnou testovací indikaci odesílatele. Externí volání povolí až `PACKETA_API_ENABLED=true`.
+Widget API key je identifikátor určený widgetu v prohlížeči. API password je serverové tajemství. Packeta nemá oddělený sandbox, proto `PACKETA_API_ENABLED` zůstává `false` až do řízeného testu první zásilky. Zapnutí může vytvořit skutečný záznam zásilky v klientském účtu Packety.
+
+## Řízený předprodukční test
+
+1. Připravit testovací objednávku s odsouhlaseným příjemcem a skutečnou českou nebo slovenskou adresou.
+2. Dočasně zapnout `PACKETA_API_ENABLED=true` pouze na stagingu.
+3. V administraci vytvořit zásilku a ověřit Packeta ID, čárový kód, A6 štítek a tracking URL.
+4. Zásilku nepředávat do sítě Packety; bez fyzického podání nevzniká přepravní služba.
+5. Po ověření tvorbu zásilek opět vypnout, dokud nebude schválené produkční spuštění.
 
 ## Datový model objednávky
 
 ```text
-shipping_method: packeta_pickup | packeta_home | personal_pickup
+shipping_method: packeta_pickup | packeta_home
 packeta_point_id
 packeta_point_name
 packeta_point_type: pickup-point | zbox

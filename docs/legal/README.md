@@ -13,7 +13,7 @@ Tyto dokumenty jsou pracovní návrhy, nikoli právní stanovisko ani právní g
 - Sídlo a vratková adresa: Příčná 129/3, Hodolany, 779 00 Olomouc, Česká republika
 - Zápis: Krajský soud v Ostravě, oddíl C, vložka 24429; den zápisu 21. června 2001
 - Společnost není plátcem DPH; DIČ se neuvádí
-- E-mail: info@amaree.cz; telefon: +420 737 076 249
+- E-mail: info@amaree.cz; telefon: +420 777 705 682
 - Bankovní účet: 3361675015/3030
 
 ## Chybějící údaje
@@ -22,7 +22,6 @@ Tyto dokumenty jsou pracovní návrhy, nikoli právní stanovisko ani právní g
 - datová schránka,
 - přesný okamžik uzavření kupní smlouvy,
 - přesný seznam podporovaných EU zemí/služeb Packeta a dodací lhůty,
-- otevírací doba osobního odběru (do potvrzení se nezobrazuje),
 - seznam platebních metod GoPay,
 - pravidla pro dárkové poukazy, slevy a předobjednávky,
 - zda budou nabízené personalizované nebo hygienicky zapečetěné výrobky,

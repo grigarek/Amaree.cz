@@ -8,7 +8,7 @@ Stav: serverová sandbox implementace připravená v kódu. Checkout je vypnutý
 2. RPC `create_checkout_order` vytvoří objednávku ve stavu `awaiting_payment` a sklad rezervuje na 30 minut.
 3. Server získá OAuth token s rozsahem `payment-create` a vytvoří GoPay platbu.
 4. GoPay `id` se uloží jako `payment_provider_reference` a zákazník se přesměruje na vrácené `gw_url`.
-5. Návratová stránka je `https://test.amaree.cz/cs/objednavka/vysledek`; notifikační URL je `https://test.amaree.cz/api/payments/gopay/notification` a přijímá pouze ID platby.
+5. Návratová URL je `https://amaree.cz/api/payments/gopay/return?locale=cs`; notifikační URL je `https://amaree.cz/api/payments/gopay/notification`. Obě přijímají pouze ID platby a skutečný stav vždy ověřují serverově přímo u GoPay.
 6. Server získá token `payment-all`, načte skutečný stav přímo z GoPay a mapuje jej na interní stav.
 7. Kombinace provider reference a ověřeného stavu se ukládá idempotentně v Supabase transakci.
 8. Sklad se odečte a potvrzovací e-mail se odešle pouze při prvním přechodu do `paid`.
@@ -40,10 +40,13 @@ Citlivé údaje jsou pouze serverové. Do logů se nesmí zapisovat Client Secre
 
 Seznam zákaznicky komunikovaných metod (karta, Apple Pay, Google Pay, online bankovní převod) se načte z `NEXT_PUBLIC_GOPAY_ENABLED_METHODS` až podle skutečné aktivace účtu. Klasický převod na účet MEDIANUM s.r.o. je samostatná platební metoda a není součástí tohoto seznamu.
 
+Checkout používá nezměněná oficiální loga GoPay, Visa, Mastercard, Maestro, Verified by Visa a Mastercard SecureCode v `public/payment-methods`. Zobrazené platební metody nesmějí slibovat službu, která není v obchodním účtu skutečně aktivní.
+
 ## Přechod do produkce
 
 1. Schválit a spustit baseline na prázdném development Supabase a provést databázové integrační testy.
 2. Projít sandbox scénáře `PAID`, `CANCELED` a `TIMEOUTED`.
+   U každého scénáře ověřit návrat do e-shopu, serverové načtení stavu, idempotentní webhook, objednávku, sklad a odpovídající e-mail.
 3. Nechat GoPay zkontrolovat integraci a získat produkční údaje.
 4. Nastavit HTTPS návratovou a notifikační URL v GoPay účtu.
 5. Změnit `GOPAY_ENVIRONMENT=production` až v produkčním secrets manageru.

@@ -30,7 +30,7 @@ describe("GoPay provider", () => {
       customerEmail: "customer@example.test",
       currency: "CZK",
       total: 149000,
-      successUrl: "https://test.amaree.cz/cs/objednavka/vysledek",
+      successUrl: "https://amaree.cz/api/payments/gopay/return?locale=cs",
       cancelUrl: "https://example.test/cs/objednavka",
       notificationUrl: "https://test.amaree.cz/api/payments/gopay/notification",
       locale: "cs"

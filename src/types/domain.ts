@@ -38,8 +38,20 @@ export interface Product {
   material: LocalizedText;
   color?: LocalizedText;
   dimensions: LocalizedText;
+  clasp?: LocalizedText;
   weightGrams?: number;
   care: LocalizedText;
+  materialCompliance?: {
+    materialType: string;
+    preciousMetalKind?: "gold" | "silver" | "platinum" | "other";
+    fineness?: string;
+    preciousMetalWeightGrams?: number;
+    hallmarkStatus: "yes" | "no" | "not_applicable";
+    finenessMarkStatus: "yes" | "no" | "not_applicable";
+    exemptionReason?: string;
+    countryOfOrigin?: string;
+    publicCustomerInformation?: string;
+  };
   active: boolean;
   featured: boolean;
   bestseller: boolean;
@@ -75,7 +87,7 @@ export interface DiscountCode {
 }
 
 export type ShippingMethodId = "packeta_home" | "packeta_pickup" | "personal_pickup" | "eu_delivery";
-export type PaymentMethodId = "gopay" | "cash_on_delivery" | "bank_transfer";
+export type PaymentMethodId = "gopay" | "cash_on_delivery" | "cash_on_pickup" | "bank_transfer";
 export type OrderStatus =
   | "new"
   | "awaiting_payment"

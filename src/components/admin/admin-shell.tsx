@@ -17,6 +17,8 @@ export async function AdminShell({ children }: { children: React.ReactNode }) {
             <Link className="hover:text-ruby" href="/admin/products">Produkty</Link>
             {admin.role === "admin" ? <Link className="hover:text-ruby" href="/admin/orders">Objednávky</Link> : null}
             {admin.role === "admin" ? <Link className="hover:text-ruby" href="/admin/discounts">Slevy</Link> : null}
+            {admin.role === "admin" ? <Link className="hover:text-ruby" href="/admin/customers">Zákazníci</Link> : null}
+            {admin.role === "admin" ? <Link className="hover:text-ruby" href="/admin/settings">Nastavení</Link> : null}
           </nav>
           <div className="flex items-center gap-3">
             <span className="hidden font-redhat text-xs text-muted sm:inline">{admin.email} · {admin.role}</span>
@@ -25,6 +27,13 @@ export async function AdminShell({ children }: { children: React.ReactNode }) {
             </form>
           </div>
         </div>
+        <nav aria-label="Administrace" className="mx-auto flex max-w-page gap-5 overflow-x-auto border-t border-line px-5 py-3 font-redhat text-sm font-semibold md:hidden">
+          <Link className="shrink-0 hover:text-ruby" href="/admin/products">Produkty</Link>
+          {admin.role === "admin" ? <Link className="shrink-0 hover:text-ruby" href="/admin/orders">Objednávky</Link> : null}
+          {admin.role === "admin" ? <Link className="shrink-0 hover:text-ruby" href="/admin/discounts">Slevy</Link> : null}
+          {admin.role === "admin" ? <Link className="shrink-0 hover:text-ruby" href="/admin/customers">Zákazníci</Link> : null}
+          {admin.role === "admin" ? <Link className="shrink-0 hover:text-ruby" href="/admin/settings">Nastavení</Link> : null}
+        </nav>
       </header>
       {children}
     </>

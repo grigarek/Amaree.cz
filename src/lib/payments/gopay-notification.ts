@@ -5,6 +5,8 @@ import { getPaymentProvider } from "@/lib/payments";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { sendOrderStatusEmail } from "@/lib/email/order-status";
 import type { OrderTemplateKey } from "@/lib/orders/statuses";
+import { syncFakturoidInvoice } from "@/lib/accounting/fakturoid";
+import { createAutomaticPacketaShipment } from "@/lib/shipping/packeta-create";
 
 const paymentEmailTemplates: Partial<Record<string, OrderTemplateKey>> = {
   paid: "payment_confirmed",
@@ -35,16 +37,32 @@ export async function handleGoPayNotification(request: Request) {
     const result = data as { duplicate?: boolean; orderId?: string };
     if (result.duplicate) return NextResponse.json({ status: "duplicate_ignored" });
 
+    let accountingStatus: string | null = null;
+    let shipmentStatus: string | null = null;
+    if (verified.status === "paid" && result.orderId) {
+      try {
+        accountingStatus = (await syncFakturoidInvoice(result.orderId, { source: "payment_webhook" })).status;
+      } catch {
+        accountingStatus = "failed_recorded";
+      }
+    }
     let emailStatus: string | null = null;
     const template = paymentEmailTemplates[verified.status];
     if (template && result.orderId) {
       try {
-        emailStatus = (await sendOrderStatusEmail(result.orderId, template)).status;
+        emailStatus = (await sendOrderStatusEmail(result.orderId, template, { triggerSource: "payment_webhook" })).status;
       } catch {
         emailStatus = "failed_recorded";
       }
     }
-    return NextResponse.json({ status: "accepted", paymentStatus: verified.status, emailStatus });
+    if (verified.status === "paid" && result.orderId) {
+      try {
+        shipmentStatus = (await createAutomaticPacketaShipment(result.orderId)).status;
+      } catch {
+        shipmentStatus = "failed_recorded";
+      }
+    }
+    return NextResponse.json({ status: "accepted", paymentStatus: verified.status, emailStatus, accountingStatus, shipmentStatus });
   } catch {
     return NextResponse.json({ error: "payment_status_verification_failed" }, { status: 503 });
   }

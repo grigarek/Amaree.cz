@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Montserrat, Newsreader, Playfair_Display, Red_Hat_Text } from "next/font/google";
+import { Montserrat, Newsreader, Playfair_Display, Red_Hat_Text } from "next/font/google";
 import { headers } from "next/headers";
 import { defaultLocale, isLocale } from "@/i18n/routing";
 import { isIndexingAllowed } from "@/lib/environment";
@@ -12,16 +12,9 @@ const newsreader = Newsreader({
   display: "swap"
 });
 
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin-ext"],
-  weight: ["400"],
-  variable: "--font-cormorant",
-  display: "swap"
-});
-
 const redHat = Red_Hat_Text({
   subsets: ["latin-ext"],
-  weight: ["500", "600"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-redhat",
   display: "swap"
 });
@@ -42,7 +35,7 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: "A M A R É E",
-  description: "Minimalistická elegance, která podtrhne váš styl. Kvalitní materiály. Nadčasový design.",
+  description: "Pečlivě vybrané stříbrné šperky z Olomouce od zakladatelky Anette.",
   robots: isIndexingAllowed()
     ? { index: true, follow: true }
     : { index: false, follow: false, noarchive: true, nocache: true }
@@ -56,7 +49,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html
       lang={locale}
       data-scroll-behavior="smooth"
-      className={`${newsreader.variable} ${cormorant.variable} ${redHat.variable} ${playfair.variable} ${montserrat.variable}`}
+      className={`${newsreader.variable} ${redHat.variable} ${playfair.variable} ${montserrat.variable}`}
     >
       <body className="font-redhat antialiased">{children}</body>
     </html>

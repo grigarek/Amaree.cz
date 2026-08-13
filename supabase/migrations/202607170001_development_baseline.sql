@@ -951,7 +951,7 @@ begin
     else shipping_option.price_minor end;
   payment_fee_value := payment_option.fee_minor;
   total_value := greatest(subtotal_value - discount_value + shipping_value + payment_fee_value, 0);
-  target_order_number := 'AMR-' || to_char(now(), 'YYYY') || '-' || lpad(nextval('public.order_number_sequence')::text, 6, '0');
+  target_order_number := 'A' || to_char(now(), 'YY') || '-' || lpad(nextval('public.order_number_sequence')::text, 4, '0');
   target_status := case when p_payload->>'paymentMethodId' in ('gopay', 'bank_transfer') then 'awaiting_payment'::public.order_status else 'new'::public.order_status end;
   expires_at_value := case p_payload->>'paymentMethodId'
     when 'gopay' then now() + interval '30 minutes'

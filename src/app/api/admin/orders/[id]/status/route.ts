@@ -5,6 +5,9 @@ import { getAdminSession } from "@/lib/admin/session";
 import { orderStatuses, templateForOrderStatus } from "@/lib/orders/statuses";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { sendOrderStatusEmail } from "@/lib/email/order-status";
+import { getAdminOrder } from "@/lib/admin/orders";
+import { syncFakturoidInvoice } from "@/lib/accounting/fakturoid";
+import { createAutomaticPacketaShipment } from "@/lib/shipping/packeta-create";
 
 const schema = z.object({
   status: z.enum(orderStatuses),
@@ -29,10 +32,11 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
   let emailStatus: string | null = null;
   if (parsed.data.sendEmail) {
-    const template = templateForOrderStatus(parsed.data.status);
+    const order = await getAdminOrder(id);
+    const template = templateForOrderStatus(parsed.data.status, order?.paymentMethod);
     if (!template) return NextResponse.json({ error: "Pro tento stav není e-mailová šablona.", statusChanged: true }, { status: 422 });
     try {
-      const emailResult = await sendOrderStatusEmail(id, template);
+      const emailResult = await sendOrderStatusEmail(id, template, { triggeredBy: admin.userId, triggerSource: "admin_status" });
       emailStatus = emailResult.status;
       if (emailResult.messageId && history?.id) {
         await supabase.from("order_status_history").update({ email_message_id: emailResult.messageId }).eq("id", history.id);
@@ -42,7 +46,23 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       return NextResponse.json({ error: emailError instanceof Error ? emailError.message : "E-mail se nepodařilo odeslat.", statusChanged: true }, { status: 502 });
     }
   }
+  let accountingStatus: string | null = null;
+  if (parsed.data.status === "delivered") {
+    try {
+      accountingStatus = (await syncFakturoidInvoice(id, { source: "admin_status" })).status;
+    } catch {
+      accountingStatus = "failed_recorded";
+    }
+  }
+  let shipmentStatus: string | null = null;
+  if (parsed.data.status === "paid" || parsed.data.status === "processing") {
+    try {
+      shipmentStatus = (await createAutomaticPacketaShipment(id)).status;
+    } catch {
+      shipmentStatus = "failed_recorded";
+    }
+  }
   revalidatePath(`/admin/orders/${id}`);
   revalidatePath("/admin/orders");
-  return NextResponse.json({ ok: true, emailStatus });
+  return NextResponse.json({ ok: true, emailStatus, accountingStatus, shipmentStatus });
 }

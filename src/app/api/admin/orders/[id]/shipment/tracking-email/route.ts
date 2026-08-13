@@ -8,7 +8,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
   if (!admin || admin.role !== "admin") return NextResponse.json({ error: "admin_required" }, { status: 403 });
   const { id } = await params;
   try {
-    const result = await sendOrderStatusEmail(id, "order_shipped");
+    const result = await sendOrderStatusEmail(id, "order_shipped", { triggeredBy: admin.userId, triggerSource: "shipment" });
     revalidatePath(`/admin/orders/${id}`);
     return NextResponse.json({ status: result.status });
   } catch (error) {

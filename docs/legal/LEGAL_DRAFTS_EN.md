@@ -4,7 +4,7 @@
 
 ## Operator and scope
 
-The AMARÉE online shop is operated by MEDIANUM s.r.o., Company ID 25882384, registered office Příčná 129/3, Hodolany, 779 00 Olomouc, Czech Republic, registered with the Regional Court in Ostrava, section C, file 24429, e-mail info@amaree.cz and telephone +420 737 076 249. The company is not VAT registered and no VAT ID is stated.
+The AMARÉE online shop is operated by MEDIANUM s.r.o., Company ID 25882384, registered office Příčná 129/3, Hodolany, 779 00 Olomouc, Czech Republic, registered with the Regional Court in Ostrava, section C, file 24429, e-mail info@amaree.cz and telephone +420 777 705 682. The company is not VAT registered and no VAT ID is stated.
 
 ## Contract and payment obligation
 

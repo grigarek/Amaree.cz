@@ -28,7 +28,7 @@ export function ShipmentActions({
       const response = await fetch(`/api/admin/orders/${orderId}/shipment/${name}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: name === "mark-shipped" ? JSON.stringify({ note: "Zásilka předána dopravci Packeta" }) : undefined
+        body: name === "mark-shipped" ? JSON.stringify({ note: "Zásilka předána dopravci Zásilkovna" }) : undefined
       });
       const result = await response.json() as { status?: string; error?: string };
       if (!response.ok) throw new Error(result.error ?? "Akce se nezdařila.");
@@ -41,7 +41,7 @@ export function ShipmentActions({
     }
   }
 
-  if (!isPacketa) return <p className="mt-4 text-muted">Tato objednávka nepoužívá dopravu Packeta.</p>;
+  if (!isPacketa) return <p className="mt-4 text-muted">Tato objednávka nepoužívá dopravu přes Zásilkovnu.</p>;
   const icon = (name: string, fallback: React.ReactNode) => busy === name ? <LoaderCircle className="animate-spin" size={17} /> : fallback;
   const buttonClass = "inline-flex min-h-10 items-center gap-2 border border-line bg-white px-3 font-redhat text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-40";
 

@@ -3,25 +3,25 @@ import { productImportListSchema, productImportSchema } from "@/lib/products/imp
 
 const baseProduct = {
   internalId: "prod-test-001",
-  name: { cs: "Test", en: "Test", de: "Test" },
-  slug: { cs: "test-cs", en: "test-en", de: "test-de" },
-  sku: "AMR-TEST-001",
+  name: { cs: "Test", sk: "Test", en: "Test", de: "Test" },
+  slug: { cs: "test-cs", sk: "test-sk", en: "test-en", de: "test-de" },
+  sku: "1001",
   category: "earrings" as const,
   priceCzkMinor: 100000,
   priceEurMinor: 4000,
   originalPriceCzkMinor: 120000,
   originalPriceEurMinor: 4800,
   stockQuantity: 1,
-  shortDescription: { cs: "Krátký popis", en: "Short copy", de: "Kurztext" },
-  longDescription: { cs: "Dlouhý popis", en: "Long copy", de: "Langtext" },
-  material: { cs: "Ocel", en: "Steel", de: "Stahl" },
-  color: { cs: "Zlatá", en: "Gold", de: "Gold" },
-  dimensions: { cs: "10 mm", en: "10 mm", de: "10 mm" },
+  shortDescription: { cs: "Krátký popis", sk: "Krátky popis", en: "Short copy", de: "Kurztext" },
+  longDescription: { cs: "Dlouhý popis", sk: "Dlhý popis", en: "Long copy", de: "Langtext" },
+  material: { cs: "Ocel", sk: "Oceľ", en: "Steel", de: "Stahl" },
+  color: { cs: "Zlatá", sk: "Zlatá", en: "Gold", de: "Gold" },
+  dimensions: { cs: "10 mm", sk: "10 mm", en: "10 mm", de: "10 mm" },
   weightGrams: 2.5,
-  care: { cs: "V suchu", en: "Keep dry", de: "Trocken lagern" },
+  care: { cs: "V suchu", sk: "V suchu", en: "Keep dry", de: "Trocken lagern" },
   mainImage: {
     path: "products/test/main.webp",
-    alt: { cs: "Test CS", en: "Test EN", de: "Test DE" },
+    alt: { cs: "Test CS", sk: "Test SK", en: "Test EN", de: "Test DE" },
     sortOrder: 0 as const
   },
   additionalImages: [],
@@ -30,8 +30,8 @@ const baseProduct = {
   isNew: false,
   variants: [],
   seo: {
-    title: { cs: "Test CS", en: "Test EN", de: "Test DE" },
-    description: { cs: "SEO CS", en: "SEO EN", de: "SEO DE" }
+    title: { cs: "Test CS", sk: "Test SK", en: "Test EN", de: "Test DE" },
+    description: { cs: "SEO CS", sk: "SEO SK", en: "SEO EN", de: "SEO DE" }
   }
 };
 
@@ -48,22 +48,22 @@ describe("product import schema", () => {
 
   it("requires a distinct slug for each locale", () => {
     expect(
-      productImportSchema.safeParse({ ...baseProduct, slug: { cs: "same", en: "same", de: "same" } }).success
+      productImportSchema.safeParse({ ...baseProduct, slug: { cs: "same", sk: "same", en: "same", de: "same" } }).success
     ).toBe(false);
   });
 
   it("requires variant stock to match the product total", () => {
     const variant = {
       variantId: "gold",
-      sku: "AMR-TEST-001-GOLD",
-      name: { cs: "Zlatá", en: "Gold", de: "Gold" },
+      sku: "1002",
+      name: { cs: "Zlatá", sk: "Zlatá", en: "Gold", de: "Gold" },
       priceCzkMinor: null,
       priceEurMinor: null,
       originalPriceCzkMinor: null,
       originalPriceEurMinor: null,
       stockQuantity: 2,
       material: null,
-      color: { cs: "Zlatá", en: "Gold", de: "Gold" },
+      color: { cs: "Zlatá", sk: "Zlatá", en: "Gold", de: "Gold" },
       dimensions: null,
       active: true
     };

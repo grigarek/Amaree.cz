@@ -2,19 +2,39 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { X } from "lucide-react";
+import { Check, LoaderCircle, TicketPercent, Trash2, X } from "lucide-react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { localizedPaths, type Locale } from "@/i18n/routing";
 import { calculateOrderTotal } from "@/lib/cart";
 import { commerceConfig } from "@/lib/commerce/config";
 import { formatMoney } from "@/lib/money";
 import { useCartStore } from "@/store/cart-store";
+import { GiftCardSelector } from "@/components/shop/gift-card-selector";
 
 export function CartDrawer({ locale }: { locale: Locale }) {
   const t = useTranslations("cart");
-  const { isOpen, close, lines, setQuantity, removeItem, discountCode, setDiscountCode } = useCartStore();
-  const totals = calculateOrderTotal(lines, discountCode);
-  const freeLeft = Math.max(commerceConfig.freeShipping.threshold - (totals.subtotal - totals.discount), 0);
+  const { isOpen, close, lines, setQuantity, removeItem, giftCardDesignId, setGiftCardDesign, discountCode, discountAmount, discountFreeShipping, discountMessage, discountValid, setDiscountCode, setDiscountResult, clearDiscount } = useCartStore();
+  const [checkingDiscount, setCheckingDiscount] = useState(false);
+  const countryCode = locale === "sk" ? "SK" : "CZ";
+  const currency = locale === "sk" ? "EUR" : "CZK";
+  const totals = calculateOrderTotal(lines, discountCode, { countryCode, shippingMethodId: "packeta_pickup", paymentMethodId: "gopay", discountAmount, freeShipping: discountFreeShipping, giftCardDesignId });
+  const freeLeft = countryCode === "CZ" ? Math.max(commerceConfig.freeShipping.threshold - (totals.productSubtotal - totals.discount), 0) : 0;
+
+  async function applyDiscount() {
+    if (!discountCode.trim() || !lines.length) return;
+    setCheckingDiscount(true);
+    try {
+      const response = await fetch("/api/discounts/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: discountCode, currency, locale, lines: lines.map(({ productId, quantity }) => ({ productId, quantity })) })
+      });
+      const result = await response.json() as { valid?: boolean; amountMinor?: number; freeShipping?: boolean; message?: string; error?: string };
+      setDiscountResult(response.ok && result.valid ? result.amountMinor ?? 0 : 0, result.message ?? result.error ?? t("couponError"), Boolean(response.ok && result.valid), Boolean(response.ok && result.valid && result.freeShipping));
+    } catch { setDiscountResult(0, t("couponError"), false); }
+    finally { setCheckingDiscount(false); }
+  }
 
   return (
     <aside
@@ -51,7 +71,7 @@ export function CartDrawer({ locale }: { locale: Locale }) {
                         {t("remove")}
                       </button>
                     </div>
-                    <p className="mt-1 font-redhat text-sm font-semibold">{formatMoney(line.lineTotal, locale)}</p>
+                    <p className="mt-1 font-redhat text-sm font-semibold">{formatMoney(line.lineTotal, locale, line.product.currency)}</p>
                     <input
                       aria-label={t("quantity")}
                       className="mt-3 w-20 rounded-brand border border-line px-3 py-2"
@@ -64,45 +84,57 @@ export function CartDrawer({ locale }: { locale: Locale }) {
                   </div>
                 </div>
               ))}
+              <GiftCardSelector locale={locale} onSelect={setGiftCardDesign} selectedId={giftCardDesignId} />
+              <section aria-labelledby="cart-discount-title" className="border-t border-line pt-5">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="flex items-center gap-2 font-redhat text-sm font-semibold" id="cart-discount-title">
+                    <TicketPercent aria-hidden="true" className="text-ruby" size={18} />
+                    {t("coupon")}
+                  </h3>
+                  {discountValid ? (
+                    <button className="inline-flex items-center gap-1.5 font-redhat text-xs font-semibold text-muted transition hover:text-ruby" onClick={() => { clearDiscount(); setDiscountCode(""); }} type="button">
+                      <Trash2 aria-hidden="true" size={15} /> {t("removeCoupon")}
+                    </button>
+                  ) : null}
+                </div>
+                <div className="mt-3 flex gap-2">
+                  <div className="relative min-w-0 flex-1">
+                    {discountValid ? <Check aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-700" size={18} /> : <TicketPercent aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" size={18} />}
+                    <input aria-label={t("coupon")} autoCapitalize="characters" autoComplete="off" className="w-full rounded-brand border border-line py-3 pl-10 pr-3 font-mono uppercase" disabled={discountValid} id="discount-code" name="discountCode" placeholder={t("couponPlaceholder")} value={discountCode} onChange={(event) => setDiscountCode(event.target.value.toUpperCase())} onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); void applyDiscount(); } }} />
+                  </div>
+                  <button className="min-w-24 rounded-brand border border-ruby px-4 font-redhat text-sm font-semibold text-ruby transition hover:bg-ruby hover:text-white disabled:opacity-50" disabled={checkingDiscount || discountValid || !discountCode.trim() || !lines.length} onClick={() => void applyDiscount()} type="button">{checkingDiscount ? <LoaderCircle aria-label={t("checkingCoupon")} className="mx-auto animate-spin" size={18} /> : t("applyCoupon")}</button>
+                </div>
+                {discountMessage ? <p className={`mt-2 font-redhat text-xs font-semibold ${discountValid ? "text-emerald-700" : "text-red-700"}`} role="status">{discountMessage}</p> : null}
+              </section>
             </div>
           )}
         </div>
         <div className="border-t border-line p-5">
-          <label className="amaree-ui text-muted" htmlFor="discount-code">
-            {t("coupon")}
-          </label>
-          <input
-            id="discount-code"
-            name="discountCode"
-            className="mt-2 w-full rounded-brand border border-line px-3 py-3"
-            value={discountCode}
-            onChange={(event) => setDiscountCode(event.target.value)}
-          />
-          <p className="mt-4 font-redhat text-sm text-muted">
-            {freeLeft > 0 ? t("freeShippingLeft", { amount: formatMoney(freeLeft, locale) }) : t("freeShippingReached")}
-          </p>
+          {countryCode === "CZ" ? <p className="mt-4 font-redhat text-sm text-muted">
+            {freeLeft > 0 ? t("freeShippingLeft", { amount: formatMoney(freeLeft, locale, currency) }) : t("freeShippingReached")}
+          </p> : <p className="mt-4 font-redhat text-sm text-muted">{t("slovakiaShipping")}</p>}
           <dl className="mt-4 grid gap-2 font-redhat text-sm">
             <div className="flex justify-between">
               <dt>{t("subtotal")}</dt>
-              <dd>{formatMoney(totals.subtotal, locale)}</dd>
+              <dd>{formatMoney(totals.subtotal, locale, totals.currency)}</dd>
             </div>
             <div className="flex justify-between">
               <dt>{t("discount")}</dt>
-              <dd>-{formatMoney(totals.discount, locale)}</dd>
+              <dd>-{formatMoney(totals.discount, locale, totals.currency)}</dd>
             </div>
             <div className="flex justify-between">
               <dt>{t("shipping")}</dt>
-              <dd>{formatMoney(totals.shipping, locale)}</dd>
+              <dd>{formatMoney(totals.shipping, locale, totals.currency)}</dd>
             </div>
             {totals.paymentFee > 0 ? (
               <div className="flex justify-between">
                 <dt>{t("paymentFee")}</dt>
-                <dd>{formatMoney(totals.paymentFee, locale)}</dd>
+                <dd>{formatMoney(totals.paymentFee, locale, totals.currency)}</dd>
               </div>
             ) : null}
             <div className="flex justify-between border-t border-line pt-3 text-base font-semibold">
               <dt>{t("total")}</dt>
-              <dd>{formatMoney(totals.total, locale)}</dd>
+              <dd>{formatMoney(totals.total, locale, totals.currency)}</dd>
             </div>
           </dl>
           {totals.lines.length > 0 ? (

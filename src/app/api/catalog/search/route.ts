@@ -4,10 +4,10 @@ import { getCatalogCategories, getCatalogProducts } from "@/lib/catalog";
 
 const querySchema = z.object({
   q: z.string().trim().min(1).max(100),
-  locale: z.enum(["cs", "en", "de"])
+  locale: z.enum(["cs", "sk", "en", "de"])
 });
 
-function normalize(value: string, locale: "cs" | "en" | "de") {
+function normalize(value: string, locale: "cs" | "sk" | "en" | "de") {
   return value.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLocaleLowerCase(locale);
 }
 

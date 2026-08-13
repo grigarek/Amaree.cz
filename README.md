@@ -22,7 +22,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Web běží na `/cs`, administrace na `/admin`. Veřejné EN/DE přepínání je dočasně vypnuté, datový model však překlady CS/EN/DE zachovává.
+Český trh běží na `/cs` v CZK, slovenský na `/sk` v EUR a administrace na `/admin`. Přepínač CZ/SK s vlajkami je v horním banneru; při změně trhu se kvůli rozdílné měně a dopravě vyprázdní košík. Veřejné EN/DE přepínání je dočasně vypnuté, datový model však překlady CS/SK/EN/DE zachovává.
 
 Lokální demo katalog se použije pouze při `APP_ENV=development`, když Supabase není nakonfigurovaný. Staging ani production demo produkty jako fallback nezobrazí.
 
@@ -46,11 +46,11 @@ Mazání vyžaduje současně argument `--apply` a `CONFIRM_ORPHAN_DELETE=true`.
 
 ## Supabase
 
-Jediná aktivní migrace je `supabase/migrations/202607170001_development_baseline.sql`. Je určena pouze pro prázdný vývojový projekt a nebyla spuštěna. Audit je v `docs/supabase/MIGRATION_AUDIT_2026-07-17.md`, bezpečný postup v `docs/supabase/MIGRATION_PLAN.md`.
+Konsolidovaný baseline `supabase/migrations/202607170001_development_baseline.sql` je určen pouze pro prázdný vývojový projekt. Na připojeném development Supabase je spuštěný společně s navazujícími migracemi produktového workflow, integrací, puncovních údajů, slevových kódů a slovenského trhu. Audit je v `docs/supabase/MIGRATION_AUDIT_2026-07-17.md`, bezpečný postup v `docs/supabase/MIGRATION_PLAN.md`.
 
 Po spuštění baseline a vytvoření schváleného admin účtu umí `/admin`:
 
-- plný CRUD produktů včetně CS/EN/DE, CZK/EUR, skladu, SEO a lifecycle,
+- plný CRUD produktů včetně CS/SK/EN/DE, CZK/EUR, skladu, SEO a lifecycle,
 - fotografie v Supabase Storage včetně pořadí, hlavní fotografie a ALT,
 - seznam/detail objednávek, interní poznámku, historii stavů, e-mailů a audit,
 - stavové e-maily a samostatné Packeta akce.
@@ -90,6 +90,17 @@ heslo musí zůstat výhradně v ignorovaném `.env.local` nebo v serverových s
 ### Ecomail
 
 Transakční odesílání je vypnuté přes `ECOMAIL_SEND_ENABLED=false`. Před zapnutím je potřeba placený/testovací účet, ověřená odesílací doména a doručovací test. Marketingový newsletter je oddělený od provozních zpráv.
+
+### OpenAI pomocník produktů
+
+AI pomocník v `/admin` je volitelný a ve výchozím stavu vypnutý. Používá OpenAI Responses API pouze po ručním kliknutí administrátora, nejvýše pět fotografií zmenšených v prohlížeči a před vložením vždy zobrazí porovnání návrhů. Bez API klíče funguje e-shop i celá administrace normálně.
+
+1. V [OpenAI API dashboardu](https://platform.openai.com/) vytvořte samostatný API projekt, nastavte rozpočtový limit a vytvořte serverový klíč.
+2. Lokálně vložte klíč pouze do ignorovaného `.env.local` jako `OPENAI_API_KEY`. Nastavte `AI_PRODUCT_ASSISTANT_ENABLED=true`.
+3. Na Cloudflare vložte klíč jako šifrovaný secret, nikdy jako `vars` ani `NEXT_PUBLIC_*`: `npx wrangler secret put OPENAI_API_KEY --env staging`.
+4. Až poté změňte `AI_PRODUCT_ASSISTANT_ENABLED` pro požadované prostředí na `true` a znovu nasaďte Worker.
+
+Výchozí model `gpt-5-mini` lze změnit přes `OPENAI_PRODUCT_ASSISTANT_MODEL`. Použití OpenAI API se účtuje samostatně podle spotřeby a není zahrnuto v předplatném ChatGPT Plus. Migrace `202607200002_product_ai_assistant.sql` musí být před zapnutím spuštěná, protože zajišťuje audit a limity 5 požadavků za 15 minut a 30 za 24 hodin na administrátora.
 
 ## Staging hosting
 

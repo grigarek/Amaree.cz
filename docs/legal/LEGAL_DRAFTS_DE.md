@@ -4,7 +4,7 @@
 
 ## Betreiber und Geltungsbereich
 
-Der AMARÉE Online-Shop wird von MEDIANUM s.r.o., Unternehmens-ID 25882384, Sitz Příčná 129/3, Hodolany, 779 00 Olomouc, Tschechien, Registergericht Ostrava, Abteilung C, Einlage 24429, E-Mail info@amaree.cz und Telefon +420 737 076 249 betrieben. Das Unternehmen ist nicht mehrwertsteuerpflichtig; eine USt-IdNr. wird nicht angegeben.
+Der AMARÉE Online-Shop wird von MEDIANUM s.r.o., Unternehmens-ID 25882384, Sitz Příčná 129/3, Hodolany, 779 00 Olomouc, Tschechien, Registergericht Ostrava, Abteilung C, Einlage 24429, E-Mail info@amaree.cz und Telefon +420 777 705 682 betrieben. Das Unternehmen ist nicht mehrwertsteuerpflichtig; eine USt-IdNr. wird nicht angegeben.
 
 ## Vertrag und Zahlungspflicht
 

@@ -14,10 +14,11 @@ export async function POST(request: Request) {
   if (!parsed.success) return NextResponse.json({ error: parsed.error.issues[0]?.message, issues: parsed.error.flatten() }, { status: 422 });
 
   try {
-    const id = await saveAdminProduct(parsed.data);
+    const requestedStatus = parsed.data.publicationStatus;
+    const id = await saveAdminProduct({ ...parsed.data, publicationStatus: requestedStatus === "active" ? "draft" : requestedStatus });
     revalidatePath("/admin/products");
     revalidatePath("/cs");
-    return NextResponse.json({ id }, { status: 201 });
+    return NextResponse.json({ id, requestedStatus }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Produkt se nepodařilo uložit." }, { status: 500 });
   }

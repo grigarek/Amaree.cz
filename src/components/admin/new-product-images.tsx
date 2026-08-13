@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, GripVertical, ImagePlus, Star, Trash2 } from "lucide-react";
 import { maxProductImageBatchSize, maxProductImageFileSize, validateProductImageBatch } from "@/lib/images/upload-limits";
 
@@ -9,7 +9,7 @@ export type NewProductImageDraft = {
   id: string;
   file: File;
   previewUrl: string;
-  alt: { cs: string; en: string; de: string };
+  alt: { cs: string; sk: string; en: string; de: string };
 };
 
 const acceptedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
@@ -27,6 +27,7 @@ export function NewProductImages({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const draftsRef = useRef(drafts);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
 
   useEffect(() => {
     draftsRef.current = drafts;
@@ -63,7 +64,7 @@ export function NewProductImages({
         id: crypto.randomUUID(),
         file,
         previewUrl: URL.createObjectURL(file),
-        alt: { cs: "", en: "", de: "" }
+        alt: { cs: "", sk: "", en: "", de: "" }
       }))
     ]);
     if (inputRef.current) inputRef.current.value = "";
@@ -85,14 +86,14 @@ export function NewProductImages({
     onChange(next);
   }
 
-  function updateAlt(id: string, locale: "cs" | "en" | "de", value: string) {
+  function updateAlt(id: string, locale: "cs" | "sk" | "en" | "de", value: string) {
     onChange(drafts.map((draft) => draft.id === id ? { ...draft, alt: { ...draft.alt, [locale]: value } } : draft));
   }
 
   const totalSize = drafts.reduce((sum, draft) => sum + draft.file.size, 0);
 
   return (
-    <section className="border-y border-line py-7" id="new-product-images">
+    <section id="new-product-images">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="font-redhat text-xs font-semibold uppercase tracking-[0.16em] text-ruby">Součást vytvoření produktu</p>
@@ -122,7 +123,23 @@ export function NewProductImages({
           </div>
           <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {drafts.map((draft, index) => (
-              <article className="border border-line bg-white" key={draft.id}>
+              <article
+                className="border border-line bg-white"
+                draggable
+                key={draft.id}
+                onDragStart={() => setDraggedId(draft.id)}
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={() => {
+                  if (!draggedId || draggedId === draft.id) return;
+                  const next = [...drafts];
+                  const from = next.findIndex((item) => item.id === draggedId);
+                  const to = next.findIndex((item) => item.id === draft.id);
+                  const [moved] = next.splice(from, 1);
+                  next.splice(to, 0, moved);
+                  setDraggedId(null);
+                  onChange(next);
+                }}
+              >
                 <div className="relative aspect-[4/3] bg-blush">
                   <Image alt={draft.alt.cs || draft.file.name} className="object-cover" fill sizes="(min-width: 1024px) 30vw, 50vw" src={draft.previewUrl} unoptimized />
                 </div>
@@ -133,19 +150,15 @@ export function NewProductImages({
                   </div>
                   <p className="mt-3 truncate font-redhat text-sm font-semibold" title={draft.file.name}>{draft.file.name}</p>
                   <p className="mt-1 font-redhat text-xs text-muted">{(draft.file.size / 1024 / 1024).toFixed(1)} MB z max. {maxProductImageFileSize / 1024 / 1024} MB</p>
-                  <div className="mt-3 grid gap-2">
-                    {(["cs", "en", "de"] as const).map((locale) => (
-                      <label className="grid grid-cols-[2rem_1fr] items-center gap-2 font-redhat text-xs" key={locale}>
-                        <span className="font-semibold uppercase text-ruby">{locale}</span>
-                        <input
-                          className="min-h-9 border border-line px-2"
-                          onChange={(event) => updateAlt(draft.id, locale, event.target.value)}
-                          placeholder="Doplní se názvem produktu"
-                          value={draft.alt[locale]}
-                        />
-                      </label>
-                    ))}
-                  </div>
+                  <label className="mt-3 grid gap-2 font-redhat text-xs">
+                    <span className="font-semibold text-ruby">Alternativní text fotografie (CS)</span>
+                    <input
+                      className="min-h-9 border border-line px-2"
+                      onChange={(event) => updateAlt(draft.id, "cs", event.target.value)}
+                      placeholder="Doplní se názvem produktu"
+                      value={draft.alt.cs}
+                    />
+                  </label>
                   <div className="mt-4 flex items-center gap-1">
                     <button aria-label="Posunout fotografii doleva" className="p-2 hover:text-ruby disabled:opacity-30" disabled={index === 0} onClick={() => move(draft.id, -1)} title="Posunout doleva" type="button"><ChevronLeft size={18} /></button>
                     <button aria-label="Posunout fotografii doprava" className="p-2 hover:text-ruby disabled:opacity-30" disabled={index === drafts.length - 1} onClick={() => move(draft.id, 1)} title="Posunout doprava" type="button"><ChevronRight size={18} /></button>

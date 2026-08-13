@@ -7,7 +7,7 @@ export interface CheckoutSessionInput {
   successUrl: string;
   cancelUrl: string;
   notificationUrl: string;
-  locale: "cs" | "en" | "de";
+  locale: "cs" | "sk" | "en" | "de";
 }
 
 export interface CheckoutSessionResult {

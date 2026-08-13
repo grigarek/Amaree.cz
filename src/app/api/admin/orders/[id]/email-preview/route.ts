@@ -3,11 +3,10 @@ import { z } from "zod";
 import { getAdminSession } from "@/lib/admin/session";
 import { getAdminOrder } from "@/lib/admin/orders";
 import { buildOrderStatusEmail } from "@/lib/email/order-status";
+import { getOrderEmailSettings } from "@/lib/admin/email-template-settings";
+import { orderTemplateKeys } from "@/lib/orders/statuses";
 
-const templateSchema = z.enum([
-  "order_received", "awaiting_bank_transfer", "payment_confirmed", "payment_failed",
-  "order_processing", "ready_for_pickup", "order_shipped", "order_cancelled", "payment_refunded"
-]);
+const templateSchema = z.enum(orderTemplateKeys);
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const admin = await getAdminSession();
@@ -18,7 +17,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   const order = await getAdminOrder(id);
   if (!order) return NextResponse.json({ error: "Objednávka nebyla nalezena." }, { status: 404 });
   try {
-    return NextResponse.json({ recipient: order.email, ...buildOrderStatusEmail(order, template.data) });
+    return NextResponse.json({ recipient: order.email, ...buildOrderStatusEmail(order, template.data, await getOrderEmailSettings()) });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Náhled nelze sestavit." }, { status: 422 });
   }

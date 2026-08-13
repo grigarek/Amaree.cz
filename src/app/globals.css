@@ -79,7 +79,7 @@ img {
   }
 
   .amaree-body {
-    @apply font-cormorant text-xl leading-8 text-muted;
+    @apply font-redhat text-base font-medium leading-7 text-muted md:text-lg md:leading-8;
   }
 
   .amaree-ui {

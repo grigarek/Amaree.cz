@@ -65,17 +65,20 @@ export function getEnvironmentSafetyReport() {
   if (environment !== "production" && process.env.PACKETA_ENVIRONMENT === "production") {
     problems.push("Production Packeta is forbidden outside production");
   }
-  if (environment !== "production" && process.env.ECOMAIL_ENVIRONMENT === "production") {
-    problems.push("Production Ecomail is forbidden outside production");
-  }
   if (environment !== "production" && process.env.PACKETA_API_ENABLED === "true" && process.env.PACKETA_ENVIRONMENT !== "test") {
     problems.push("Enabled Packeta API must use a test sender outside production");
   }
   if (environment !== "production" && process.env.GOPAY_CHECKOUT_ENABLED === "true" && process.env.GOPAY_ENVIRONMENT !== "sandbox") {
     problems.push("Enabled GoPay checkout must use sandbox outside production");
   }
-  if (environment !== "production" && process.env.ECOMAIL_SEND_ENABLED === "true" && process.env.ECOMAIL_ENVIRONMENT !== "test") {
-    problems.push("Enabled Ecomail sending must use the test environment outside production");
+  if (environment !== "production" && process.env.TRANSACTIONAL_EMAIL_SEND_ENABLED === "true" && !process.env.TRANSACTIONAL_EMAIL_TEST_RECIPIENT) {
+    problems.push("Enabled staging e-mail requires TRANSACTIONAL_EMAIL_TEST_RECIPIENT");
+  }
+  if (process.env.TRANSACTIONAL_EMAIL_SEND_ENABLED === "true" && process.env.TRANSACTIONAL_EMAIL_PROVIDER !== "resend") {
+    problems.push("Transactional sending is currently approved only for the Resend provider");
+  }
+  if (process.env.AI_PRODUCT_ASSISTANT_ENABLED === "true" && !process.env.OPENAI_API_KEY) {
+    problems.push("Enabled AI product assistant requires the server-only OPENAI_API_KEY secret");
   }
 
   return { environment, ok: problems.length === 0, problems };

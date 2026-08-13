@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const locales = ["cs", "en", "de"] as const;
+const locales = ["cs", "sk", "en", "de"] as const;
 
 const localizedRequiredSchema = z.object(
   Object.fromEntries(locales.map((locale) => [locale, z.string().trim().min(1)])) as Record<
@@ -15,7 +15,7 @@ const localizedSlugSchema = z.object(
   ) as Record<(typeof locales)[number], z.ZodString>
 );
 
-const skuSchema = z.string().trim().min(3).max(64).regex(/^[A-Z0-9-]+$/);
+const skuSchema = z.string().trim().min(4).max(12).regex(/^\d+$/);
 const moneySchema = z.number().int().nonnegative();
 
 const productVariantSchema = z

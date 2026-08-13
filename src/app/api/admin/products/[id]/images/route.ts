@@ -26,6 +26,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
   const fallbackAlt = {
     cs: String(formData.get("altCs") ?? "").trim(),
+    sk: String(formData.get("altSk") ?? "").trim(),
     en: String(formData.get("altEn") ?? "").trim(),
     de: String(formData.get("altDe") ?? "").trim()
   };
@@ -38,7 +39,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       metadata = parsed.map((item) => {
         if (!item || typeof item !== "object" || !("alt" in item) || !item.alt || typeof item.alt !== "object") throw new Error();
         const alt = item.alt as Record<string, unknown>;
-        return { alt: { cs: String(alt.cs ?? "").trim(), en: String(alt.en ?? "").trim(), de: String(alt.de ?? "").trim() } };
+        return { alt: { cs: String(alt.cs ?? "").trim(), sk: String(alt.sk ?? "").trim(), en: String(alt.en ?? "").trim(), de: String(alt.de ?? "").trim() } };
       });
     } catch {
       return NextResponse.json({ error: "Metadata fotografií nejsou platná." }, { status: 422 });
@@ -49,6 +50,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
   const supabase = await createSupabaseServerClient();
   const { count } = await supabase.from("product_images").select("id", { count: "exact", head: true }).eq("product_id", productId).is("archived_at", null);
+  if ((count ?? 0) + files.length > 12) return NextResponse.json({ error: "Produkt může mít nejvýše 12 aktivních fotografií." }, { status: 422 });
   let nextOrder = count ?? 0;
   const created: Array<{ id: string; storagePath: string }> = [];
 
@@ -83,6 +85,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
       const { error: translationsError } = await supabase.from("product_image_translations").insert([
         { image_id: image.id, locale: "cs", alt_text: alt.cs },
+        { image_id: image.id, locale: "sk", alt_text: alt.sk },
         { image_id: image.id, locale: "en", alt_text: alt.en },
         { image_id: image.id, locale: "de", alt_text: alt.de }
       ]);
@@ -97,6 +100,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
     revalidatePath(`/admin/products/${productId}`);
     revalidatePath("/cs");
+    revalidatePath("/sk");
     return NextResponse.json({ ids: created.map((image) => image.id) }, { status: 201 });
   } catch (error) {
     if (created.length) {

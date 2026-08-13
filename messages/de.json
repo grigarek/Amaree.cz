@@ -2,13 +2,14 @@
   "brand": {
     "name": "AMARÉE",
     "est": "EST. 2025",
-    "claim": "Jedes Schmuckstück hat seine Geschichte.",
+    "claim": "Silberschmuck für Geschichten, die bleiben.",
     "intro": "Minimalistische Eleganz, die Ihren Stil unterstreicht. Hochwertige Materialien. Zeitloses Design."
   },
   "nav": {
     "home": "Startseite",
     "collection": "Schmuck",
     "about": "Über uns",
+    "faq": "Häufige Fragen",
     "contact": "Kontakt",
     "search": "Suchen",
     "cart": "Warenkorb",
@@ -74,9 +75,11 @@
     "description": "Produktbeschreibung",
     "category": "Kategorie",
     "material": "Material",
-    "color": "Farbe und Oberfläche",
+    "color": "Farbe",
     "dimensions": "Maße",
+    "clasp": "Verschlussart",
     "weight": "Gewicht",
+    "notSpecified": "Nicht angegeben",
     "sku": "Produktcode",
     "availability": "Verfügbarkeit",
     "care": "Schmuckpflege",
@@ -87,7 +90,8 @@
     "demo": "Demo-Produkt",
     "inStock": "Auf Lager",
     "soldOut": "Ausverkauft",
-    "shippingBody": "Packeta Hauszustellung oder Abholstelle und persönliche Abholung. Kostenloser Versand in Tschechien ab 1.500 CZK.",
+    "dispatch": "Vorrätige Produkte versenden wir an Werktagen in der Regel innerhalb von 24 Stunden.",
+    "shippingBody": "Packeta Hauszustellung oder Abholstelle. Kostenloser Versand in Tschechien ab 1.500 CZK.",
     "returnsBody": "Gesetzlicher Widerruf innerhalb von 14 Tagen und freiwillige AMARÉE-Rückgabe innerhalb von 30 Tagen unter den genannten Bedingungen."
   },
   "cart": {
@@ -99,12 +103,25 @@
     "paymentFee": "Zahlungsgebühr",
     "total": "Gesamt",
     "coupon": "Rabattcode",
+    "couponPlaceholder": "Code eingeben",
+    "applyCoupon": "Anwenden",
+    "removeCoupon": "Code entfernen",
+    "checkingCoupon": "Wird geprüft…",
+    "couponError": "Der Rabattcode konnte nicht geprüft werden.",
     "checkout": "Weiter zur Bestellung",
     "freeShippingLeft": "Noch {amount} bis zum kostenlosen Versand",
     "freeShippingReached": "Sie haben kostenlosen Versand.",
     "remove": "Entfernen",
     "close": "Warenkorb schließen",
     "quantity": "Menge"
+    ,"giftCardTitle": "Grußkarte hinzufügen"
+    ,"giftCardDescription": "Wählen Sie ein Motiv für 1,20 €. Wir legen die Karte dem Paket bei."
+    ,"giftCardChoose": "Auswählen"
+    ,"giftCardHide": "Motive ausblenden"
+    ,"giftCardRemove": "Karte entfernen"
+    ,"giftCardSelect": "Karte auswählen: {name}"
+    ,"giftCardPreview": "Karte vergrößern: {name}"
+    ,"giftCardClosePreview": "Kartenvorschau schließen"
   },
   "checkout": {
     "title": "Bestellung",
@@ -128,9 +145,8 @@
     "selectedPickupPoint": "Ausgewählte Abholstelle",
     "homeDelivery": "Lieferung nach Hause",
     "comingSoon": "in Vorbereitung",
-    "pickup": "Abholung",
     "providerNote": "Demo-Modus: Die Zahlung bleibt deaktiviert, bis Testzugangsdaten des Anbieters sicher konfiguriert sind.",
-    "confirmation": "Die Bestellbestätigung wird nach der Zahlungsprüfung per Webhook per E-Mail versendet.",
+    "confirmation": "Wir haben Ihre Bestellung erhalten. Die Bestätigung und weitere Hinweise senden wir an Ihre E-Mail-Adresse.",
     "backToCollection": "Zurück zur Kollektion"
   },
   "footer": {
@@ -138,7 +154,7 @@
     "tagline": "Schmuck mit Geschichte",
     "socialMedia": "Soziale Medien",
     "instagram": "AMARÉE auf Instagram",
-    "facebookSoon": "Facebook folgt bald",
+    "facebook": "AMARÉE auf Facebook",
     "contact": "Kontakt",
     "operator": "Betreiber: MEDIANUM s.r.o.",
     "companyId": "Unternehmens-ID: 25882384",
@@ -146,7 +162,7 @@
     "registerEntry": "Bezirksgericht Ostrava, Abteilung C, Einlage 24429",
     "registrationDate": "Eintragungsdatum: 21. Juni 2001",
     "email": "info@amaree.cz",
-    "phone": "+420 737 076 249",
+    "phone": "+420 777 705 682",
     "address": "Příčná 129/3, Hodolany, 779 00 Olomouc, Tschechien",
     "rights": "Alle Rechte vorbehalten.",
     "legal": "Kundenservice",
@@ -154,7 +170,9 @@
     "privacy": "Datenschutz",
     "returns": "Umtausch, Rückgabe und Reklamation",
     "shipping": "Versand und Zahlung",
-    "care": "Schmuckpflege"
+    "care": "Schmuckpflege",
+    "club": "AMARÉE Club",
+    "hallmark": "Punzierung"
   },
   "cookie": {
     "message": "Wir verwenden notwendige Cookies für den sicheren Betrieb der Website. Analyse- und Marketing-Skripte bleiben bis zu Ihrer Zustimmung deaktiviert.",

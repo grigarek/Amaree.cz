@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { enabledLocales, isLocale } from "@/i18n/routing";
+import { enabledLocales, isLocale, localizedPaths } from "@/i18n/routing";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { CookieConsent } from "@/components/site/cookie-consent";
 import { DocumentLocale } from "@/components/site/document-locale";
+import { CartHydrator } from "@/components/shop/cart-hydrator";
 import { company } from "@/lib/config/company";
 
 export function generateStaticParams() {
@@ -17,6 +18,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const description = locale === "sk"
+    ? "Nadčasové šperky, ktoré podčiarknu váš štýl. Kvalitné materiály a jemný dizajn AMARÉE."
+    : "Pečlivě vybrané stříbrné šperky z Olomouce od zakladatelky Anette.";
 
   return {
     metadataBase: new URL(siteUrl),
@@ -24,14 +28,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       default: "A M A R É E",
       template: "%s | A M A R É E"
     },
-    description: "Minimalistická elegance, která podtrhne váš styl. Kvalitní materiály. Nadčasový design.",
+    description,
     alternates: {
-      canonical: `/${locale}`
+      canonical: localizedPaths[locale].home,
+      languages: {
+        "cs-CZ": localizedPaths.cs.home,
+        "sk-SK": localizedPaths.sk.home,
+        "x-default": localizedPaths.cs.home
+      }
     },
     openGraph: {
       type: "website",
       siteName: "A M A R É E",
-      locale,
+      locale: locale === "sk" ? "sk_SK" : "cs_CZ",
+      alternateLocale: locale === "sk" ? ["cs_CZ"] : ["sk_SK"],
       images: ["/opengraph-image"]
     }
   };
@@ -70,6 +80,7 @@ export default async function LocaleLayout({
         }) }}
       />
       <DocumentLocale locale={locale} />
+      <CartHydrator locale={locale} />
       <Header locale={locale} />
       <main>{children}</main>
       <Footer locale={locale} />

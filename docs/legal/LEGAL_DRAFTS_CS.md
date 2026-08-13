@@ -6,7 +6,7 @@
 
 ### Prodávající
 
-Prodávajícím a provozovatelem e-shopu značky AMARÉE je MEDIANUM s.r.o., IČO 25882384, se sídlem Příčná 129/3, Hodolany, 779 00 Olomouc, Česká republika, zapsaná v obchodním rejstříku vedeném Krajským soudem v Ostravě, oddíl C, vložka 24429, den zápisu 21. června 2001, e-mail info@amaree.cz, telefon +420 737 076 249 (dále jen „prodávající“). Společnost není plátcem DPH a DIČ se neuvádí.
+Prodávajícím a provozovatelem e-shopu značky AMARÉE je MEDIANUM s.r.o., IČO 25882384, se sídlem Příčná 129/3, Hodolany, 779 00 Olomouc, Česká republika, zapsaná v obchodním rejstříku vedeném Krajským soudem v Ostravě, oddíl C, vložka 24429, den zápisu 21. června 2001, e-mail info@amaree.cz, telefon +420 777 705 682 (dále jen „prodávající“). Společnost není plátcem DPH a DIČ se neuvádí.
 
 ### Nabídka a ceny
 
@@ -20,7 +20,7 @@ Prodávající zašle bez zbytečného odkladu potvrzení objednávky na e-mail 
 
 ### Platba a dodání
 
-Hlavní online platební metodou je GoPay; konkrétní kartové, bankovní a peněženkové metody se zobrazí pouze podle aktivace obchodního účtu. Klasický bankovní převod probíhá na účet 3361675015/3030 se splatností 3 kalendářní dny a dobírka stojí 39 Kč. Packeta na adresu stojí 119 Kč, výdejní místo nebo Z-BOX 95 Kč a osobní odběr na sídle prodávajícího je zdarma. Doprava po ČR je zdarma od 1 500 Kč hodnoty zboží po slevě; dobírkový poplatek zůstává. Ostatní podporované země EU mají připravenou sazbu 14,50 EUR bez dopravy zdarma a dobírky. Dodací lhůty a přesné podporované služby jsou TODO.
+Hlavní online platební metodou je GoPay; konkrétní kartové, bankovní a peněženkové metody se zobrazí pouze podle aktivace obchodního účtu. Klasický bankovní převod probíhá na účet 3361675015/3030 se splatností 3 kalendářní dny. V Česku stojí dobírka 39 Kč, Packeta na adresu 119 Kč a výdejní místo nebo Z-BOX 95 Kč. Doprava po ČR je zdarma od 1 500 Kč hodnoty zboží po slevě. Na Slovensko stojí výdejní místo, Z-BOX i doručení na adresu 8,50 EUR, dobírka u ověřených služeb 1,50 EUR a doprava zdarma se neposkytuje. Dodací lhůty a přesně podporované kombinace dobírky jsou TODO k ověření v účtu Packety.
 
 ### Odpovědnost za vady
 
@@ -36,7 +36,7 @@ Pokud se spor nepodaří vyřešit dohodou, může spotřebitel podat návrh Če
 
 ### Závěrečná ustanovení
 
-Smlouva se řídí českým právem; tím nejsou dotčena kogentní práva spotřebitele v zemi jeho obvyklého bydliště, pokud se uplatní. Účinnost podmínek: TODO.
+Smlouva se řídí českým právem; tím nejsou dotčena kogentní práva spotřebitele v zemi jeho obvyklého bydliště, pokud se uplatní. Účinnost podmínek: 1. 8. 2026.
 
 ## 2. Ochrana osobních údajů
 
@@ -51,7 +51,7 @@ Zpracovávané údaje mohou zahrnovat identifikační, kontaktní, objednávkov�
 - newsletter nezákazníkům – souhlas,
 - nabídka vlastních obdobných výrobků zákazníkům – za zákonných podmínek a s možností jednoduchého odmítnutí.
 
-Předpokládaní příjemci: poskytovatel hostingu TODO, Supabase, Packeta, GoPay, Ecomail, účetní a právní poradci a orgány veřejné moci. Skutečný seznam, země zpracování, smlouvy se zpracovateli a případné předávání mimo EHP musí být ověřeny před spuštěním.
+Předpokládaní příjemci: Cloudflare, Supabase, Packeta, GoPay, Resend pro transakční e-maily, případně budoucí Ecomail pro newsletter, externí účetní, daňoví a případně právní poradci a orgány veřejné moci. Skutečný seznam, země zpracování, smlouvy se zpracovateli a případné předávání mimo EHP musí být ověřeny před spuštěním.
 
 Retenční lhůty pro objednávky, účetní doklady, reklamace, bezpečnostní logy a marketingové souhlasy: TODO stanovit samostatně podle účelu. Subjekt údajů má podle okolností právo na přístup, opravu, výmaz, omezení, přenositelnost, námitku a odvolání souhlasu a může podat stížnost ÚOOÚ, https://uoou.gov.cz/.
 
@@ -72,10 +72,9 @@ Spotřebitel může podle zákonných podmínek požadovat opravu nebo výměnu;
 ## 5. Doprava a platba
 
 - Packeta výdejní místo / Z-BOX: 95 Kč v ČR; lhůta a přesné podporované země TODO.
-- Osobní odběr: Příčná 129/3, Olomouc, zdarma; připravenost bude potvrzena e-mailem, otevírací doba TODO a nezobrazuje se.
 - Packeta na adresu: 119 Kč v ČR.
 - Doprava zdarma: po ČR od 1 500 Kč hodnoty zboží po slevě.
-- Ostatní podporované státy EU: 14,50 EUR, bez dopravy zdarma a dobírky.
+- Slovensko: 8,50 EUR pro výdejní místo / Z-BOX i doručení na adresu; dobírka 1,50 EUR pouze u ověřených služeb; bez dopravy zdarma.
 - GoPay, klasický bankovní převod a dobírka 39 Kč podle povolené kombinace dopravy.
 
 Zákazník musí před zaplacením vidět zvoleného dopravce, výdejní místo, cenu dopravy, celkovou cenu a předpokládaný termín dodání. Riziko škody přechází na spotřebitele zásadně převzetím zboží.

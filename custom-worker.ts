@@ -5,6 +5,9 @@ type WorkerEnvironment = {
   APP_ENV?: string;
   NEXT_PUBLIC_SUPABASE_URL?: string;
   SUPABASE_SERVICE_ROLE_KEY?: string;
+  CRON_SECRET?: string;
+  NEXT_PUBLIC_SITE_URL?: string;
+  PACKETA_API_ENABLED?: string;
 };
 
 type WorkerExecutionContext = {
@@ -29,10 +32,54 @@ async function expireReservations(env: WorkerEnvironment) {
   if (!response.ok) throw new Error(`reservation_expiry_failed_${response.status}`);
 }
 
+async function syncPacketaStatuses(env: WorkerEnvironment) {
+  if (env.PACKETA_API_ENABLED !== "true" || !env.CRON_SECRET) return;
+  const siteUrl = env.NEXT_PUBLIC_SITE_URL ?? "https://amaree.cz";
+  const response = await fetch(`${siteUrl}/api/cron/packeta-status`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.CRON_SECRET}` }
+  });
+  if (!response.ok) throw new Error(`packeta_status_sync_failed_${response.status}`);
+}
+
+async function sendOrderFollowups(env: WorkerEnvironment) {
+  if (!env.CRON_SECRET) return;
+  const siteUrl = env.NEXT_PUBLIC_SITE_URL ?? "https://amaree.cz";
+  const response = await fetch(`${siteUrl}/api/cron/order-followups`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.CRON_SECRET}` }
+  });
+  if (!response.ok) throw new Error(`order_followups_failed_${response.status}`);
+}
+
+async function processLoyaltyRewards(env: WorkerEnvironment) {
+  if (!env.NEXT_PUBLIC_SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return;
+  const processReward = async (rpc: "process_loyalty_rewards" | "process_birthday_rewards") => {
+    const response = await fetch(`${env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/rpc/${rpc}`, {
+      method: "POST",
+      headers: {
+        apikey: env.SUPABASE_SERVICE_ROLE_KEY!,
+        Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ p_limit: 100 })
+    });
+    if (!response.ok && response.status !== 404) throw new Error(`${rpc}_failed_${response.status}`);
+  };
+  await Promise.all([processReward("process_loyalty_rewards"), processReward("process_birthday_rewards")]);
+}
+
 const worker = {
   fetch: nextHandler.fetch,
   scheduled(_event: unknown, env: WorkerEnvironment, ctx: WorkerExecutionContext) {
-    ctx.waitUntil(expireReservations(env));
+    ctx.waitUntil(Promise.all([
+      expireReservations(env),
+      syncPacketaStatuses(env),
+      (async () => {
+        await processLoyaltyRewards(env);
+        await sendOrderFollowups(env);
+      })()
+    ]));
   }
 };
 

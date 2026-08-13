@@ -3,6 +3,7 @@ import type { Currency } from "@/types/domain";
 
 const localeMap: Record<Locale, string> = {
   cs: "cs-CZ",
+  sk: "sk-SK",
   en: "en-GB",
   de: "de-DE"
 };

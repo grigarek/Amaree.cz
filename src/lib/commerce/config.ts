@@ -22,52 +22,57 @@ export const commerceConfig = {
       personal_pickup: { amount: 0, currency: "CZK" as Currency }
     },
     SK: {
-      packeta_home: { amount: 490, currency: "EUR" as Currency },
-      packeta_pickup: { amount: 390, currency: "EUR" as Currency }
+      packeta_home: { amount: 850, currency: "EUR" as Currency },
+      packeta_pickup: { amount: 850, currency: "EUR" as Currency }
     }
   },
   paymentFees: {
     gopay: { amount: 0, currency: "CZK" as Currency },
     cash_on_delivery: { amount: 3_900, currency: "CZK" as Currency },
+    cash_on_pickup: { amount: 0, currency: "CZK" as Currency },
     bank_transfer: { amount: 0, currency: "CZK" as Currency }
   },
   paymentFeesByCountry: {
     CZ: {
       gopay: { amount: 0, currency: "CZK" as Currency },
       cash_on_delivery: { amount: 3_900, currency: "CZK" as Currency },
+      cash_on_pickup: { amount: 0, currency: "CZK" as Currency },
       bank_transfer: { amount: 0, currency: "CZK" as Currency }
     },
     SK: {
       gopay: { amount: 0, currency: "EUR" as Currency },
-      cash_on_delivery: { amount: 190, currency: "EUR" as Currency },
+      cash_on_delivery: { amount: 150, currency: "EUR" as Currency },
+      cash_on_pickup: { amount: 0, currency: "EUR" as Currency },
       bank_transfer: { amount: 0, currency: "EUR" as Currency }
     }
   },
   reservationMinutes: {
     gopay: 30,
     bank_transfer: 3 * 24 * 60,
-    cash_on_delivery: 0
+    cash_on_delivery: 0,
+    cash_on_pickup: 0
   },
   bankTransferDueDays: 3,
   allowedPayments: {
     packeta_home: ["gopay", "cash_on_delivery", "bank_transfer"],
     packeta_pickup: ["gopay", "cash_on_delivery", "bank_transfer"],
-    personal_pickup: ["gopay", "bank_transfer"],
+    personal_pickup: ["gopay", "cash_on_pickup", "bank_transfer"],
     eu_delivery: ["gopay"]
   } satisfies Record<ShippingMethodId, PaymentMethodId[]>
 } as const;
 
 export const shippingLabels: Record<ShippingMethodId, LocalizedText> = {
-  packeta_home: { cs: "Zásilkovna – doručení na adresu", en: "Packeta home delivery", de: "Packeta Hauszustellung" },
-  packeta_pickup: { cs: "Zásilkovna – výdejní místo nebo Z-BOX", en: "Packeta pickup point or Z-BOX", de: "Packeta Abholstelle oder Z-BOX" },
-  personal_pickup: { cs: "Osobní odběr", en: "Personal pickup", de: "Persönliche Abholung" },
-  eu_delivery: { cs: "Doručení do EU", en: "EU delivery", de: "EU-Lieferung" }
+  packeta_home: { cs: "Zásilkovna – doručení na adresu", sk: "Packeta – doručenie na adresu", en: "Packeta home delivery", de: "Packeta Hauszustellung" },
+  packeta_pickup: { cs: "Zásilkovna – výdejní místo nebo Z-BOX", sk: "Packeta – výdajné miesto alebo Z-BOX", en: "Packeta pickup point or Z-BOX", de: "Packeta Abholstelle oder Z-BOX" },
+  personal_pickup: { cs: "Osobní odběr", sk: "Osobný odber", en: "Personal pickup", de: "Persönliche Abholung" },
+  eu_delivery: { cs: "Doručení do EU", sk: "Doručenie v EÚ", en: "EU delivery", de: "EU-Lieferung" }
 };
 
 export const paymentLabels: Record<PaymentMethodId, LocalizedText> = {
-  gopay: { cs: "Online platba přes GoPay", en: "Online payment via GoPay", de: "Online-Zahlung über GoPay" },
-  cash_on_delivery: { cs: "Platba na dobírku", en: "Cash on delivery", de: "Nachnahme" },
-  bank_transfer: { cs: "Bankovní převod", en: "Bank transfer", de: "Banküberweisung" }
+  gopay: { cs: "Online platba kartou", sk: "Online platba kartou", en: "Online card payment", de: "Online-Kartenzahlung" },
+  cash_on_delivery: { cs: "Platba na dobírku", sk: "Platba na dobierku", en: "Cash on delivery", de: "Nachnahme" },
+  cash_on_pickup: { cs: "Hotově při osobním odběru", sk: "V hotovosti pri osobnom odbere", en: "Cash on pickup", de: "Barzahlung bei Abholung" },
+  bank_transfer: { cs: "Bankovní převod", sk: "Bankový prevod", en: "Bank transfer", de: "Banküberweisung" }
 };
 
 export function isDeliveryCountryCode(value: string): value is DeliveryCountryCode {
@@ -84,7 +89,7 @@ export function getCheckoutCurrency(countryCode: DeliveryCountryCode): Currency 
 
 export function getShippingMethods(countryCode: DeliveryCountryCode): ShippingMethodId[] {
   return isDomesticCountry(countryCode)
-    ? ["packeta_home", "packeta_pickup", "personal_pickup"]
+    ? ["packeta_home", "packeta_pickup"]
     : ["packeta_home", "packeta_pickup"];
 }
 
@@ -99,16 +104,25 @@ export function getPaymentQuote(paymentMethodId: PaymentMethodId, countryCode: D
   return commerceConfig.paymentFeesByCountry[countryCode][paymentMethodId];
 }
 
-export function getAllowedPaymentMethods(shippingMethodId: ShippingMethodId): readonly PaymentMethodId[] {
-  return commerceConfig.allowedPayments[shippingMethodId];
+export function getAllowedPaymentMethods(
+  shippingMethodId: ShippingMethodId,
+  countryCode: DeliveryCountryCode = "CZ"
+): readonly PaymentMethodId[] {
+  if (!getShippingMethods(countryCode).includes(shippingMethodId)) return [];
+  const methods = commerceConfig.allowedPayments[shippingMethodId];
+  return countryCode === "SK" ? methods.filter((method) => method !== "bank_transfer") : methods;
 }
 
-export function isPaymentAllowed(shippingMethodId: ShippingMethodId, paymentMethodId: PaymentMethodId): boolean {
-  return getAllowedPaymentMethods(shippingMethodId).includes(paymentMethodId);
+export function isPaymentAllowed(
+  shippingMethodId: ShippingMethodId,
+  paymentMethodId: PaymentMethodId,
+  countryCode: DeliveryCountryCode = "CZ"
+): boolean {
+  return getAllowedPaymentMethods(shippingMethodId, countryCode).includes(paymentMethodId);
 }
 
 export function getOrderInitialStatus(paymentMethodId: PaymentMethodId) {
-  if (paymentMethodId === "cash_on_delivery") return "new" as const;
+  if (paymentMethodId === "cash_on_delivery" || paymentMethodId === "cash_on_pickup") return "new" as const;
   return "awaiting_payment" as const;
 }
 

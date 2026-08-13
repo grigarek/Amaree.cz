@@ -19,7 +19,12 @@ export function GET() {
         ),
         gopayMode: process.env.GOPAY_ENVIRONMENT ?? "disabled",
         packetaMode: process.env.PACKETA_ENVIRONMENT ?? "mock",
-        ecomailMode: process.env.ECOMAIL_ENVIRONMENT ?? "disabled"
+        transactionalEmailProvider: process.env.TRANSACTIONAL_EMAIL_PROVIDER ?? "resend",
+        transactionalEmailSending: process.env.TRANSACTIONAL_EMAIL_SEND_ENABLED === "true" ? "enabled" : "disabled",
+        ecomailNewsletter: process.env.ECOMAIL_NEWSLETTER_ENABLED === "true" ? "enabled" : "disabled",
+        productAiAssistant: process.env.AI_PRODUCT_ASSISTANT_ENABLED === "true" && Boolean(process.env.OPENAI_API_KEY)
+          ? "enabled"
+          : "disabled"
       },
       problems: report.problems
     },

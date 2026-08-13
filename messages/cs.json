@@ -2,16 +2,19 @@
   "brand": {
     "name": "AMARÉE",
     "est": "EST. 2025",
-    "claim": "Každý šperk má svůj příběh.",
+    "claim": "Stříbrné šperky pro příběhy, které zůstávají.",
     "intro": "Minimalistická elegance, která podtrhne váš styl. Kvalitní materiály. Nadčasový design."
   },
   "nav": {
     "home": "Úvod",
     "collection": "Šperky",
     "about": "O nás",
+    "faq": "Časté dotazy",
     "contact": "Kontakt",
     "search": "Hledat",
     "cart": "Košík",
+    "market": "Země nákupu",
+    "marketChangeConfirm": "Při změně země se košík vyprázdní, protože ceny jsou v jiné měně. Chcete pokračovat?",
     "language": "Jazyk",
     "menu": "Menu",
     "close": "Zavřít"
@@ -31,9 +34,10 @@
   },
   "home": {
     "announcement": "Doprava zdarma od 1 500 Kč • 30 dní na vrácení",
+    "announcementShort": "Doprava zdarma od 1 500 Kč",
     "cta": "Objevit šperky",
     "heroAlt": "Žena s náhrdelníkem a náramkem AMARÉE",
-    "benefits": ["Kvalitní materiály", "Elegantní balení", "30 dní na vrácení", "Doprava zdarma"],
+    "benefits": ["Kvalitní materiály", "Elegantní balení", "30 dní na vrácení", "Doprava zdarma od 1 500 Kč"],
     "categoriesTitle": "Objevte šperky AMARÉE",
     "categoriesSubtitle": "Objevte šperky, které podtrhnou vaši jedinečnost.",
     "bestsellers": "Nejoblíbenější",
@@ -74,9 +78,11 @@
     "description": "Popis produktu",
     "category": "Kategorie",
     "material": "Materiál",
-    "color": "Barva a povrch",
+    "color": "Barva",
     "dimensions": "Rozměry",
+    "clasp": "Typ zapínání",
     "weight": "Hmotnost",
+    "notSpecified": "Neuvedeno",
     "sku": "Kód produktu",
     "availability": "Dostupnost",
     "care": "Péče o šperk",
@@ -87,7 +93,8 @@
     "demo": "Demonstrační produkt",
     "inStock": "Skladem",
     "soldOut": "Vyprodáno",
-    "shippingBody": "Zásilkovna na adresu nebo výdejní místo a osobní odběr. Doprava zdarma po ČR od 1 500 Kč.",
+    "dispatch": "Skladové produkty odesíláme zpravidla do 24 hodin v pracovní dny.",
+    "shippingBody": "Zásilkovna na adresu nebo výdejní místo. Doprava zdarma po ČR od 1 500 Kč.",
     "returnsBody": "Zákonné odstoupení do 14 dnů a dobrovolné vrácení AMARÉE do 30 dnů za stanovených podmínek."
   },
   "cart": {
@@ -99,12 +106,26 @@
     "paymentFee": "Platební poplatek",
     "total": "Celkem",
     "coupon": "Slevový kód",
+    "couponPlaceholder": "Zadejte kód",
+    "applyCoupon": "Použít",
+    "removeCoupon": "Odebrat kód",
+    "checkingCoupon": "Ověřuji…",
+    "couponError": "Slevový kód se nepodařilo ověřit.",
     "checkout": "Pokračovat k objednávce",
     "freeShippingLeft": "Do dopravy zdarma zbývá {amount}",
     "freeShippingReached": "Máte dopravu zdarma.",
+    "slovakiaShipping": "Doprava na Slovensko přes Packetu za 8,50 €.",
     "remove": "Odebrat",
     "close": "Zavřít košík",
     "quantity": "Množství"
+    ,"giftCardTitle": "Přidat kartičku s věnováním"
+    ,"giftCardDescription": "Vyberte si motiv za 30 Kč. Kartičku vložíme do balíčku."
+    ,"giftCardChoose": "Vybrat"
+    ,"giftCardHide": "Skrýt motivy"
+    ,"giftCardRemove": "Odebrat kartičku"
+    ,"giftCardSelect": "Vybrat kartičku: {name}"
+    ,"giftCardPreview": "Zvětšit kartičku: {name}"
+    ,"giftCardClosePreview": "Zavřít náhled kartičky"
   },
   "checkout": {
     "title": "Objednávka",
@@ -128,9 +149,8 @@
     "selectedPickupPoint": "Vybrané výdejní místo",
     "homeDelivery": "Doručení na adresu",
     "comingSoon": "připravujeme",
-    "pickup": "Osobní odběr",
     "providerNote": "Demonstrační režim: platba je vypnutá, dokud nebudou bezpečně doplněny testovací údaje poskytovatele.",
-    "confirmation": "Potvrzení objednávky bude odesláno e-mailem po ověření platby webhookem.",
+    "confirmation": "Objednávku jsme přijali. Potvrzení s dalšími pokyny odešleme na zadaný e-mail.",
     "backToCollection": "Zpět do kolekce"
   },
   "footer": {
@@ -138,7 +158,7 @@
     "tagline": "Šperky s příběhem",
     "socialMedia": "Sociální sítě",
     "instagram": "Instagram AMARÉE",
-    "facebookSoon": "Facebook připravujeme",
+    "facebook": "Facebook AMARÉE",
     "contact": "Kontakt",
     "operator": "Provozovatel: MEDIANUM s.r.o.",
     "companyId": "IČO: 25882384",
@@ -146,7 +166,7 @@
     "registerEntry": "Krajský soud v Ostravě, oddíl C, vložka 24429",
     "registrationDate": "Den zápisu: 21. června 2001",
     "email": "info@amaree.cz",
-    "phone": "+420 737 076 249",
+    "phone": "+420 777 705 682",
     "address": "Příčná 129/3, Hodolany, 779 00 Olomouc",
     "rights": "Všechna práva vyhrazena.",
     "legal": "Pro zákazníky",
@@ -154,7 +174,9 @@
     "privacy": "Ochrana osobních údajů",
     "returns": "Výměna, vrácení a reklamace",
     "shipping": "Doprava a platba",
-    "care": "Péče o šperky"
+    "care": "Péče o šperky",
+    "club": "AMARÉE Club",
+    "hallmark": "Puncovní informace"
   },
   "cookie": {
     "message": "Používáme nezbytné cookies pro bezpečný provoz webu. Analytické a marketingové skripty zůstávají vypnuté, dokud s nimi nesouhlasíte.",

@@ -1,6 +1,6 @@
 # Objednávkové notifikace a sledování zásilky
 
-Tento dokument definuje cílový proces automatických a ručních zpráv zákazníkovi. Současná implementace ukládá deduplikované zprávy do `email_messages`, umí Ecomail preview/send a ruční opakování; bez vývojové databáze a testovacího účtu však není provozně aktivní. Retry worker a automatický tracking zůstávají navazující práce.
+Tento dokument definuje proces automatických a ručních zpráv zákazníkovi. Implementace ukládá deduplikované zprávy do `email_messages`, používá aktivní adaptér Resend, umí CS/SK preview, ruční opakování a bezpečné interní limity. Odesílání zůstává vypnuté do schváleného staging testu. Automatický tracking zůstává navazující práce.
 
 ## Základní princip
 
@@ -14,7 +14,7 @@ Zákazník nemá dostávat e-mail při každém technickém skenu dopravce. Odes
 
 | Milník | Spuštění | Zpráva zákazníkovi |
 | --- | --- | --- |
-| Objednávka přijata | po úspěšném uložení objednávky | číslo, položky, ceny, doprava, platba, adresy a další postup |
+| Objednávka přijata | po úspěšném uložení objednávky | číslo, položky, ceny, doprava, platba, adresy, další postup a příloha s obchodními podmínkami platnými při objednání |
 | Čekáme na platbu | bankovní převod | účet, variabilní symbol a splatnost |
 | Platba potvrzena | pouze po serverovém ověření GoPay nebo spárování převodu | potvrzení platby a zahájení přípravy |
 | Objednávku připravujeme | potvrzená interní změna | stručná informace; může být sloučena s potvrzením platby |
@@ -33,6 +33,8 @@ Právní okamžik uzavření smlouvy a přesné znění prvního e-mailu musí p
 - Opakovaný GoPay webhook nesmí vytvořit druhou událost ani druhý e-mail.
 - U dobírky se objednávka potvrzuje bez čekání na platbu.
 - U bankovního převodu první e-mail obsahuje platební údaje; druhý se odešle až po spárování platby.
+- Povinný souhlas s obchodními podmínkami kontroluje klient i server. Objednávka ukládá čas souhlasu, verzi a přesný obsah podmínek.
+- První potvrzení nebo výzva k platbě přikládá uložený snapshot jako samostatný UTF-8 HTML soubor; pozdější stavové e-maily jej znovu nepřikládají.
 
 ## Packeta a automatický tracking
 
@@ -63,12 +65,13 @@ Detail objednávky musí obsahovat:
 - možnost poslat jednorázovou servisní zprávu s interně uloženým důvodem,
 - stav odeslání, čas, příjemce, šablonu a identifikátor poskytovatele,
 - audit administrátora, který stav nebo odeslání vyvolal.
+- čas souhlasu, verzi a informaci, zda je u objednávky uložen přesný snapshot obchodních podmínek.
 
 Interní změny, například poznámka nebo korekce skladu, zákaznický e-mail automaticky nespouštějí. Hromadná změna stavů musí předem ukázat počet objednávek a počet plánovaných zpráv.
 
 ## E-mailový poskytovatel
 
-Obchodní logika zůstane za rozhraním `EmailProvider`. Plánovanou volbou je transakční API Ecomailu s ověřenou transakční doménou. Pokud zvolený tarif nebo doručitelnost nebude vyhovovat, lze transakční poskytovatel změnit bez změny stavového procesu.
+Obchodní logika zůstává za rozhraním `EmailProvider`. Aktivní volbou je Resend s ověřenou subdoménou `notify.amaree.cz`; Ecomail je vyhrazen pro případný budoucí newsletter. Poskytovatele lze změnit bez změny objednávkového stavového procesu.
 
 Transakční a marketingové zprávy se nesmějí směšovat:
 
@@ -104,4 +107,6 @@ Minimální produkční tabulky nebo ekvivalenty:
 - Packeta tracking: https://docs.packeta.com/docs/packet-tracking/tracking
 - Packeta stavové kódy: https://docs.packeta.com/docs/packet-tracking/status-codes
 - Packeta API metody: https://docs.packeta.com/docs/api-reference/api-methods
-- Ecomail transakční e-maily: https://support.ecomail.cz/cs/articles/6197248-transakcni-e-maily
+- Resend domény: https://resend.com/docs/dashboard/domains/introduction
+- Resend limity: https://resend.com/docs/knowledge-base/account-quotas-and-limits
+- Resend idempotence: https://resend.com/docs/dashboard/emails/idempotency-keys

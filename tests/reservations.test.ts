@@ -25,6 +25,10 @@ describe("stock reservations", () => {
     expect(createStockReservation({ orderId: "o3", productId: "p1", quantity: 1, paymentMethodId: "cash_on_delivery", now })).toMatchObject({ status: "committed", expiresAt: null });
   });
 
+  it("commits cash-on-pickup stock immediately", () => {
+    expect(createStockReservation({ orderId: "o4", productId: "p1", quantity: 1, paymentMethodId: "cash_on_pickup", now })).toMatchObject({ status: "committed", expiresAt: null });
+  });
+
   it("does not commit the same GoPay reservation twice", () => {
     const active = createStockReservation({ orderId: "o1", productId: "p1", quantity: 1, paymentMethodId: "gopay", now });
     const first = commitReservation(active);

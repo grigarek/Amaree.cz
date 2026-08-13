@@ -1,6 +1,8 @@
 import { adminProductSchema, type AdminProductInput } from "@/lib/products/admin-product-schema";
+import { defaultSeoDescription, defaultSeoTitle, defaultSku, toSeoSlug } from "@/lib/products/product-identifiers";
 
-const locales = ["cs", "en", "de"] as const;
+const locales = ["cs", "sk", "en", "de"] as const;
+type ProductTranslation = AdminProductInput["translations"]["cs"];
 
 function text(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -20,8 +22,13 @@ function optionalMoneyMinor(formData: FormData, key: string) {
   return moneyMinor(formData, key);
 }
 
+function optionalNumber(formData: FormData, key: string) {
+  if (!text(formData, key)) return null;
+  return numberValue(formData, key);
+}
+
 export function parseAdminProductFormData(formData: FormData) {
-  const translations = Object.fromEntries(locales.map((locale) => [locale, {
+  const enteredTranslations = Object.fromEntries(locales.map((locale) => [locale, {
     slug: text(formData, `${locale}.slug`),
     name: text(formData, `${locale}.name`),
     shortDescription: text(formData, `${locale}.shortDescription`),
@@ -29,19 +36,45 @@ export function parseAdminProductFormData(formData: FormData) {
     material: text(formData, `${locale}.material`),
     color: text(formData, `${locale}.color`),
     dimensions: text(formData, `${locale}.dimensions`),
+    clasp: text(formData, `${locale}.clasp`),
+    stones: text(formData, `${locale}.stones`),
     care: text(formData, `${locale}.care`),
     seoTitle: text(formData, `${locale}.seoTitle`),
     seoDescription: text(formData, `${locale}.seoDescription`)
-  }])) as AdminProductInput["translations"];
+  }])) as Record<(typeof locales)[number], ProductTranslation>;
+
+  const enteredCs = enteredTranslations.cs;
+  const cs: ProductTranslation = {
+    ...enteredCs,
+    slug: enteredCs.slug || toSeoSlug(enteredCs.name),
+    seoTitle: enteredCs.seoTitle || defaultSeoTitle(enteredCs.name),
+    seoDescription: enteredCs.seoDescription || defaultSeoDescription(enteredCs.shortDescription)
+  };
+  const localizedTranslation = (locale: "sk" | "en" | "de"): ProductTranslation => {
+    const translation = enteredTranslations[locale];
+    return {
+      ...translation,
+      slug: translation.slug || toSeoSlug(translation.name) || `${cs.slug}-${locale}`,
+      seoTitle: translation.seoTitle || defaultSeoTitle(translation.name),
+      seoDescription: translation.seoDescription || defaultSeoDescription(translation.shortDescription)
+    };
+  };
+
+  const translations: AdminProductInput["translations"] = {
+    cs,
+    sk: localizedTranslation("sk"),
+    en: localizedTranslation("en"),
+    de: localizedTranslation("de")
+  };
 
   return adminProductSchema.safeParse({
-    internalId: text(formData, "internalId"),
-    sku: text(formData, "sku").toUpperCase(),
+    sku: (text(formData, "sku") || defaultSku(cs.name)).toUpperCase(),
     category: text(formData, "category"),
-    weightGrams: numberValue(formData, "weightGrams"),
+    weightGrams: optionalNumber(formData, "weightGrams"),
     stockQuantity: numberValue(formData, "stockQuantity"),
     lowStockThreshold: numberValue(formData, "lowStockThreshold"),
-    active: formData.get("active") === "on",
+    styleTags: text(formData, "styleTags").split(",").map((item) => item.trim()).filter(Boolean),
+    publicationStatus: text(formData, "publicationStatus") || "draft",
     featured: formData.get("featured") === "on",
     isNew: formData.get("isNew") === "on",
     sortOrder: numberValue(formData, "sortOrder"),

@@ -15,7 +15,7 @@ export async function ProductCard({ product, locale, eager = false, compact = fa
 
   return (
     <article className="group">
-      <Link href={`${localizedPaths[locale].product}/${product.slug}`} className="block overflow-hidden rounded-brand bg-blush">
+      <Link href={`${localizedPaths[locale].product}/${product.slug}`} className="block overflow-hidden rounded-brand bg-white">
         <div className={`relative ${compact ? "aspect-square" : "aspect-[4/5]"}`}>
           <Image
             src={first.url}
@@ -23,7 +23,7 @@ export async function ProductCard({ product, locale, eager = false, compact = fa
             fill
             loading={eager ? "eager" : "lazy"}
             sizes="(min-width: 768px) 33vw, 90vw"
-            className="object-cover transition duration-500 group-hover:opacity-0"
+            className="object-contain transition duration-500 group-hover:opacity-0"
           />
           <Image
             src={second.url}
@@ -48,14 +48,13 @@ export async function ProductCard({ product, locale, eager = false, compact = fa
           <p className="mt-1 font-redhat text-sm text-muted">{product.stockQuantity > 0 ? t("inStock") : t("soldOut")}</p>
         </div>
         <div className="text-right font-redhat text-sm font-semibold">
-          <div>{formatMoney(product.price, locale)}</div>
-          {product.originalPrice ? <div className="text-muted line-through">{formatMoney(product.originalPrice, locale)}</div> : null}
+          <div>{formatMoney(product.price, locale, product.currency)}</div>
+          {product.originalPrice ? <div className="text-muted line-through">{formatMoney(product.originalPrice, locale, product.currency)}</div> : null}
         </div>
       </div>
       <div className={compact ? "mt-3" : "mt-4"}>
         <AddToCartButton product={product} disabled={product.stockQuantity < 1} />
       </div>
-      <span className="sr-only">{t("demo")}</span>
     </article>
   );
 }

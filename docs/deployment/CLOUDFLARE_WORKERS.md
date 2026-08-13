@@ -18,7 +18,7 @@ npx wrangler secret put NEXT_PUBLIC_SUPABASE_ANON_KEY --env staging
 npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY --env staging
 ```
 
-GoPay, serverová Packeta a Ecomail zůstávají vypnuté. Jejich testovací secrets se přidají až při samostatném schváleném end-to-end testu. Production secrets se nikdy nekopírují do stagingu.
+GoPay, serverová Packeta a transakční Resend zůstávají funkčními přepínači vypnuté. Staging už obsahuje šifrované secrets pro Resend a Packetu a omezuje e-mailového příjemce na `info@amaree.cz`; GoPay čeká na sandbox údaje od poskytovatele. Ecomail je pouze budoucí newsletter. Production secrets se nikdy nekopírují do stagingu.
 
 ## Ověřený postup
 
@@ -29,13 +29,15 @@ npx wrangler deploy --dry-run --env staging
 npm run cf:deploy:staging
 ```
 
-První staging deployment byl ověřen 17. 7. 2026. Před dalším nasazením zkontrolovat `/api/health`, `/cs`, `/admin`, checkout, noindex hlavičku a logy Workeru.
+První staging deployment byl ověřen 17. 7. 2026. Dne 19. 7. 2026 byly doplněné Supabase, Resend a Packeta secrets; `/api/health` vrací platnou staging konfiguraci se všemi externími akcemi bezpečně vypnutými. Před dalším nasazením zkontrolovat `/api/health`, `/cs`, `/admin`, checkout, noindex hlavičku a logy Workeru.
 
 ## `test.amaree.cz` a Active24
 
 Cloudflare Workers Custom Domain vyžaduje aktivní DNS zónu u Cloudflare. Při autoritativních nameserverech u Active24 proto nelze `test.amaree.cz` přímo připojit jako Worker Custom Domain na Free tarifu. Bez změny DNS používejte `workers.dev`.
 
-Pokud bude později schválen vlastní subdoménový staging, bezpečný postup je:
+Cloudflare zóna `amaree.cz` je připravená a čeká na aktivaci. Obsahuje kopii webových, MX, SPF, DKIM, DMARC, autodiscovery, Resend a Ecomail záznamů. Přidělené nameservery jsou zapsané jen v interním provozním checklistu a u Active24 zatím nebyly změněné.
+
+Pokud bude schváleno přepnutí autoritativního DNS, bezpečný postup je:
 
 1. ponechat registraci domény a e-mailové schránky u Active24,
 2. opsat všechny DNS záznamy včetně MX, SPF, DKIM a DMARC,

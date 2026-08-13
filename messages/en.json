@@ -2,13 +2,14 @@
   "brand": {
     "name": "AMARÉE",
     "est": "EST. 2025",
-    "claim": "Every jewel has its story.",
-    "intro": "Minimalist elegance that elevates your style. Quality materials. Timeless design."
+    "claim": "Silver jewelry for stories that last.",
+    "intro": "Minimalist elegance that complements your style. Quality materials. Timeless design."
   },
   "nav": {
     "home": "Home",
     "collection": "Jewelry",
     "about": "About Us",
+    "faq": "FAQ",
     "contact": "Contact",
     "search": "Search",
     "cart": "Cart",
@@ -74,9 +75,11 @@
     "description": "Product description",
     "category": "Category",
     "material": "Material",
-    "color": "Colour and finish",
+    "color": "Colour",
     "dimensions": "Dimensions",
+    "clasp": "Clasp type",
     "weight": "Weight",
+    "notSpecified": "Not specified",
     "sku": "Product code",
     "availability": "Availability",
     "care": "Jewelry care",
@@ -87,7 +90,8 @@
     "demo": "Demo product",
     "inStock": "In stock",
     "soldOut": "Sold out",
-    "shippingBody": "Packeta home or pickup-point delivery and personal pickup. Free Czech shipping over CZK 1,500.",
+    "dispatch": "In-stock products are usually dispatched within 24 hours on business days.",
+    "shippingBody": "Packeta home or pickup-point delivery. Free Czech shipping over CZK 1,500.",
     "returnsBody": "Statutory 14-day withdrawal and voluntary AMARÉE returns within 30 days under the stated conditions."
   },
   "cart": {
@@ -99,12 +103,25 @@
     "paymentFee": "Payment fee",
     "total": "Total",
     "coupon": "Discount code",
+    "couponPlaceholder": "Enter code",
+    "applyCoupon": "Apply",
+    "removeCoupon": "Remove code",
+    "checkingCoupon": "Checking…",
+    "couponError": "The discount code could not be verified.",
     "checkout": "Continue to checkout",
     "freeShippingLeft": "{amount} left for free shipping",
     "freeShippingReached": "You have free shipping.",
     "remove": "Remove",
     "close": "Close cart",
     "quantity": "Quantity"
+    ,"giftCardTitle": "Add a gift message card"
+    ,"giftCardDescription": "Choose a design for €1.20. We will place it in the parcel."
+    ,"giftCardChoose": "Choose"
+    ,"giftCardHide": "Hide designs"
+    ,"giftCardRemove": "Remove card"
+    ,"giftCardSelect": "Select card: {name}"
+    ,"giftCardPreview": "Enlarge card: {name}"
+    ,"giftCardClosePreview": "Close card preview"
   },
   "checkout": {
     "title": "Checkout",
@@ -128,9 +145,8 @@
     "selectedPickupPoint": "Selected pickup point",
     "homeDelivery": "Home delivery",
     "comingSoon": "coming soon",
-    "pickup": "Local pickup",
     "providerNote": "Demo mode: payment is disabled until test credentials for the provider are configured securely.",
-    "confirmation": "Your order confirmation will be sent by e-mail after the webhook verifies payment.",
+    "confirmation": "We have received your order. We will send confirmation and next steps to your e-mail address.",
     "backToCollection": "Back to collection"
   },
   "footer": {
@@ -138,7 +154,7 @@
     "tagline": "Jewelry with a story",
     "socialMedia": "Social media",
     "instagram": "AMARÉE on Instagram",
-    "facebookSoon": "Facebook coming soon",
+    "facebook": "AMARÉE on Facebook",
     "contact": "Contact",
     "operator": "Operator: MEDIANUM s.r.o.",
     "companyId": "Company ID: 25882384",
@@ -146,7 +162,7 @@
     "registerEntry": "Regional Court in Ostrava, section C, file 24429",
     "registrationDate": "Registration date: 21 June 2001",
     "email": "info@amaree.cz",
-    "phone": "+420 737 076 249",
+    "phone": "+420 777 705 682",
     "address": "Příčná 129/3, Hodolany, 779 00 Olomouc, Czech Republic",
     "rights": "All rights reserved.",
     "legal": "Customer care",
@@ -154,7 +170,9 @@
     "privacy": "Privacy policy",
     "returns": "Returns, exchanges and complaints",
     "shipping": "Shipping and payment",
-    "care": "Jewelry care"
+    "care": "Jewelry care",
+    "club": "AMARÉE Club",
+    "hallmark": "Hallmark information"
   },
   "cookie": {
     "message": "We use essential cookies to operate the website securely. Analytics and marketing scripts remain disabled until you consent.",
