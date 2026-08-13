@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Check, LoaderCircle, TicketPercent, Trash2, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { localizedPaths, type Locale } from "@/i18n/routing";
 import { calculateOrderTotal } from "@/lib/cart";
@@ -14,12 +15,21 @@ import { GiftCardSelector } from "@/components/shop/gift-card-selector";
 
 export function CartDrawer({ locale }: { locale: Locale }) {
   const t = useTranslations("cart");
+  const pathname = usePathname();
+  const previousPathname = useRef(pathname);
   const { isOpen, close, lines, setQuantity, removeItem, giftCardDesignId, setGiftCardDesign, discountCode, discountAmount, discountFreeShipping, discountMessage, discountValid, setDiscountCode, setDiscountResult, clearDiscount } = useCartStore();
   const [checkingDiscount, setCheckingDiscount] = useState(false);
   const countryCode = locale === "sk" ? "SK" : "CZ";
   const currency = locale === "sk" ? "EUR" : "CZK";
   const totals = calculateOrderTotal(lines, discountCode, { countryCode, shippingMethodId: "packeta_pickup", paymentMethodId: "gopay", discountAmount, freeShipping: discountFreeShipping, giftCardDesignId });
   const freeLeft = countryCode === "CZ" ? Math.max(commerceConfig.freeShipping.threshold - (totals.productSubtotal - totals.discount), 0) : 0;
+
+  useEffect(() => {
+    if (previousPathname.current !== pathname) {
+      close();
+      previousPathname.current = pathname;
+    }
+  }, [close, pathname]);
 
   async function applyDiscount() {
     if (!discountCode.trim() || !lines.length) return;
@@ -59,6 +69,7 @@ export function CartDrawer({ locale }: { locale: Locale }) {
             <p className="amaree-body">{t("empty")}</p>
           ) : (
             <div className="grid gap-5">
+              <GiftCardSelector locale={locale} onSelect={setGiftCardDesign} selectedId={giftCardDesignId} />
               {totals.lines.map((line) => (
                 <div key={line.product.id} className="grid grid-cols-[84px_1fr] gap-4">
                   <div className="relative aspect-square overflow-hidden rounded-brand bg-blush">
@@ -84,7 +95,6 @@ export function CartDrawer({ locale }: { locale: Locale }) {
                   </div>
                 </div>
               ))}
-              <GiftCardSelector locale={locale} onSelect={setGiftCardDesign} selectedId={giftCardDesignId} />
               <section aria-labelledby="cart-discount-title" className="border-t border-line pt-5">
                 <div className="flex items-center justify-between gap-3">
                   <h3 className="flex items-center gap-2 font-redhat text-sm font-semibold" id="cart-discount-title">
