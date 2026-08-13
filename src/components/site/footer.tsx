@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { Facebook, Instagram, Mail, Phone } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { localizedPaths, type Locale } from "@/i18n/routing";
 import { categories } from "@/lib/products";
@@ -12,8 +12,6 @@ export async function Footer({ locale }: { locale: Locale }) {
   const footerCategories = ["necklaces", "earrings", "bracelets"]
     .map((slug) => categories.find((category) => category.slug === slug))
     .filter((category) => category !== undefined);
-  const footerAddress = t("footer.address").replace("779 00 Olomouc", "779\u00a000\u00a0Olomouc");
-
   return (
     <footer className="bg-[#f4ecec]">
       <div className="page-shell grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.15fr_0.8fr_1.05fr_1fr] lg:gap-14 lg:py-16">
@@ -85,10 +83,6 @@ export async function Footer({ locale }: { locale: Locale }) {
               <Phone aria-hidden="true" className="mt-0.5 shrink-0 text-ruby" size={18} strokeWidth={1.8} />
               <span>{t("footer.phone")}</span>
             </a>
-            <div className="flex items-start gap-3">
-              <MapPin aria-hidden="true" className="mt-0.5 shrink-0 text-ruby" size={18} strokeWidth={1.8} />
-              <span>{footerAddress}</span>
-            </div>
           </div>
         </div>
       </div>
