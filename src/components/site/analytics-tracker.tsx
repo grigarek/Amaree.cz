@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import type { Locale } from "@/i18n/routing";
-import { ANALYTICS_CONSENT_EVENT, getAnalyticsConsent } from "@/lib/analytics/consent";
+import { ANALYTICS_CONSENT_EVENT, getAnalyticsConsent, INTERNAL_VISITOR_EVENT, isInternalVisitor } from "@/lib/analytics/consent";
 
 const sessionKey = "amaree-analytics-session";
 
@@ -32,7 +32,11 @@ export function AnalyticsTracker({ locale }: { locale: Locale }) {
 
   useEffect(() => {
     const flush = () => {
-      if (getAnalyticsConsent() !== "analytics") return;
+      if (getAnalyticsConsent() !== "analytics" || isInternalVisitor()) {
+        activeSince.current = null;
+        activeSeconds.current = 0;
+        return;
+      }
       if (activeSince.current !== null) {
         activeSeconds.current += (performance.now() - activeSince.current) / 1000;
         activeSince.current = null;
@@ -42,26 +46,29 @@ export function AnalyticsTracker({ locale }: { locale: Locale }) {
       activeSeconds.current = 0;
     };
     const start = () => {
-      if (document.visibilityState === "visible" && getAnalyticsConsent() === "analytics" && activeSince.current === null) activeSince.current = performance.now();
+      if (document.visibilityState === "visible" && getAnalyticsConsent() === "analytics" && !isInternalVisitor() && activeSince.current === null) activeSince.current = performance.now();
     };
     const pageView = () => {
-      if (getAnalyticsConsent() !== "analytics") return;
+      if (getAnalyticsConsent() !== "analytics" || isInternalVisitor()) return;
       const referrerHost = (() => { try { return document.referrer ? new URL(document.referrer).hostname : undefined; } catch { return undefined; } })();
       sendEvent({ eventType: "page_view", sessionId: getSessionId(), locale, path: pathname, referrerHost });
       start();
     };
     const onVisibility = () => document.visibilityState === "hidden" ? flush() : start();
     const onConsent = () => { if (getAnalyticsConsent() === "analytics") pageView(); else flush(); };
+    const onInternalVisitorChange = () => { if (isInternalVisitor()) flush(); else pageView(); };
 
     pageView();
     document.addEventListener("visibilitychange", onVisibility);
     window.addEventListener("pagehide", flush);
     window.addEventListener(ANALYTICS_CONSENT_EVENT, onConsent);
+    window.addEventListener(INTERNAL_VISITOR_EVENT, onInternalVisitorChange);
     return () => {
       flush();
       document.removeEventListener("visibilitychange", onVisibility);
       window.removeEventListener("pagehide", flush);
       window.removeEventListener(ANALYTICS_CONSENT_EVENT, onConsent);
+      window.removeEventListener(INTERNAL_VISITOR_EVENT, onInternalVisitorChange);
     };
   }, [locale, pathname]);
 

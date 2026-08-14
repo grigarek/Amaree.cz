@@ -7,6 +7,7 @@ import { listAdminOrders } from "@/lib/admin/orders";
 import { EmailTestSuite } from "@/components/admin/email-test-suite";
 import { updatePacketaSettings } from "./actions";
 import { getMaintenanceSettings } from "@/lib/admin/maintenance-settings";
+import { AnalyticsExclusionToggle } from "@/components/admin/analytics-exclusion-toggle";
 
 const inputClass = "min-h-11 border border-line bg-white px-3 font-redhat text-sm";
 const labelClass = "grid gap-2 font-redhat text-sm font-semibold";
@@ -45,6 +46,8 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
           <span className="flex items-start gap-4"><Wrench className="mt-1 shrink-0 text-ruby" size={23} /><span><strong className="block font-redhat text-base">Režim údržby</strong><span className="mt-1 block font-redhat text-sm text-muted">Dočasné skrytí veřejného e-shopu s vlastním sdělením zákazníkům.</span></span></span><span className="flex items-center gap-3"><span className={`font-redhat text-xs font-bold uppercase ${maintenance.enabled ? "text-amber-700" : "text-emerald-700"}`}>{maintenance.enabled ? "Aktivní" : "Web online"}</span><ChevronRight size={20} /></span>
         </Link>
         {query.saved === "1" ? <p className="mt-5 border border-ruby/30 bg-blush p-4 font-redhat text-sm font-semibold text-ruby" role="status">Nastavení Zásilkovny bylo uloženo.</p> : null}
+
+        <AnalyticsExclusionToggle />
 
         <form action={updatePacketaSettings} className="mt-8 border border-line bg-white p-6">
           <h2 className="font-newsreader text-3xl">Zásilkovna</h2>
