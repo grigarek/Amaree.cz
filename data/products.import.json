@@ -1,0 +1,101 @@
+[
+  {
+    "internalId": "example-amaree-001",
+    "name": {
+      "cs": "Ukázkové kruhové náušnice",
+      "sk": "Ukážkové kruhové náušnice",
+      "en": "Example Hoop Earrings",
+      "de": "Beispiel Creolen"
+    },
+    "slug": {
+      "cs": "ukazkove-kruhove-nausnice",
+      "sk": "ukazkove-kruhove-nausnice-sk",
+      "en": "example-hoop-earrings",
+      "de": "beispiel-creolen"
+    },
+    "sku": "1001",
+    "category": "earrings",
+    "priceCzkMinor": 149000,
+    "priceEurMinor": 5990,
+    "originalPriceCzkMinor": 169000,
+    "originalPriceEurMinor": 6790,
+    "stockQuantity": 10,
+    "shortDescription": {
+      "cs": "Ukázkový krátký popis pro kontrolu datové struktury.",
+      "sk": "Ukážkový krátky opis na kontrolu dátovej štruktúry.",
+      "en": "Example short description for validating the data structure.",
+      "de": "Beispiel-Kurzbeschreibung zur Prüfung der Datenstruktur."
+    },
+    "longDescription": {
+      "cs": "Tento záznam je pouze správně vyplněná ukázka a nesmí být importován jako skutečný produkt.",
+      "sk": "Tento záznam je iba správne vyplnená ukážka a nesmie sa importovať ako skutočný produkt.",
+      "en": "This record is a completed example only and must not be imported as a real product.",
+      "de": "Dieser Datensatz ist nur ein ausgefülltes Beispiel und darf nicht als echtes Produkt importiert werden."
+    },
+    "material": {
+      "cs": "Stříbro 925/1000",
+      "sk": "Striebro 925/1000",
+      "en": "Silver 925/1000",
+      "de": "Silber 925/1000"
+    },
+    "color": {
+      "cs": "Stříbrná",
+      "sk": "Strieborná",
+      "en": "Silver",
+      "de": "Silber"
+    },
+    "dimensions": {
+      "cs": "Průměr 18 mm, šířka 3 mm",
+      "sk": "Priemer 18 mm, šírka 3 mm",
+      "en": "18 mm diameter, 3 mm width",
+      "de": "18 mm Durchmesser, 3 mm Breite"
+    },
+    "weightGrams": 4.8,
+    "care": {
+      "cs": "Chraňte před parfémem a po nošení otřete měkkým hadříkem.",
+      "sk": "Chráňte pred parfumom a po nosení utrite mäkkou handričkou.",
+      "en": "Keep away from perfume and wipe with a soft cloth after wearing.",
+      "de": "Vor Parfüm schützen und nach dem Tragen mit einem weichen Tuch abwischen."
+    },
+    "mainImage": {
+      "path": "products/example-amaree-001/main.webp",
+      "alt": {
+        "cs": "Stříbrné kruhové náušnice AMARÉE na světlém pozadí",
+        "sk": "Strieborné kruhové náušnice AMARÉE na svetlom pozadí",
+        "en": "AMARÉE silver hoop earrings on a light background",
+        "de": "Silberne AMARÉE Creolen auf hellem Hintergrund"
+      },
+      "sortOrder": 0
+    },
+    "additionalImages": [
+      {
+        "path": "products/example-amaree-001/detail-01.webp",
+        "alt": {
+          "cs": "Detail zapínání ukázkových kruhových náušnic",
+          "sk": "Detail zapínania ukážkových kruhových náušníc",
+          "en": "Clasp detail of the example hoop earrings",
+          "de": "Verschlussdetail der Beispiel-Creolen"
+        },
+        "sortOrder": 1
+      }
+    ],
+    "active": false,
+    "featured": false,
+    "isNew": false,
+    "variants": [],
+    "seo": {
+      "title": {
+        "cs": "Ukázkové kruhové náušnice | AMARÉE",
+        "sk": "Ukážkové kruhové náušnice | AMARÉE",
+        "en": "Example Hoop Earrings | AMARÉE",
+        "de": "Beispiel Creolen | AMARÉE"
+      },
+      "description": {
+        "cs": "Ukázkový SEO popis produktu AMARÉE pro validaci dat.",
+        "sk": "Ukážkový SEO opis produktu AMARÉE na validáciu dát.",
+        "en": "Example AMARÉE product SEO description for data validation.",
+        "de": "Beispielhafte AMARÉE SEO-Produktbeschreibung zur Datenprüfung."
+      }
+    }
+  }
+]

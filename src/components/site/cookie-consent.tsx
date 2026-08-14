@@ -2,27 +2,25 @@
 
 import { useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
-
-const consentKey = "amaree-cookie-consent";
-const consentEvent = "amaree-cookie-consent-change";
+import { ANALYTICS_CONSENT_EVENT, ANALYTICS_CONSENT_KEY, getAnalyticsConsent, type AnalyticsConsent } from "@/lib/analytics/consent";
 
 function subscribe(onStoreChange: () => void) {
   window.addEventListener("storage", onStoreChange);
-  window.addEventListener(consentEvent, onStoreChange);
+  window.addEventListener(ANALYTICS_CONSENT_EVENT, onStoreChange);
 
   return () => {
     window.removeEventListener("storage", onStoreChange);
-    window.removeEventListener(consentEvent, onStoreChange);
+    window.removeEventListener(ANALYTICS_CONSENT_EVENT, onStoreChange);
   };
 }
 
 function getSnapshot() {
-  return localStorage.getItem(consentKey) !== "saved";
+  return getAnalyticsConsent() === null;
 }
 
-function saveConsent() {
-  localStorage.setItem(consentKey, "saved");
-  window.dispatchEvent(new Event(consentEvent));
+function saveConsent(consent: AnalyticsConsent) {
+  localStorage.setItem(ANALYTICS_CONSENT_KEY, consent);
+  window.dispatchEvent(new Event(ANALYTICS_CONSENT_EVENT));
 }
 
 export function CookieConsent() {
@@ -37,13 +35,13 @@ export function CookieConsent() {
       <div className="mt-4 flex gap-2">
         <button
           className="rounded-brand bg-ruby px-4 py-2 font-redhat text-sm font-semibold text-white"
-          onClick={saveConsent}
+          onClick={() => saveConsent("analytics")}
         >
           {t("accept")}
         </button>
         <button
           className="rounded-brand border border-line px-4 py-2 font-redhat text-sm font-semibold"
-          onClick={saveConsent}
+          onClick={() => saveConsent("necessary")}
         >
           {t("necessary")}
         </button>

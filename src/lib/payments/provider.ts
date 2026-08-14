@@ -2,10 +2,12 @@ export interface CheckoutSessionInput {
   orderId: string;
   orderNumber: string;
   customerEmail: string;
-  currency: "CZK";
+  currency: "CZK" | "EUR";
   total: number;
   successUrl: string;
   cancelUrl: string;
+  notificationUrl: string;
+  locale: "cs" | "sk" | "en" | "de";
 }
 
 export interface CheckoutSessionResult {
@@ -14,15 +16,17 @@ export interface CheckoutSessionResult {
   redirectUrl: string;
 }
 
-export interface PaymentWebhookResult {
+export type PaymentStatus = "pending" | "paid" | "failed" | "cancelled" | "expired" | "refunded";
+
+export interface PaymentStatusResult {
   provider: string;
   providerReference: string;
-  status: "paid" | "failed" | "ignored";
-  eventId: string;
+  status: PaymentStatus;
+  rawStatus: string;
 }
 
 export interface PaymentProvider {
   id: string;
   createCheckoutSession(input: CheckoutSessionInput): Promise<CheckoutSessionResult>;
-  verifyWebhook(payload: string, signature: string | null): Promise<PaymentWebhookResult>;
+  getPaymentStatus(providerReference: string): Promise<PaymentStatusResult>;
 }

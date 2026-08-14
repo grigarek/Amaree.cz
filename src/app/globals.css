@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --color-ivory: #fffcfa;
+  --color-ivory: #ffffff;
   --color-ink: #171313;
-  --color-muted: #6d6261;
-  --color-ruby: #6f1028;
-  --color-ruby-dark: #3c0715;
-  --color-blush: #f6eef0;
-  --color-line: #e7dedc;
-  --shadow-soft: 0 24px 70px rgba(60, 7, 21, 0.08);
+  --color-muted: #6b6461;
+  --color-ruby: #af2124;
+  --color-ruby-dark: #a71d22;
+  --color-blush: #f7f5f2;
+  --color-line: #e6e2df;
+  --shadow-soft: 0 24px 70px rgba(23, 19, 19, 0.08);
   --radius: 8px;
   color-scheme: light;
 }
@@ -79,11 +79,21 @@ img {
   }
 
   .amaree-body {
-    @apply font-cormorant text-xl leading-8 text-muted;
+    @apply font-redhat text-base font-medium leading-7 text-muted md:text-lg md:leading-8;
   }
 
   .amaree-ui {
     @apply font-redhat text-sm font-semibold tracking-normal;
+  }
+
+  .amaree-wordmark {
+    @apply font-playfair font-semibold uppercase leading-none tracking-[0.19em] text-ruby;
+    text-indent: 0.19em;
+  }
+
+  .amaree-est {
+    @apply font-montserrat font-medium uppercase leading-none tracking-[0.32em];
+    text-indent: 0.32em;
   }
 
   .page-shell {
