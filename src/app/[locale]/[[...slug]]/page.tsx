@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect, redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { ArrowRight, BadgeInfo, Bell, Building2, CakeSlice, ChevronDown, Clock3, Copy, Crown, Gem, Gift, Heart, Landmark, Mail, MapPin, Phone, RotateCcw, Sparkles, Truck } from "lucide-react";
@@ -581,7 +581,7 @@ async function ProductPage({ locale, slug }: { locale: Locale; slug?: string }) 
   const t = await getTranslations("product");
   const product = await resolveCatalogProductByLocalizedSlug(locale, slug);
   if (!product) notFound();
-  if (slug !== product.slug) redirect(`${localizedPaths[locale].product}/${product.slug}`);
+  if (slug !== product.slug) permanentRedirect(`${localizedPaths[locale].product}/${product.slug}`);
   const category = await getCatalogCategoryBySlug(product.category);
   if (!category) notFound();
   const recommendedProducts = await getRecommendedCatalogProducts(locale, product.id);
