@@ -134,7 +134,7 @@ export function Header({ locale }: { locale: Locale }) {
             </Link>
             <button aria-label={t("nav.cart")} className={`relative p-2 transition-opacity hover:opacity-65 ${transparent ? "text-white" : "text-ink"}`} onClick={openCart} type="button">
               <ShoppingBag size={22} strokeWidth={1.35} />
-              <span className="absolute -right-1 -top-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-ruby px-1 text-[10px] font-semibold leading-none text-white">
+              <span className="absolute right-0 top-0 grid h-[18px] min-w-[18px] -translate-y-1/3 place-items-center rounded-full bg-ruby px-1 text-[10px] font-semibold leading-none text-white">
                 {count}
               </span>
             </button>
