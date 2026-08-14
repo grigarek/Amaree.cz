@@ -6,6 +6,7 @@ import { enabledLocales, isLocale, localizedPaths } from "@/i18n/routing";
 import { Header } from "@/components/site/header";
 import { Footer } from "@/components/site/footer";
 import { CookieConsent } from "@/components/site/cookie-consent";
+import { AnalyticsTracker } from "@/components/site/analytics-tracker";
 import { DocumentLocale } from "@/components/site/document-locale";
 import { CartHydrator } from "@/components/shop/cart-hydrator";
 import { company } from "@/lib/config/company";
@@ -19,14 +20,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (!isLocale(locale)) notFound();
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const description = locale === "sk"
-    ? "Nadčasové šperky, ktoré podčiarknu váš štýl. Kvalitné materiály a jemný dizajn AMARÉE."
-    : "Pečlivě vybrané stříbrné šperky z Olomouce od zakladatelky Anette.";
+    ? "Strieborné šperky 925 pre každý deň. Objavte náhrdelníky, náušnice a náramky AMARÉE s doručením na Slovensko."
+    : "Stříbrné šperky 925 pro každý den. Objevte náhrdelníky, náušnice a náramky AMARÉE z Olomouce.";
 
   return {
     metadataBase: new URL(siteUrl),
     title: {
-      default: "A M A R É E",
-      template: "%s | A M A R É E"
+      default: locale === "sk" ? "Strieborné šperky 925 | AMARÉE" : "Stříbrné šperky 925 | AMARÉE",
+      template: "%s | AMARÉE"
     },
     description,
     alternates: {
@@ -66,7 +67,11 @@ export default async function LocaleLayout({
         dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "OnlineStore",
+          "@id": `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://amaree.cz"}/#store`,
           name: company.brand,
+          url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://amaree.cz",
+          logo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://amaree.cz"}/brand/logo/amaree-logo-ruby-on-white.svg`,
+          image: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://amaree.cz"}/opengraph-image`,
           legalName: company.legalName,
           identifier: { "@type": "PropertyValue", name: "IČO", value: company.companyId },
           additionalProperty: [
@@ -76,6 +81,14 @@ export default async function LocaleLayout({
           ],
           email: company.email,
           telephone: company.phone,
+          currenciesAccepted: "CZK, EUR",
+          paymentAccepted: "Platební karta, Apple Pay, Google Pay, bankovní převod, dobírka",
+          areaServed: [
+            { "@type": "Country", name: "Česká republika" },
+            { "@type": "Country", name: "Slovensko" }
+          ],
+          sameAs: ["https://www.instagram.com/amaree_cz", "https://www.facebook.com/profile.php?id=61592564824401"],
+          contactPoint: { "@type": "ContactPoint", contactType: "customer service", email: company.email, telephone: company.phone, availableLanguage: ["cs", "sk"] },
           address: { "@type": "PostalAddress", streetAddress: `${company.address.street}, ${company.address.district}`, postalCode: company.address.postalCode, addressLocality: company.address.city, addressCountry: company.address.countryCode }
         }) }}
       />
@@ -85,6 +98,7 @@ export default async function LocaleLayout({
       <main>{children}</main>
       <Footer locale={locale} />
       <CookieConsent />
+      <AnalyticsTracker locale={locale} />
     </NextIntlClientProvider>
   );
 }

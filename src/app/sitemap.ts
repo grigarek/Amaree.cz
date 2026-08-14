@@ -15,12 +15,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const locale of enabledLocales) {
     const products = await getCatalogProducts(locale);
     const paths = indexableKeys.map((key) => localizedPaths[locale][key]);
-    for (const path of paths) urls.push({ url: `${siteUrl}${path}`, lastModified: new Date() });
-    if (isPublicHallmarkPageReady(hallmarkSettings)) urls.push({ url: `${siteUrl}${localizedPaths[locale].hallmark}`, lastModified: new Date() });
+    for (const path of paths) urls.push({ url: `${siteUrl}${path}`, changeFrequency: path === localizedPaths[locale].home ? "weekly" : "monthly", priority: path === localizedPaths[locale].home ? 1 : 0.6 });
+    if (isPublicHallmarkPageReady(hallmarkSettings)) urls.push({ url: `${siteUrl}${localizedPaths[locale].hallmark}`, changeFrequency: "yearly", priority: 0.4 });
     for (const category of categories) {
-      urls.push({ url: `${siteUrl}${localizedPaths[locale].collection}/${category.localizedSlug[locale]}`, lastModified: new Date() });
+      urls.push({ url: `${siteUrl}${localizedPaths[locale].collection}/${category.localizedSlug[locale]}`, changeFrequency: "weekly", priority: 0.8 });
     }
-    for (const product of products) urls.push({ url: `${siteUrl}${localizedPaths[locale].product}/${product.slug}`, lastModified: product.updatedAt });
+    for (const product of products) urls.push({ url: `${siteUrl}${localizedPaths[locale].product}/${product.slug}`, lastModified: product.updatedAt, changeFrequency: "weekly", priority: 0.9 });
   }
 
   return urls;

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Activity, AlertCircle, ArrowRight, BarChart3, Boxes, CircleDollarSign, PackageCheck, ShoppingBag } from "lucide-react";
 import { AdminShell } from "@/components/admin/admin-shell";
 import { listAdminProducts } from "@/lib/admin/products";
-import { getCloudflareTrafficSummary, getDashboardMetrics } from "@/lib/admin/dashboard";
+import { getCloudflareTrafficSummary, getDashboardMetrics, getStorefrontEngagementSummary } from "@/lib/admin/dashboard";
 import { requireAdmin } from "@/lib/admin-auth";
 import { formatMoney } from "@/lib/money";
 import { orderStatusLabels } from "@/lib/orders/statuses";
@@ -12,9 +12,9 @@ const integer = new Intl.NumberFormat("cs-CZ");
 export default async function AdminPage() {
   const admin = await requireAdmin();
   const productCount = (await listAdminProducts()).length;
-  const [metrics, traffic] = admin.role === "admin"
-    ? await Promise.all([getDashboardMetrics(), getCloudflareTrafficSummary()])
-    : [null, null];
+  const [metrics, traffic, engagement] = admin.role === "admin"
+    ? await Promise.all([getDashboardMetrics(), getCloudflareTrafficSummary(), getStorefrontEngagementSummary()])
+    : [null, null, null];
 
   return (
     <AdminShell>
@@ -61,6 +61,7 @@ export default async function AdminPage() {
                 </dl>
               </section>
               <TrafficCard traffic={traffic} />
+              <EngagementCard engagement={engagement} />
             </div>
           </div>
         ) : null}
@@ -102,4 +103,8 @@ function formatDualMoney(values: Record<"CZK" | "EUR", number>) {
 function TrafficCard({ traffic }: { traffic: Awaited<ReturnType<typeof getCloudflareTrafficSummary>> | null }) {
   const maximum = Math.max(1, ...(traffic?.daily.map((day) => day.visits) ?? []));
   return <section className="border border-line bg-white p-5"><div className="flex items-center gap-2 text-ruby"><BarChart3 size={19} /><p className="font-redhat text-xs font-semibold uppercase tracking-[0.14em]">Návštěvnost webu</p></div>{traffic?.configured && !traffic.error ? <><div className="mt-4 grid grid-cols-2 gap-4"><div><p className="font-newsreader text-4xl">{integer.format(traffic.visits7Days ?? 0)}</p><p className="mt-1 font-redhat text-xs text-muted">návštěv za 7 dní</p></div><div className="border-l border-line pl-4"><p className="font-newsreader text-4xl">{integer.format(traffic.pageViews7Days ?? 0)}</p><p className="mt-1 font-redhat text-xs text-muted">zobrazení stránek za 7 dní</p></div></div><p className="mt-3 font-redhat text-xs leading-5 text-muted">Dnes: {integer.format(traffic.visitsToday ?? 0)} návštěv a {integer.format(traffic.pageViewsToday ?? 0)} zobrazení. Jedna návštěva není unikátní osoba; opakovaný příchod se může započítat znovu. Data zatím zahrnují i naše testovací otevření webu a administrace.</p><div aria-label="Denní návštěvnost za posledních sedm dní" className="mt-5 grid h-24 grid-cols-7 items-end gap-2">{traffic.daily.map((day) => { const height = Math.max(6, Math.round((day.visits / maximum) * 72)); return <div className="flex h-full min-w-0 flex-col items-center justify-end gap-1" key={day.date}><span className="font-redhat text-[10px] font-semibold text-muted">{integer.format(day.visits)}</span><span className="w-full bg-ruby/75" style={{ height }} /><span className="font-redhat text-[10px] text-muted">{new Intl.DateTimeFormat("cs-CZ", { weekday: "narrow", timeZone: "UTC" }).format(new Date(`${day.date}T12:00:00Z`))}</span></div>; })}</div><div className="mt-5 flex items-center justify-between gap-3 border-t border-line pt-4 font-redhat text-xs text-muted"><span>{integer.format(traffic.requests7Days ?? 0)} technických požadavků</span><span className="flex items-center gap-1.5"><Activity size={14} />Data z prohlížeče</span></div></> : <><p className="mt-4 font-redhat text-sm font-semibold">{traffic?.error ? "Data Cloudflare se nyní nepodařilo načíst." : "Připraveno k propojení s Cloudflare."}</p><p className="mt-2 font-redhat text-sm leading-6 text-muted">{traffic?.error ? "Připojení je aktivní. Obnovte stránku; pokud chyba přetrvá, zkontrolujte oprávnění Analytics read." : "Pro přehled je potřeba read-only Analytics token, Account ID a Zone ID. Cloudflare Web Analytics nepoužívá vlastní sledovací cookies ani osobní údaje."}</p><a className="mt-4 inline-flex items-center gap-2 font-redhat text-sm font-semibold text-ruby" href="https://dash.cloudflare.com/" rel="noreferrer" target="_blank">Otevřít Cloudflare <ArrowRight size={15} /></a></>}</section>;
+}
+
+function EngagementCard({ engagement }: { engagement: Awaited<ReturnType<typeof getStorefrontEngagementSummary>> | null }) {
+  return <section className="border border-line bg-white p-5"><div className="flex items-center gap-2 text-ruby"><Activity size={19} /><p className="font-redhat text-xs font-semibold uppercase tracking-[0.14em]">Chování návštěvníků</p></div>{engagement?.configured && !engagement.error ? <><div className="mt-4 grid grid-cols-3 gap-3"><div><p className="font-newsreader text-3xl">{integer.format(engagement.sessions)}</p><p className="font-redhat text-xs text-muted">relací</p></div><div><p className="font-newsreader text-3xl">{integer.format(engagement.pageViews)}</p><p className="font-redhat text-xs text-muted">stránek</p></div><div><p className="font-newsreader text-3xl">{integer.format(engagement.averageSeconds)} s</p><p className="font-redhat text-xs text-muted">aktivně průměrně</p></div></div><div className="mt-5 grid gap-3">{engagement.topPages.map((page) => <div className="grid grid-cols-[1fr_auto] gap-3 border-t border-line pt-3 font-redhat text-xs" key={page.path}><span className="truncate font-semibold" title={page.path}>{page.path}</span><span className="whitespace-nowrap text-muted">{page.pageViews}× · {page.averageSeconds} s</span></div>)}</div><p className="mt-4 font-redhat text-xs leading-5 text-muted">Pouze anonymní relace návštěvníků, kteří povolili analytiku. Nezaznamenáváme IP adresu, zařízení ani osobní údaje.</p></> : <><p className="mt-4 font-redhat text-sm font-semibold">{engagement?.error ? "Přehled zatím nelze načíst." : "Měření se aktivuje po nasazení databázové migrace."}</p><p className="mt-2 font-redhat text-xs leading-5 text-muted">První údaje se objeví po souhlasu reálných návštěvníků s analytikou.</p></>}</section>;
 }

@@ -180,8 +180,8 @@
     "hallmark": "Puncové informácie"
   },
   "cookie": {
-    "message": "Používame nevyhnutné cookies na bezpečnú prevádzku webu. Analytické a marketingové skripty zostávajú vypnuté, kým s nimi nesúhlasíte.",
-    "accept": "Prijať",
+    "message": "Nevyhnutné technológie zabezpečujú košík a bezpečnú prevádzku. S vaším súhlasom anonymne zmeriame navštívené stránky a aktívny čas, aby sme e-shop zlepšovali.",
+    "accept": "Povoliť analytiku",
     "necessary": "Iba nevyhnutné"
   },
   "legal": {

@@ -115,6 +115,7 @@ const content: Record<Locale, Record<LegalPageKey, LegalPageContent>> = {
             "Komunikaci se zákaznickou podporou a údaje potřebné k ochraně právních nároků.",
             "Technické a bezpečnostní údaje, například IP adresu, čas požadavku a nezbytné záznamy o provozu e-shopu.",
             "E-mail a záznam o souhlasu nebo odmítnutí, pokud se zákazník přihlásí k newsletteru.",
+            "Po udělení souhlasu anonymní identifikátor relace, navštívenou cestu stránky, jazyk webu a aktivní čas na stránce. Do této analytiky neukládáme IP adresu, zařízení ani identitu zákazníka.",
             "Volitelně den a měsíc narození, pokud zákazník využije narozeninovou odměnu v zákaznickém účtu. Rok narození ani celé datum narození neukládáme."
           ]
         },
@@ -127,6 +128,7 @@ const content: Record<Locale, Record<LegalPageKey, LegalPageContent>> = {
             "Newsletter pro osoby, které nejsou zákazníky – souhlas, který lze kdykoli odvolat.",
             "Nabídky vlastních obdobných výrobků stávajícím zákazníkům – oprávněný zájem a pravidla elektronického marketingu, vždy s jednoduchou možností odmítnutí.",
             "Narozeninová odměna – souhlas zákazníka vyjádřený dobrovolným zadáním dne a měsíce narození; údaj lze opravit prostřednictvím zákaznické podpory."
+            ,"Zlepšování webu pomocí měření návštěvnosti, navštívených stránek a aktivního času – souhlas návštěvníka, který lze odmítnout nebo později odvolat."
           ]
         },
         {
@@ -146,6 +148,7 @@ const content: Record<Locale, Record<LegalPageKey, LegalPageContent>> = {
             "Newsletterové údaje uchováváme do odvolání souhlasu nebo vznesení námitky. Nezbytný záznam o odhlášení můžeme dále uchovat, abychom respektovali zákaz dalšího zasílání a doložili jeho splnění.",
             "Den a měsíc narození uchováváme po dobu trvání zákaznického účtu nebo do odvolání souhlasu; následně údaj odstraníme, nebrání-li tomu zákonná povinnost.",
             "Bezpečnostní a provozní logy uchováváme pouze po přiměřenou dobu potřebnou k ochraně e-shopu; při bezpečnostním incidentu mohou být příslušné záznamy uchovány déle do jeho vyřešení."
+            ,"Anonymní údaje o návštěvnosti založené na souhlasu uchováváme nejvýše 90 dní a poté je mažeme nebo agregujeme."
           ]
         },
         {
@@ -167,7 +170,7 @@ const content: Record<Locale, Record<LegalPageKey, LegalPageContent>> = {
         {
           title: "8. Cookies a newsletter",
           paragraphs: [
-            "V současné verzi e-shop používá pouze nezbytné cookies nebo obdobné lokální úložiště pro zabezpečení, přihlášení administrátora, fungování košíku a uložení volby cookies. Analytické a marketingové technologie nebudou aktivovány bez předchozího souhlasu návštěvníka.",
+            "E-shop používá nezbytné cookies nebo obdobné lokální úložiště pro zabezpečení, fungování košíku a uložení volby cookies. Po udělení souhlasu měří anonymní relaci, navštívené stránky a aktivní čas; bez souhlasu se toto detailní měření neaktivuje. Volbu lze změnit vymazáním uložené volby cookies v prohlížeči.",
             "Každý newsletter musí být označen jako obchodní sdělení, uvádět odesílatele a obsahovat jednoduché bezplatné odhlášení."
           ]
         }
@@ -362,12 +365,12 @@ const content: Record<Locale, Record<LegalPageKey, LegalPageContent>> = {
       intro: "Ako AMARÉE spracúva osobné údaje zákazníkov a návštevníkov e-shopu.",
       sections: [
         { title: "1. Prevádzkovateľ", paragraphs: [`Prevádzkovateľom osobných údajov je ${addressSk}, IČO ${company.companyId}. Otázky k ochrane údajov posielajte na ${company.email}.`] },
-        { title: "2. Spracúvané údaje", items: ["Identifikačné, kontaktné, doručovacie a fakturačné údaje.", "Údaje o objednávke, platbe, doprave, výdajnom mieste, vrátení a reklamácii.", "Komunikácia so zákazníkom a primerané technické a bezpečnostné záznamy.", "E-mail a záznam súhlasu alebo odhlásenia pri newsletteri.", "Voliteľne deň a mesiac narodenia, ak zákazník využije narodeninovú odmenu. Rok narodenia ani celý dátum narodenia neukladáme."] },
+        { title: "2. Spracúvané údaje", items: ["Identifikačné, kontaktné, doručovacie a fakturačné údaje.", "Údaje o objednávke, platbe, doprave, výdajnom mieste, vrátení a reklamácii.", "Komunikácia so zákazníkom a primerané technické a bezpečnostné záznamy.", "E-mail a záznam súhlasu alebo odhlásenia pri newsletteri.", "Po súhlase anonymný identifikátor relácie, navštívená cesta stránky, jazyk a aktívny čas; bez IP adresy, zariadenia alebo identity zákazníka.", "Voliteľne deň a mesiac narodenia, ak zákazník využije narodeninovú odmenu. Rok narodenia ani celý dátum narodenia neukladáme."] },
         { title: "3. Účely a právne základy", items: ["Vybavenie objednávky, platby a doručenia – plnenie zmluvy.", "Účtovníctvo a zákonná evidencia – splnenie právnej povinnosti.", "Reklamácie, ochrana práv a prevencia zneužitia – zmluva, právna povinnosť alebo oprávnený záujem.", "Newsletter – súhlas alebo pravidlá pre ponuku podobných vlastných produktov existujúcim zákazníkom.", "Narodeninová odmena – súhlas vyjadrený dobrovoľným zadaním dňa a mesiaca narodenia."] },
         { title: "4. Príjemcovia", paragraphs: ["Údaje poskytujeme iba v potrebnom rozsahu službám Cloudflare, Supabase, Active24/Websupport, Resend a Ecomail a podľa zvolenej služby tiež spoločnostiam Packeta a GoPay. Údaje môžu dostať aj oprávnení poradcovia alebo orgány verejnej moci."] },
         { title: "5. Uchovávanie", items: ["Objednávkové údaje spravidla počas vybavenia a následne 3 roky na ochranu právnych nárokov.", "Účtovné doklady počas zákonnej lehoty.", "Reklamačné údaje spravidla 3 roky po ukončení prípadu.", "Newsletter do odvolania súhlasu alebo námietky; minimálny záznam o odhlásení môže zostať zachovaný.", "Deň a mesiac narodenia do zrušenia zákazníckeho účtu alebo odvolania súhlasu."] },
         { title: "6. Vaše práva", items: ["Prístup k údajom a ich oprava.", "Vymazanie alebo obmedzenie pri splnení podmienok GDPR.", "Prenosnosť údajov a námietka proti spracúvaniu na základe oprávneného záujmu.", "Odvolanie súhlasu a sťažnosť dozornému úradu."] },
-        { title: "7. Bezpečnosť a cookies", paragraphs: ["Používame primerané bezpečnostné opatrenia, riadenie prístupov a šifrovaný prenos. Nevyhnutné technológie zabezpečujú funkciu košíka a bezpečnosť; analytické a marketingové technológie sa aktivujú iba s príslušným súhlasom."] }
+        { title: "7. Bezpečnosť a cookies", paragraphs: ["Používame primerané bezpečnostné opatrenia, riadenie prístupov a šifrovaný prenos. Nevyhnutné technológie zabezpečujú košík a bezpečnosť. Po súhlase anonymne meriame navštívené stránky a aktívny čas; tieto údaje uchovávame najviac 90 dní."] }
       ]
     },
     returns: {

@@ -78,13 +78,17 @@ export async function generateMetadata({
   const canonicalPath = isProductRoute && product ? `${localizedPaths[locale].product}/${product.slug}` : path;
   const pageTitle = getPageTitle(locale, path, product?.name[locale], category?.name[locale]);
   const description = product?.shortDescription[locale] ?? category?.description[locale] ?? getPageDescription(locale);
+  const privatePaths = new Set<string>([localizedPaths[locale].cart, localizedPaths[locale].checkout, localizedPaths[locale].thankYou, localizedPaths[locale].account, localizedPaths[locale].login]);
   const localizedAlternates = product
     ? await getCatalogProductAlternatePaths(product.id)
     : getLocalizedAlternates(path);
 
   return {
-    title: slug.length === 0 ? { absolute: "A M A R É E" } : pageTitle,
+    title: slug.length === 0
+      ? { absolute: locale === "sk" ? "Strieborné šperky 925 pre každý deň | AMARÉE" : "Stříbrné šperky 925 pro každý den | AMARÉE" }
+      : pageTitle,
     description,
+    robots: privatePaths.has(path) ? { index: false, follow: false } : undefined,
     alternates: {
       canonical: canonicalPath,
       languages: {
@@ -110,11 +114,11 @@ async function routeCategory(locale: Locale, path: string, categorySlug?: string
 
 function getPageTitle(locale: Locale, path: string, productName?: string, categoryName?: string) {
   if (productName) return productName;
-  if (categoryName) return categoryName;
+  if (categoryName) return locale === "sk" ? `Strieborné ${categoryName.toLocaleLowerCase("sk")} 925` : `Stříbrné ${categoryName.toLocaleLowerCase("cs")} 925`;
 
   const titles: Record<Locale, Partial<Record<keyof (typeof localizedPaths)[Locale], string>>> = {
-    cs: { home: "A M A R É E", collection: "Šperky", about: "O nás", faq: "Časté dotazy", contact: "Kontakt", cart: "Košík", checkout: "Objednávka", thankYou: "Děkujeme za objednávku", terms: "Obchodní podmínky", privacy: "Ochrana osobních údajů", returns: "Výměna, vrácení a reklamace", shipping: "Doprava a platba", care: "Péče o šperky", club: "AMARÉE Club", hallmark: "Puncovní informace", account: "Můj účet", login: "Přihlášení" },
-    sk: { home: "A M A R É E", collection: "Šperky", about: "O nás", faq: "Časté otázky", contact: "Kontakt", cart: "Košík", checkout: "Objednávka", thankYou: "Ďakujeme za objednávku", terms: "Obchodné podmienky", privacy: "Ochrana osobných údajov", returns: "Výmena, vrátenie a reklamácie", shipping: "Doprava a platba", care: "Starostlivosť o šperky", club: "AMARÉE Club", hallmark: "Puncové informácie", account: "Môj účet", login: "Prihlásenie" },
+    cs: { home: "Stříbrné šperky 925", collection: "Dámské stříbrné šperky 925", about: "Příběh značky", faq: "Časté dotazy ke stříbrným šperkům", contact: "Kontakt", cart: "Košík", checkout: "Objednávka", thankYou: "Děkujeme za objednávku", terms: "Obchodní podmínky", privacy: "Ochrana osobních údajů", returns: "Výměna, vrácení a reklamace", shipping: "Doprava a platba", care: "Jak pečovat o stříbrné šperky", club: "AMARÉE Club", hallmark: "Puncovní informace", account: "Můj účet", login: "Přihlášení" },
+    sk: { home: "Strieborné šperky 925", collection: "Dámske strieborné šperky 925", about: "Príbeh značky", faq: "Časté otázky o strieborných šperkoch", contact: "Kontakt", cart: "Košík", checkout: "Objednávka", thankYou: "Ďakujeme za objednávku", terms: "Obchodné podmienky", privacy: "Ochrana osobných údajov", returns: "Výmena, vrátenie a reklamácie", shipping: "Doprava a platba", care: "Ako sa starať o strieborné šperky", club: "AMARÉE Club", hallmark: "Puncové informácie", account: "Môj účet", login: "Prihlásenie" },
     en: { home: "A M A R É E", collection: "Jewelry", about: "About Us", faq: "FAQ", contact: "Contact", cart: "Cart", checkout: "Checkout", thankYou: "Thank you for your order", terms: "Terms and Conditions", privacy: "Privacy Policy", returns: "Returns and Complaints", shipping: "Shipping and Payment", care: "Jewelry Care", club: "AMARÉE Club", hallmark: "Hallmark information", account: "My account", login: "Sign in" },
     de: { home: "A M A R É E", collection: "Schmuck", about: "Über uns", faq: "Häufige Fragen", contact: "Kontakt", cart: "Warenkorb", checkout: "Bestellung", thankYou: "Vielen Dank für Ihre Bestellung", terms: "Geschäftsbedingungen", privacy: "Datenschutz", returns: "Umtausch, Rückgabe und Reklamation", shipping: "Versand und Zahlung", care: "Schmuckpflege", club: "AMARÉE Club", hallmark: "Punzierung", account: "Mein Konto", login: "Anmelden" }
   };
@@ -546,6 +550,13 @@ async function CollectionPage({ locale, categorySlug }: { locale: Locale; catego
 
   return (
     <section className="page-shell py-12">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        name: category?.name[locale] ?? t("title"),
+        url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://amaree.cz"}${category ? `${localizedPaths[locale].collection}/${category.localizedSlug[locale]}` : localizedPaths[locale].collection}`,
+        mainEntity: { "@type": "ItemList", itemListElement: products.map((product, index) => ({ "@type": "ListItem", position: index + 1, url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://amaree.cz"}${localizedPaths[locale].product}/${product.slug}`, name: product.name[locale] })) }
+      }) }} />
       <div className="mx-auto max-w-3xl text-center">
         <h1 className="amaree-h1 text-ruby">{category?.name[locale] ?? t("title")}</h1>
         <p className="amaree-body mt-3">{t("subtitle")}</p>
@@ -599,15 +610,22 @@ async function ProductPage({ locale, slug }: { locale: Locale; slug?: string }) 
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Product",
+            "@id": `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://amaree.cz"}${localizedPaths[locale].product}/${product.slug}#product`,
             name: product.name[locale],
             image: product.images.map((image) => image.url),
             description: product.shortDescription[locale],
             sku: product.sku,
+            brand: { "@type": "Brand", name: "AMARÉE" },
+            category: category.name[locale],
+            material: confirmedParameter(product.material[locale]),
             offers: {
               "@type": "Offer",
+              url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://amaree.cz"}${localizedPaths[locale].product}/${product.slug}`,
               priceCurrency: product.currency,
               price: product.price / 100,
-              availability: product.stockQuantity > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+              availability: product.stockQuantity > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+              itemCondition: "https://schema.org/NewCondition",
+              seller: { "@type": "Organization", name: company.legalName }
             }
           })
         }}

@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import type { AdminOrderStatus } from "@/lib/orders/statuses";
 
 type DashboardOrderRow = {
@@ -200,5 +201,58 @@ export async function getCloudflareTrafficSummary(): Promise<TrafficSummary> {
     return { configured: true, visitsToday: null, visits7Days: null, pageViewsToday: null, pageViews7Days: null, requests7Days: null, daily: [], error: true };
   } finally {
     clearTimeout(timeout);
+  }
+}
+
+export type EngagementSummary = {
+  configured: boolean;
+  sessions: number;
+  pageViews: number;
+  averageSeconds: number;
+  topPages: Array<{ path: string; pageViews: number; averageSeconds: number }>;
+  error: boolean;
+};
+
+export async function getStorefrontEngagementSummary(): Promise<EngagementSummary> {
+  if (!isSupabaseConfigured()) return { configured: false, sessions: 0, pageViews: 0, averageSeconds: 0, topPages: [], error: false };
+  try {
+    const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const { data, error } = await createSupabaseAdminClient()
+      .from("storefront_analytics_events")
+      .select("session_id,event_type,path,duration_seconds")
+      .gte("created_at", since)
+      .limit(10000);
+    if (error) throw error;
+    const sessions = new Set<string>();
+    const pages = new Map<string, { pageViews: number; duration: number; engagementEvents: number }>();
+    let totalDuration = 0;
+    let engagementEvents = 0;
+    for (const event of data ?? []) {
+      sessions.add(String(event.session_id));
+      const path = String(event.path);
+      const current = pages.get(path) ?? { pageViews: 0, duration: 0, engagementEvents: 0 };
+      if (event.event_type === "page_view") current.pageViews += 1;
+      if (event.event_type === "page_engagement") {
+        const duration = Number(event.duration_seconds) || 0;
+        current.duration += duration;
+        current.engagementEvents += 1;
+        totalDuration += duration;
+        engagementEvents += 1;
+      }
+      pages.set(path, current);
+    }
+    return {
+      configured: true,
+      sessions: sessions.size,
+      pageViews: [...pages.values()].reduce((sum, page) => sum + page.pageViews, 0),
+      averageSeconds: engagementEvents ? Math.round(totalDuration / engagementEvents) : 0,
+      topPages: [...pages.entries()]
+        .map(([path, page]) => ({ path, pageViews: page.pageViews, averageSeconds: page.engagementEvents ? Math.round(page.duration / page.engagementEvents) : 0 }))
+        .sort((a, b) => b.pageViews - a.pageViews || b.averageSeconds - a.averageSeconds)
+        .slice(0, 6),
+      error: false
+    };
+  } catch {
+    return { configured: true, sessions: 0, pageViews: 0, averageSeconds: 0, topPages: [], error: true };
   }
 }
