@@ -76,6 +76,13 @@ export function getCountdownParts(targetAt: string, now = Date.now()): Countdown
   };
 }
 
+export function isMaintenanceActive(settings: MaintenanceSettings, now = Date.now()) {
+  if (!settings.enabled) return false;
+  if (!settings.expectedBackAt) return true;
+  const expectedBackAt = Date.parse(settings.expectedBackAt);
+  return Number.isNaN(expectedBackAt) || expectedBackAt > now;
+}
+
 export function getMaintenanceLocale(pathname: string): MaintenanceLocale {
   return pathname === "/sk" || pathname.startsWith("/sk/") ? "sk" : "cs";
 }

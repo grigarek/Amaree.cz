@@ -5,7 +5,7 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { defaultLocale, enabledLocales, getAlternatePath, isLocale } from "./i18n/routing";
 import { getAppEnvironment } from "./lib/environment";
 import { isLocalAdminAccessAllowed } from "./lib/admin/access-policy";
-import { getMaintenanceLocale, isApiPath, isLocalDevelopmentHostname, isMaintenanceExemptPath, parseMaintenanceSettings } from "./lib/maintenance";
+import { getMaintenanceLocale, isApiPath, isLocalDevelopmentHostname, isMaintenanceActive, isMaintenanceExemptPath, parseMaintenanceSettings } from "./lib/maintenance";
 
 const handleI18n = createMiddleware({
   locales: enabledLocales,
@@ -66,7 +66,7 @@ async function maintenanceIsEnabled() {
     });
     if (!response.ok) return false;
     const rows = await response.json() as Array<{ value?: unknown }>;
-    return parseMaintenanceSettings(rows[0]?.value).enabled;
+    return isMaintenanceActive(parseMaintenanceSettings(rows[0]?.value));
   } catch {
     // A settings outage must never hide a healthy storefront by accident.
     return false;

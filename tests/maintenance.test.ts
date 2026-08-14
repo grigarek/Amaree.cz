@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { defaultMaintenanceSettings, formatPragueDateTimeLocal, getCountdownParts, getMaintenanceLocale, isApiPath, isLocalDevelopmentHostname, isMaintenanceExemptPath, parseMaintenanceSettings, pragueDateTimeLocalToIso } from "@/lib/maintenance";
+import { defaultMaintenanceSettings, formatPragueDateTimeLocal, getCountdownParts, getMaintenanceLocale, isApiPath, isLocalDevelopmentHostname, isMaintenanceActive, isMaintenanceExemptPath, parseMaintenanceSettings, pragueDateTimeLocalToIso } from "@/lib/maintenance";
 
 describe("maintenance mode", () => {
   it("keeps API routes outside locale routing", () => {
@@ -32,6 +32,17 @@ describe("maintenance mode", () => {
       seconds: 0,
       complete: true
     });
+  });
+
+  it("automatically opens the storefront when the announced deadline is reached", () => {
+    const settings = parseMaintenanceSettings({
+      enabled: true,
+      expectedBackAt: "2026-08-14T18:00:00.000Z"
+    });
+    expect(isMaintenanceActive(settings, Date.parse("2026-08-14T17:59:59.999Z"))).toBe(true);
+    expect(isMaintenanceActive(settings, Date.parse("2026-08-14T18:00:00.000Z"))).toBe(false);
+    expect(isMaintenanceActive({ ...settings, expectedBackAt: null })).toBe(true);
+    expect(isMaintenanceActive({ ...settings, enabled: false })).toBe(false);
   });
 
   it("keeps administration and operational callbacks available", () => {
