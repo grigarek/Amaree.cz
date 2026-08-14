@@ -4,7 +4,6 @@ import { categories as demoCategories, products as demoProducts } from "@/lib/pr
 import { createSupabaseServerClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { getAppEnvironment } from "@/lib/environment";
-import { containsProtectedHallmarkClaim } from "@/lib/products/hallmark-safety";
 import { locales, localizedPaths } from "@/i18n/routing";
 import type { Category, CategorySlug, Locale, Product } from "@/types/domain";
 
@@ -176,14 +175,6 @@ export const getCatalogSnapshot = cache(async (): Promise<CatalogSnapshot> => {
   const productsByLocale = Object.fromEntries(locales.map((locale) => [locale, rows.flatMap<Product>((row) => {
     const translation = row.product_translations.find((item) => item.locale === locale);
     if (!translation) return [];
-    if (!verifiedCompliance.has(row.id) && containsProtectedHallmarkClaim(row.product_translations.flatMap((item) => [
-      item.name,
-      item.short_description,
-      item.long_description,
-      item.material,
-      item.dimensions,
-      item.care
-    ]))) return [];
     const currency = locale === "cs" ? "CZK" : "EUR";
     const price = row.product_prices.find((item) => item.currency === currency);
     if (!price || price.amount_minor <= 0) return [];
