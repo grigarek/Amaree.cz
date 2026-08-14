@@ -14,6 +14,7 @@ export async function AdminShell({ children }: { children: React.ReactNode }) {
             AMARÉE
           </Link>
           <nav className="hidden items-center gap-6 font-redhat text-sm font-semibold md:flex">
+            <Link className="hover:text-ruby" href="/admin">Přehled</Link>
             <Link className="hover:text-ruby" href="/admin/products">Produkty</Link>
             {admin.role === "admin" ? <Link className="hover:text-ruby" href="/admin/orders">Objednávky</Link> : null}
             {admin.role === "admin" ? <Link className="hover:text-ruby" href="/admin/discounts">Slevy</Link> : null}
@@ -28,6 +29,7 @@ export async function AdminShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <nav aria-label="Administrace" className="mx-auto flex max-w-page gap-5 overflow-x-auto border-t border-line px-5 py-3 font-redhat text-sm font-semibold md:hidden">
+          <Link className="shrink-0 hover:text-ruby" href="/admin">Přehled</Link>
           <Link className="shrink-0 hover:text-ruby" href="/admin/products">Produkty</Link>
           {admin.role === "admin" ? <Link className="shrink-0 hover:text-ruby" href="/admin/orders">Objednávky</Link> : null}
           {admin.role === "admin" ? <Link className="shrink-0 hover:text-ruby" href="/admin/discounts">Slevy</Link> : null}
