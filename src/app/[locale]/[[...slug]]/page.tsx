@@ -440,7 +440,7 @@ async function HomePage({ locale }: { locale: Locale }) {
 
   return (
     <>
-      <section className="relative h-[76svh] min-h-[600px] max-h-[820px] overflow-hidden bg-ink md:h-[78svh] md:min-h-[640px]">
+      <section className="relative h-[70svh] min-h-[560px] max-h-[650px] overflow-hidden bg-ink md:h-[78svh] md:min-h-[640px] md:max-h-[820px]">
         <Image
           src={hero.activeImageUrl}
           alt={hero.alt[locale] || t("home.heroAlt")}
@@ -448,14 +448,14 @@ async function HomePage({ locale }: { locale: Locale }) {
           priority
           quality={95}
           sizes="100vw"
-          className="-scale-x-100 object-cover object-[42%_center] md:object-right"
+          className="object-cover object-[51%_center] md:-scale-x-100 md:object-right"
         />
         <div aria-hidden="true" className="absolute inset-0 bg-black/35 md:bg-[linear-gradient(90deg,rgba(0,0,0,0.52)_0%,rgba(0,0,0,0.24)_48%,rgba(0,0,0,0.08)_100%)]" />
-        <div className="page-shell relative z-10 flex h-full items-end pb-14 pt-32 md:items-center md:pb-0 md:pt-20">
+        <div className="page-shell relative z-10 flex h-full items-end pb-6 pt-32 md:items-center md:pb-0 md:pt-20">
           <div className="max-w-[560px] text-white">
-            <h1 className="font-newsreader text-5xl leading-[1.02] text-white sm:text-6xl md:text-7xl">{content.heroClaim[locale]}</h1>
-            <p className="mt-5 max-w-lg font-redhat text-base font-medium leading-7 text-white/95 md:text-xl md:leading-8">{content.heroIntro[locale]}</p>
-            <Link href={localizedPaths[locale].collection} className="mt-7 inline-flex min-h-14 items-center justify-center gap-3 rounded-brand bg-ruby px-8 py-4 font-redhat text-base font-semibold text-white shadow-soft transition hover:bg-rubyDark">
+            <h1 className="max-w-[320px] font-newsreader text-[42px] leading-[1.02] text-white sm:max-w-none sm:text-6xl md:text-7xl">{content.heroClaim[locale]}</h1>
+            <p className="mt-4 max-w-lg font-redhat text-[15px] font-medium leading-6 text-white/95 sm:mt-5 sm:text-base sm:leading-7 md:text-xl md:leading-8">{content.heroIntro[locale]}</p>
+            <Link href={localizedPaths[locale].collection} className="mt-5 inline-flex min-h-14 items-center justify-center gap-3 rounded-brand bg-ruby px-8 py-4 font-redhat text-base font-semibold text-white shadow-soft transition hover:bg-rubyDark sm:mt-7">
               <span>{t("home.cta")}</span>
               <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
             </Link>
