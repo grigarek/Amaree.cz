@@ -11,13 +11,12 @@ import { calculateOrderTotal } from "@/lib/cart";
 import { commerceConfig } from "@/lib/commerce/config";
 import { formatMoney } from "@/lib/money";
 import { useCartStore } from "@/store/cart-store";
-import { GiftCardSelector } from "@/components/shop/gift-card-selector";
 
 export function CartDrawer({ locale }: { locale: Locale }) {
   const t = useTranslations("cart");
   const pathname = usePathname();
   const previousPathname = useRef(pathname);
-  const { isOpen, close, lines, setQuantity, removeItem, giftCardDesignId, setGiftCardDesign, discountCode, discountAmount, discountFreeShipping, discountMessage, discountValid, setDiscountCode, setDiscountResult, clearDiscount } = useCartStore();
+  const { isOpen, close, lines, setQuantity, removeItem, giftCardDesignId, discountCode, discountAmount, discountFreeShipping, discountMessage, discountValid, setDiscountCode, setDiscountResult, clearDiscount } = useCartStore();
   const [checkingDiscount, setCheckingDiscount] = useState(false);
   const countryCode = locale === "sk" ? "SK" : "CZ";
   const currency = locale === "sk" ? "EUR" : "CZK";
@@ -94,7 +93,6 @@ export function CartDrawer({ locale }: { locale: Locale }) {
                   </div>
                 </div>
               ))}
-              <GiftCardSelector locale={locale} onSelect={setGiftCardDesign} selectedId={giftCardDesignId} />
               <section aria-labelledby="cart-discount-title" className="border-t border-line pt-5">
                 <div className="flex items-center justify-between gap-3">
                   <h3 className="flex items-center gap-2 font-redhat text-sm font-semibold" id="cart-discount-title">

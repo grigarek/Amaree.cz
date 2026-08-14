@@ -4,10 +4,10 @@ import type { Locale } from "@/i18n/routing";
 export const giftCardDesigns = [
   { id: "dekuji-red", imageUrl: "/images/gift-cards/dekuji-red.png", message: "Děkuju", color: "red" },
   { id: "dekuji-white", imageUrl: "/images/gift-cards/dekuji-white.png", message: "Děkuju", color: "white" },
-  { id: "jsi-muj-domov-white", imageUrl: "/images/gift-cards/jsi-muj-domov-white.png", message: "Jsi můj domov", color: "white" },
   { id: "jsi-to-nejlepsi-red", imageUrl: "/images/gift-cards/jsi-to-nejlepsi-red.png", message: "Jsi to nejlepší, co mě potkalo", color: "red" },
   { id: "jsi-to-nejlepsi-white", imageUrl: "/images/gift-cards/jsi-to-nejlepsi-white.png", message: "Jsi to nejlepší, co mě potkalo", color: "white" },
   { id: "jsi-vyjimecny-red", imageUrl: "/images/gift-cards/jsi-vyjimecny-red.png", message: "Jsi výjimečný/á", color: "red" },
+  { id: "jsi-muj-domov-white", imageUrl: "/images/gift-cards/jsi-muj-domov-white.png", message: "Jsi můj domov", color: "white" },
   { id: "miluji-te-red", imageUrl: "/images/gift-cards/miluji-te-red.png", message: "Miluji Tě", color: "red" },
   { id: "miluji-te-white", imageUrl: "/images/gift-cards/miluji-te-white.png", message: "Miluji Tě", color: "white" },
   { id: "vsechno-nejlepsi-red", imageUrl: "/images/gift-cards/vsechno-nejlepsi-red.png", message: "Všechno nejlepší k narozeninám", color: "red" },

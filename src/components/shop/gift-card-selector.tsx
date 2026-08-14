@@ -53,7 +53,7 @@ export function GiftCardSelector({ locale, selectedId, onSelect }: { locale: Loc
       ) : null}
 
       <p className="mt-4 font-redhat text-xs font-semibold uppercase tracking-widest text-ruby">{t("giftCardSingleChoice")}</p>
-      <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2">
+      <div className="mt-3 grid grid-cols-2 gap-3">
         {giftCardDesigns.map((design) => {
           const active = selectedId === design.id;
           return (
