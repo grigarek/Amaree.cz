@@ -38,7 +38,7 @@ od serverového API hesla; heslo patří pouze do serverových secrets.
 
 ## Stále demonstrační nebo nehotové
 
-- produkty řad AMARÉE Rosé, AMARÉE Noir a AMARÉE Halo tvoří aktuální katalog v Supabase; Luna, Sera a Aura v lokálním fallbacku jsou pouze vizuální demo data,
+- produkty řad Rosée, Minuit a Lueur tvoří aktuální katalog v Supabase; Luna, Sera a Aura v lokálním fallbacku jsou pouze vizuální demo data,
 - slevové kódy mají administrační CRUD; samostatná agenda odběratelů zatím zůstává pouze informační,
 - expirace rezervací má na staging Workeru Cloudflare Cron každých 15 minut; synchronizace trackingu a retry e-mailové fronty stále potřebují samostatnou úlohu,
 - varianty mají databázový model, ale současný produktový formulář spravuje základní produkt bez variant,

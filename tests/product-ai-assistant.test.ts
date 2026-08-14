@@ -16,7 +16,7 @@ const request: ProductAiRequest = {
   productId: null,
   fields: ["shortDescription", "longDescription", "seoTitle", "seoDescription", "imageAltTexts"],
   facts: {
-    name: "AMARÉE Rosé náramek",
+    name: "Rosée náramek",
     sku: "",
     slug: "",
     category: "bracelets",
@@ -33,12 +33,12 @@ const request: ProductAiRequest = {
 };
 
 const output: ProductAiOutput = {
-  name: "AMARÉE Rosé náramek",
+  name: "Rosée náramek",
   shortDescription: "Jemný náramek s růžovým motivem čtyřlístku přináší přirozenou eleganci do každodenních kombinací. Decentní vzhled se snadno nosí samostatně i s dalšími šperky.",
-  longDescription: "AMARÉE Rosé zaujme jemným řetízkem a růžovým motivem čtyřlístku, který působí lehce a elegantně. Jeho decentní vzhled přirozeně doplní každodenní outfit i slavnostnější kombinaci.\n\nNáramek můžete nosit samostatně jako nenápadný detail nebo jej vrstvit s dalšími oblíbenými šperky. Čisté linie a měkký barevný akcent se snadno propojí s různými styly.\n\nDíky půvabnému motivu může být také milým dárkem pro někoho blízkého. Materiál a přesné rozměry je před nákupem potřeba doplnit do parametrů produktu.",
-  seoTitle: "AMARÉE Rosé náramek | AMARÉE",
-  seoDescription: "Objevte jemný náramek AMARÉE Rosé s růžovým motivem čtyřlístku. Elegantní šperk pro každodenní nošení i jako milý dárek od AMARÉE.",
-  slug: "amaree-rose-naramek",
+  longDescription: "Rosée zaujme jemným řetízkem a růžovým motivem čtyřlístku, který působí lehce a elegantně. Jeho decentní vzhled přirozeně doplní každodenní outfit i slavnostnější kombinaci.\n\nNáramek můžete nosit samostatně jako nenápadný detail nebo jej vrstvit s dalšími oblíbenými šperky. Čisté linie a měkký barevný akcent se snadno propojí s různými styly.\n\nDíky půvabnému motivu může být také milým dárkem pro někoho blízkého. Materiál a přesné rozměry je před nákupem potřeba doplnit do parametrů produktu.",
+  seoTitle: "Rosée náramek | AMARÉE",
+  seoDescription: "Objevte jemný náramek Rosée s růžovým motivem čtyřlístku. Elegantní šperk pro každodenní nošení i jako milý dárek od AMARÉE.",
+  slug: "rosee-naramek",
   skuSuggestion: "1001",
   categorySuggestion: { categoryId: "bracelets", categoryName: "Náramky", confidence: 0.98 },
   colors: ["růžová", "stříbrný odstín"],

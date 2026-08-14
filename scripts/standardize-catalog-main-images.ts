@@ -17,70 +17,70 @@ const catalogImages = [
     sku: "AMA-LCB-001",
     path: "public/products/amaree-clover-bracelet-pink/main-white.png",
     alt: {
-      cs: "Růžový náramek AMARÉE Rosé na bílém pozadí",
-      sk: "Ružový náramok AMARÉE Rosé na bielom pozadí",
-      en: "AMARÉE Rosé pink bracelet on a white background",
-      de: "Rosa AMARÉE Rosé Armband auf weißem Hintergrund"
+      cs: "Růžový náramek Rosée na bílém pozadí",
+      sk: "Ružový náramok Rosée na bielom pozadí",
+      en: "Rosée pink bracelet on a white background",
+      de: "Rosa Rosée Armband auf weißem Hintergrund"
     }
   },
   {
     sku: "AMR-BRC-CLO-BLK-001",
     path: "public/products/amaree-clover-bracelet-black/main-white.png",
     alt: {
-      cs: "Černý náramek AMARÉE Noir na bílém pozadí",
-      sk: "Čierny náramok AMARÉE Noir na bielom pozadí",
-      en: "AMARÉE Noir black bracelet on a white background",
-      de: "Schwarzes AMARÉE Noir Armband auf weißem Hintergrund"
+      cs: "Černý náramek Minuit na bílém pozadí",
+      sk: "Čierny náramok Minuit na bielom pozadí",
+      en: "Minuit black bracelet on a white background",
+      de: "Schwarzes Minuit Armband auf weißem Hintergrund"
     }
   },
   {
     sku: "AMR-BRC-TEN-SLV-001",
     path: "public/products/amaree-tennis-bracelet-silver/main-white.png",
     alt: {
-      cs: "Stříbrný náramek AMARÉE Halo na bílém pozadí",
-      sk: "Strieborný náramok AMARÉE Halo na bielom pozadí",
-      en: "AMARÉE Halo silver bracelet on a white background",
-      de: "AMARÉE Halo Armband in Silber auf weißem Hintergrund"
+      cs: "Stříbrný náramek Lueur na bílém pozadí",
+      sk: "Strieborný náramok Lueur na bielom pozadí",
+      en: "Lueur silver bracelet on a white background",
+      de: "Lueur Armband in Silber auf weißem Hintergrund"
     }
   },
   {
     sku: "AMR-EAR-CLO-BLK-001",
     path: "public/products/amaree-clover-earrings-black/main-white.png",
     alt: {
-      cs: "Černé náušnice AMARÉE Noir na bílém pozadí",
-      sk: "Čierne náušnice AMARÉE Noir na bielom pozadí",
-      en: "AMARÉE Noir black earrings on a white background",
-      de: "Schwarze AMARÉE Noir Ohrringe auf weißem Hintergrund"
+      cs: "Černé náušnice Minuit na bílém pozadí",
+      sk: "Čierne náušnice Minuit na bielom pozadí",
+      en: "Minuit black earrings on a white background",
+      de: "Schwarze Minuit Ohrringe auf weißem Hintergrund"
     }
   },
   {
     sku: "1006",
     path: "public/products/amaree-clover-earrings-pink/main-white.png",
     alt: {
-      cs: "Růžové náušnice AMARÉE Rosé na bílém pozadí",
-      sk: "Ružové náušnice AMARÉE Rosé na bielom pozadí",
-      en: "AMARÉE Rosé pink earrings on a white background",
-      de: "Rosa AMARÉE Rosé Ohrringe auf weißem Hintergrund"
+      cs: "Růžové náušnice Rosée na bílém pozadí",
+      sk: "Ružové náušnice Rosée na bielom pozadí",
+      en: "Rosée pink earrings on a white background",
+      de: "Rosa Rosée Ohrringe auf weißem Hintergrund"
     }
   },
   {
     sku: "AMR-NCL-CLO-BLK-001",
     path: "public/products/amaree-clover-necklace-black/main-white.png",
     alt: {
-      cs: "Černý náhrdelník AMARÉE Noir na bílém pozadí",
-      sk: "Čierny náhrdelník AMARÉE Noir na bielom pozadí",
-      en: "AMARÉE Noir black necklace on a white background",
-      de: "Schwarze AMARÉE Noir Halskette auf weißem Hintergrund"
+      cs: "Černý náhrdelník Minuit na bílém pozadí",
+      sk: "Čierny náhrdelník Minuit na bielom pozadí",
+      en: "Minuit black necklace on a white background",
+      de: "Schwarze Minuit Halskette auf weißem Hintergrund"
     }
   },
   {
     sku: "AMR-NCL-CLO-PNK-001",
     path: "public/products/amaree-clover-necklace-pink/main-white.png",
     alt: {
-      cs: "Růžový náhrdelník AMARÉE Rosé na bílém pozadí",
-      sk: "Ružový náhrdelník AMARÉE Rosé na bielom pozadí",
-      en: "AMARÉE Rosé pink necklace on a white background",
-      de: "Rosa AMARÉE Rosé Halskette auf weißem Hintergrund"
+      cs: "Růžový náhrdelník Rosée na bílém pozadí",
+      sk: "Ružový náhrdelník Rosée na bielom pozadí",
+      en: "Rosée pink necklace on a white background",
+      de: "Rosa Rosée Halskette auf weißem Hintergrund"
     }
   }
 ] as const;

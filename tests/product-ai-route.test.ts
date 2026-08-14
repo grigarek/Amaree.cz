@@ -36,7 +36,7 @@ const validInput = {
   productId: null,
   fields: ["slug", "skuSuggestion"],
   facts: {
-    name: "AMARÉE Rosé náramek",
+    name: "Rosée náramek",
     sku: "",
     slug: "",
     category: "bracelets",
@@ -58,7 +58,7 @@ const generatedOutput = {
   longDescription: "",
   seoTitle: "",
   seoDescription: "",
-  slug: "amaree-rose-naramek",
+  slug: "rosee-naramek",
   skuSuggestion: "1001",
   categorySuggestion: { categoryId: null, categoryName: "", confidence: 0 },
   colors: [],
@@ -93,7 +93,7 @@ describe("product AI admin endpoint", () => {
     mocks.record.mockResolvedValue(undefined);
     mocks.generate.mockResolvedValue({ output: generatedOutput, usage: { inputTokens: 120, outputTokens: 80 } });
     mocks.check.mockResolvedValue({ skuAvailable: true, slugAvailable: true });
-    mocks.suggest.mockResolvedValue({ sku: "1002", slug: "amaree-rose-naramek-2" });
+    mocks.suggest.mockResolvedValue({ sku: "1002", slug: "rosee-naramek-2" });
   });
 
   afterEach(() => {
@@ -134,7 +134,7 @@ describe("product AI admin endpoint", () => {
     const body = await response.json() as { output: typeof generatedOutput };
     expect(response.status).toBe(200);
     expect(body.output.skuSuggestion).toBe("1002");
-    expect(body.output.slug).toBe("amaree-rose-naramek-2");
+    expect(body.output.slug).toBe("rosee-naramek-2");
     expect(mocks.finish).toHaveBeenCalledWith(expect.objectContaining({ status: "success" }));
   });
 

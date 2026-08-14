@@ -13,6 +13,7 @@ const orderDeleteMigration = readFileSync("supabase/migrations/202608010003_admi
 const maintenanceMigration = readFileSync("supabase/migrations/202608020001_storefront_maintenance.sql", "utf8");
 const fakturoidMigration = readFileSync("supabase/migrations/202608030001_fakturoid_integration.sql", "utf8");
 const productNamesMigration = readFileSync("supabase/migrations/202608090003_unique_product_names.sql", "utf8");
+const distinctiveProductNamesMigration = readFileSync("supabase/migrations/202608140002_distinctive_product_names.sql", "utf8");
 
 describe("development database baseline", () => {
   it("creates checkout and reserves stock in one service-role function", () => {
@@ -153,5 +154,13 @@ describe("development database baseline", () => {
     expect(productNamesMigration).toContain("AMARÉE Rosé náramek");
     expect(productNamesMigration).toContain("AMARÉE Noir náhrdelník");
     expect(productNamesMigration).toContain("AMARÉE Halo stříbrný náramek");
+  });
+
+  it("publishes distinctive product series while retaining the previous URLs", () => {
+    expect(distinctiveProductNamesMigration).toContain("insert into public.product_slug_aliases");
+    expect(distinctiveProductNamesMigration).toContain("Rosée náramek");
+    expect(distinctiveProductNamesMigration).toContain("Minuit náhrdelník");
+    expect(distinctiveProductNamesMigration).toContain("Lueur stříbrný náramek");
+    expect(distinctiveProductNamesMigration).toContain("seo_title = renamed.name || ' | AMARÉE'");
   });
 });

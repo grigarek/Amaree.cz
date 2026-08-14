@@ -113,10 +113,10 @@ describe("admin product validation", () => {
   });
 
   it("generates readable SKU, SEO and diacritic-free slug defaults", () => {
-    expect(productInitials("AMARÉE Rosé Bracelet")).toBe("ARB");
-    expect(defaultSku("AMARÉE Rosé Bracelet")).toBe("1001");
-    expect(toSeoSlug("AMARÉE Rosé Bracelet")).toBe("amaree-rose-bracelet");
-    expect(defaultSeoTitle("AMARÉE Rosé Bracelet")).toBe("AMARÉE Rosé Bracelet | AMARÉE");
+    expect(productInitials("Rosée Bracelet")).toBe("RB");
+    expect(defaultSku("Rosée Bracelet")).toBe("1001");
+    expect(toSeoSlug("Rosée Bracelet")).toBe("rosee-bracelet");
+    expect(defaultSeoTitle("Rosée Bracelet")).toBe("Rosée Bracelet | AMARÉE");
     expect(defaultSeoDescription("  Jemný   náramek pro každý den. ")).toBe("Jemný náramek pro každý den.");
   });
 
