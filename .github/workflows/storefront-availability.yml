@@ -1,0 +1,58 @@
+name: Storefront availability
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/storefront-availability.yml"
+permissions:
+  contents: read
+concurrency:
+  group: storefront-availability
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Check public storefront and checkout configuration
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const paths = ["/", "/sk", "/api/health", "/api/checkout/configuration"];
+          let failed = false;
+          for (const path of paths) {
+            let ok = false;
+            for (let attempt = 1; attempt <= 2; attempt++) {
+              const start = Date.now();
+              try {
+                const response = await fetch("https://amaree.cz" + path, {
+                  redirect: "error", signal: AbortSignal.timeout(12000),
+                  headers: { "User-Agent": "Amaree-Availability/1.0" }
+                });
+                if (response.status !== 200) throw new Error("HTTP " + response.status);
+                const body = await response.text();
+                if (path === "/api/health") {
+                  const value = JSON.parse(body);
+                  if (value.status !== "ok" || value.environment !== "production") throw new Error("health degraded");
+                } else if (path === "/api/checkout/configuration") {
+                  const value = JSON.parse(body);
+                  if (value.gopayEnabled !== true) throw new Error("checkout degraded");
+                } else {
+                  if (!response.headers.get("content-type")?.includes("text/html") ||
+                      !body.includes("<main") || !/AMAR(?:É|&Eacute;)E/i.test(body) ||
+                      response.headers.get("x-amaree-storefront") !== "native-html") throw new Error("storefront missing");
+                }
+                console.log(JSON.stringify({ path, ok: true, attempt, durationMs: Date.now() - start }));
+                ok = true;
+                break;
+              } catch {
+                console.log(JSON.stringify({ path, ok: false, attempt, durationMs: Date.now() - start }));
+                if (attempt === 1) await new Promise(resolve => setTimeout(resolve, 3000));
+              }
+            }
+            if (!ok) { console.error("::error::Availability check failed for " + path); failed = true; }
+          }
+          if (failed) process.exitCode = 1;
+          NODE
