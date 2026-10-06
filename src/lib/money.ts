@@ -1,17 +1,20 @@
 import type { Locale } from "@/i18n/routing";
+import type { Currency } from "@/types/domain";
 
 const localeMap: Record<Locale, string> = {
   cs: "cs-CZ",
+  sk: "sk-SK",
   en: "en-GB",
   de: "de-DE"
 };
 
-export function formatMoney(amount: number, locale: Locale = "cs", currency = "CZK"): string {
+export function formatMoney(amount: number, locale: Locale = "cs", currency: Currency = "CZK"): string {
+  const fractionDigits = currency === "EUR" ? 2 : 0;
   return new Intl.NumberFormat(localeMap[locale], {
     style: "currency",
     currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits
   }).format(amount / 100);
 }
 

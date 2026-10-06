@@ -1,15 +1,19 @@
 import { describe, expect, it } from "vitest";
+import { canManageOrders, isLocalAdminAccessAllowed } from "@/lib/admin/access-policy";
 
-function canAccessAdmin(email: string | undefined, allowed: string) {
-  return Boolean(email && allowed.split(",").map((item) => item.trim().toLowerCase()).includes(email.toLowerCase()));
-}
-
-describe("admin access", () => {
-  it("denies unknown users", () => {
-    expect(canAccessAdmin("someone@example.com", "info@amaree.cz")).toBe(false);
+describe("admin access policy", () => {
+  it("fails closed when Supabase is unavailable outside local development", () => {
+    expect(isLocalAdminAccessAllowed("staging", "true")).toBe(false);
+    expect(isLocalAdminAccessAllowed("production", "true")).toBe(false);
+    expect(isLocalAdminAccessAllowed("development", undefined)).toBe(false);
   });
 
-  it("allows configured administrators", () => {
-    expect(canAccessAdmin("info@amaree.cz", "info@amaree.cz")).toBe(true);
+  it("allows the explicit local development escape hatch only", () => {
+    expect(isLocalAdminAccessAllowed("development", "true")).toBe(true);
+  });
+
+  it("keeps order and integration actions restricted to admins", () => {
+    expect(canManageOrders("admin")).toBe(true);
+    expect(canManageOrders("editor")).toBe(false);
   });
 });

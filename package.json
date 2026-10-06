@@ -3,18 +3,33 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "cf:build": "DEPLOY_TARGET=cloudflare opennextjs-cloudflare build",
+    "cf:build:staging": "APP_ENV=staging NEXT_PUBLIC_APP_ENV=staging NEXT_PUBLIC_SITE_URL=https://amaree-staging.amaree-cz.workers.dev SUPABASE_ENVIRONMENT=development DEPLOY_TARGET=cloudflare opennextjs-cloudflare build",
+    "cf:build:live": "APP_ENV=production NEXT_PUBLIC_APP_ENV=production NEXT_PUBLIC_SITE_URL=https://amaree.cz SUPABASE_ENVIRONMENT=production DEPLOY_TARGET=cloudflare opennextjs-cloudflare build",
+    "cf:preview": "DEPLOY_TARGET=cloudflare opennextjs-cloudflare preview",
+    "cf:typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "cf:upload:staging": "DEPLOY_TARGET=cloudflare opennextjs-cloudflare upload --env staging",
+    "cf:deploy:staging": "npm run cf:build:staging && DEPLOY_TARGET=cloudflare opennextjs-cloudflare deploy --env staging",
+    "cf:deploy:live": "npm run cf:build:live && DEPLOY_TARGET=cloudflare opennextjs-cloudflare deploy --env staging",
+    "products:validate": "tsx scripts/validate-product-import.ts",
+    "storage:orphans": "tsx scripts/cleanup-orphan-product-images.ts",
+    "catalog:images:white": "node --env-file=.env.local --import tsx scripts/standardize-catalog-main-images.ts",
+    "supabase:export": "tsx scripts/export-supabase-critical-data.ts",
+    "supabase:limits": "tsx scripts/check-supabase-free-limits.ts",
     "seed": "tsx scripts/seed.ts"
   },
   "dependencies": {
+    "@opennextjs/cloudflare": "^1.20.1",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.45.4",
     "clsx": "^2.1.1",
+    "fast-xml-parser": "^5.10.1",
     "lucide-react": "^0.468.0",
     "next": "^16.2.1",
     "next-intl": "^4.13.2",
@@ -22,7 +37,6 @@
     "react-dom": "^19.0.0",
     "resend": "^4.0.1",
     "server-only": "^0.0.1",
-    "stripe": "^17.4.0",
     "zod": "^3.24.1",
     "zustand": "^5.0.2"
   },
@@ -38,6 +52,7 @@
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "wrangler": "^4.111.0"
   }
 }

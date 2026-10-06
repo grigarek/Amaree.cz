@@ -1,10 +1,10 @@
 import type { PaymentProvider } from "./provider";
-import { StripePaymentProvider } from "./stripe";
+import { GoPayPaymentProvider } from "./gopay";
 
-export function getPaymentProvider(id = "stripe"): PaymentProvider {
+export function getPaymentProvider(id = "gopay"): PaymentProvider {
   switch (id) {
-    case "stripe":
-      return new StripePaymentProvider();
+    case "gopay":
+      return new GoPayPaymentProvider();
     default:
       throw new Error(`Unsupported payment provider: ${id}`);
   }

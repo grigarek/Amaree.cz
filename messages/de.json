@@ -1,37 +1,61 @@
 {
   "brand": {
-    "name": "A M A R É E",
+    "name": "AMARÉE",
     "est": "EST. 2025",
-    "claim": "Jedes Schmuckstück hat seine Geschichte.",
+    "claim": "Silberschmuck für Geschichten, die bleiben.",
     "intro": "Minimalistische Eleganz, die Ihren Stil unterstreicht. Hochwertige Materialien. Zeitloses Design."
   },
   "nav": {
     "home": "Startseite",
-    "collection": "Kollektion",
+    "collection": "Schmuck",
     "about": "Über uns",
-    "inspiration": "Inspiration",
+    "faq": "Häufige Fragen",
     "contact": "Kontakt",
     "search": "Suchen",
     "cart": "Warenkorb",
-    "menu": "Menü"
+    "language": "Sprache",
+    "menu": "Menü",
+    "close": "Schließen"
+  },
+  "search": {
+    "title": "Finden Sie Ihr Schmuckstück",
+    "label": "Produkte durchsuchen",
+    "placeholder": "Schmuck suchen…",
+    "clear": "Suche löschen",
+    "prompt": "Suchen Sie nach Name, Kategorie, Material oder Produktcode.",
+    "loading": "Kollektion wird durchsucht…",
+    "all": "Alle Schmuckstücke",
+    "results": "Suchergebnisse",
+    "count": "{count, plural, =0 {Keine Produkte} one {# Produkt} other {# Produkte}}",
+    "emptyTitle": "Keine Treffer gefunden",
+    "emptyText": "Versuchen Sie einen anderen Namen, eine Kategorie, ein Material oder einen Produktcode."
   },
   "home": {
-    "announcement": "Kostenloser Versand ab 2.500 CZK • 30 Tage Rückgabe",
-    "cta": "Kollektion entdecken",
+    "announcement": "Kostenloser Versand in Tschechien ab 1.500 CZK • 30 Tage Rückgabe",
+    "cta": "Schmuck entdecken",
+    "heroAlt": "Frau mit einer AMARÉE Halskette und einem Armband",
     "benefits": ["Hochwertige Materialien", "Elegante Verpackung", "30 Tage Rückgabe", "Kostenloser Versand"],
-    "categoriesTitle": "Kollektionen für jeden Moment",
-    "bestsellers": "Beliebte Schmuckstücke",
+    "categoriesTitle": "AMARÉE Schmuck entdecken",
+    "categoriesSubtitle": "Entdecken Sie Schmuck, der Ihre Einzigartigkeit unterstreicht.",
+    "bestsellers": "Am beliebtesten",
+    "bestsellersSubtitle": "Eine Auswahl der Schmuckstücke, die unsere Kundinnen am meisten lieben.",
+    "aboutTitle": "Über uns",
+    "aboutAlt": "Das Paar hinter der Familienschmuckmarke AMARÉE",
     "storyTitle": "Ein Familienprojekt mit Sinn für Detail",
-    "campaign": "Neue Kollektion",
-    "campaignText": "Feine Linien, rubinfarbene Akzente und Schmuck, der zum natürlichen Teil Ihres Tages wird.",
-    "inspiration": "Inspiration",
-    "newsletterTitle": "Werden Sie Teil der A M A R É E Welt",
-    "newsletterText": "Erhalten Sie exklusive Angebote und Inspiration zuerst per E-Mail.",
-    "subscribe": "Anmelden"
+    "aboutCta": "Unsere Geschichte entdecken",
+    "newsletterTitleBefore": "Neuigkeiten aus der Welt von",
+    "newsletterTitleBrand": "AMARÉE",
+    "newsletterTitleAfter": "direkt für Sie",
+    "newsletterText": "Abonnieren Sie unseren Newsletter und entdecken Sie neue Schmuckstücke, Kollektionen und AMARÉE Inspiration zuerst.",
+    "newsletterBenefits": ["Neue Schmuckstücke und Kollektionen", "Frühzeitige Neuigkeiten", "Inspiration und Pflege"],
+    "subscribe": "Anmelden",
+    "newsletterDemo": "Die Anmeldung wird nach sicherer Anbindung des E-Mail-Dienstes verfügbar."
   },
   "collection": {
-    "title": "Kollektion",
+    "title": "AMARÉE Schmuck",
+    "subtitle": "Entdecken Sie die aktuelle Schmuckauswahl von AMARÉE.",
     "all": "Alle Produkte",
+    "allShort": "Alle",
     "filter": "Filtern",
     "availability": "Verfügbarkeit",
     "inStock": "Auf Lager",
@@ -41,22 +65,34 @@
     "priceAsc": "Preis aufsteigend",
     "priceDesc": "Preis absteigend",
     "loadMore": "Mehr laden",
-    "empty": "Für diese Filterkombination gibt es noch keine Produkte."
+    "empty": "Für diese Filterkombination gibt es noch keine Produkte.",
+    "filtersDemo": "Demo-Modus: Filterung und Sortierung werden nach Anbindung des Produktkatalogs verfügbar."
   },
   "product": {
     "addToCart": "In den Warenkorb",
     "quantity": "Menge",
+    "parameters": "Details",
+    "description": "Produktbeschreibung",
+    "category": "Kategorie",
     "material": "Material",
+    "color": "Farbe",
     "dimensions": "Maße",
+    "clasp": "Verschlussart",
+    "weight": "Gewicht",
+    "notSpecified": "Nicht angegeben",
+    "sku": "Produktcode",
+    "availability": "Verfügbarkeit",
     "care": "Schmuckpflege",
     "shipping": "Versand",
     "returns": "Rückgabe",
+    "shippingAndReturns": "Versand und Rückgabe",
     "recommended": "Empfohlene Produkte",
     "demo": "Demo-Produkt",
     "inStock": "Auf Lager",
     "soldOut": "Ausverkauft",
-    "shippingBody": "Packeta, PPL oder Abholung. Kostenloser Versand ab 2.500 CZK.",
-    "returnsBody": "Unbenutzten Schmuck in der Originalverpackung innerhalb von 30 Tagen zurückgeben."
+    "dispatch": "Vorrätige Produkte versenden wir an Werktagen in der Regel innerhalb von 24 Stunden.",
+    "shippingBody": "Packeta Hauszustellung oder Abholstelle. Kostenloser Versand in Tschechien ab 1.500 CZK.",
+    "returnsBody": "Gesetzlicher Widerruf innerhalb von 14 Tagen und freiwillige AMARÉE-Rückgabe innerhalb von 30 Tagen unter den genannten Bedingungen."
   },
   "cart": {
     "title": "Warenkorb",
@@ -64,11 +100,29 @@
     "subtotal": "Zwischensumme",
     "discount": "Rabatt",
     "shipping": "Versand",
+    "paymentFee": "Zahlungsgebühr",
     "total": "Gesamt",
     "coupon": "Rabattcode",
+    "couponPlaceholder": "Code eingeben",
+    "applyCoupon": "Anwenden",
+    "removeCoupon": "Code entfernen",
+    "checkingCoupon": "Wird geprüft…",
+    "couponError": "Der Rabattcode konnte nicht geprüft werden.",
     "checkout": "Weiter zur Bestellung",
     "freeShippingLeft": "Noch {amount} bis zum kostenlosen Versand",
-    "freeShippingReached": "Sie haben kostenlosen Versand."
+    "freeShippingReached": "Sie haben kostenlosen Versand.",
+    "remove": "Entfernen",
+    "close": "Warenkorb schließen",
+    "quantity": "Menge"
+    ,"giftCardTitle": "Geschenkkarte mit Gruß"
+    ,"giftCardDescription": "Fügen Sie Ihrer Bestellung eine Karte für 1,20 € hinzu. Wir legen das gewählte Motiv dem Paket bei."
+    ,"giftCardSingleChoice": "Ein Motiv auswählen"
+    ,"giftCardChoose": "Auswählen"
+    ,"giftCardHide": "Motive ausblenden"
+    ,"giftCardRemove": "Karte entfernen"
+    ,"giftCardSelect": "Karte auswählen: {name}"
+    ,"giftCardPreview": "Karte vergrößern: {name}"
+    ,"giftCardClosePreview": "Kartenvorschau schließen"
   },
   "checkout": {
     "title": "Bestellung",
@@ -81,32 +135,55 @@
     "phone": "Telefon",
     "name": "Vor- und Nachname",
     "packeta": "Packeta",
-    "pickup": "Abholung",
-    "providerNote": "Stripe Checkout ist über /api/checkout vorbereitet. GoPay oder Comgate kann als weiterer Adapter ergänzt werden.",
-    "confirmation": "Die Bestellbestätigung wird nach der Zahlungsprüfung per Webhook per E-Mail versendet.",
+    "packetaSelect": "Abholstelle oder Z-BOX auswählen",
+    "packetaChange": "Abholstelle ändern",
+    "packetaValidating": "Abholstelle wird geprüft…",
+    "packetaValidationFailed": "Die Abholstelle konnte nicht geprüft werden. Bitte wählen Sie sie erneut aus.",
+    "packetaWidgetUnavailable": "Das Packeta-Widget wurde noch nicht geladen. Bitte versuchen Sie es erneut.",
+    "packetaMockNote": "Lokaler Testmodus: Es wird keine echte Sendung erstellt.",
+    "packetaPickupPoint": "Abholstelle",
+    "packetaRequired": "Vor dem Fortfahren muss eine Abholstelle oder Z-BOX ausgewählt und geprüft werden.",
+    "selectedPickupPoint": "Ausgewählte Abholstelle",
+    "homeDelivery": "Lieferung nach Hause",
+    "comingSoon": "in Vorbereitung",
+    "providerNote": "Demo-Modus: Die Zahlung bleibt deaktiviert, bis Testzugangsdaten des Anbieters sicher konfiguriert sind.",
+    "confirmation": "Wir haben Ihre Bestellung erhalten. Die Bestätigung und weitere Hinweise senden wir an Ihre E-Mail-Adresse.",
     "backToCollection": "Zurück zur Kollektion"
   },
   "footer": {
+    "collection": "Schmuck",
+    "tagline": "Schmuck mit Geschichte",
+    "socialMedia": "Soziale Medien",
+    "instagram": "AMARÉE auf Instagram",
+    "facebook": "AMARÉE auf Facebook",
     "contact": "Kontakt",
+    "operator": "Betreiber: MEDIANUM s.r.o.",
+    "companyId": "Unternehmens-ID: 25882384",
+    "taxStatus": "Das Unternehmen ist nicht mehrwertsteuerpflichtig.",
+    "registerEntry": "Bezirksgericht Ostrava, Abteilung C, Einlage 24429",
+    "registrationDate": "Eintragungsdatum: 21. Juni 2001",
     "email": "info@amaree.cz",
-    "phone": "+420 737 076 249",
-    "address": "Příčná 129/3, Olomouc",
+    "phone": "+420 777 705 682",
+    "address": "Příčná 129/3, Hodolany, 779 00 Olomouc, Tschechien",
     "rights": "Alle Rechte vorbehalten.",
-    "legal": "Rechtliches",
+    "legal": "Kundenservice",
     "terms": "Geschäftsbedingungen",
     "privacy": "Datenschutz",
+    "returns": "Umtausch, Rückgabe und Reklamation",
     "shipping": "Versand und Zahlung",
-    "care": "Schmuckpflege"
+    "care": "Schmuckpflege",
+    "club": "AMARÉE Club",
+    "hallmark": "Punzierung"
   },
   "cookie": {
     "message": "Wir verwenden notwendige Cookies für den sicheren Betrieb der Website. Analyse- und Marketing-Skripte bleiben bis zu Ihrer Zustimmung deaktiviert.",
-    "accept": "Akzeptieren",
+    "accept": "Cookies erlauben",
     "necessary": "Nur notwendige"
   },
   "legal": {
     "title": "Rechtliches Dokument",
-    "todo": "TODO: Finale rechtliche Angaben, Betreiber, Register- und Steuerdaten, Bankverbindung und den vollständigen Text für {route} ergänzen.",
-    "placeholder": "Bewusst als Platzhalter belassen, da die finalen rechtlichen Informationen noch nicht vorliegen."
+    "todo": "Arbeitsentwurf für die Seite {route}.",
+    "placeholder": "Der Text verwendet bestätigte Betreiberangaben und muss vor Veröffentlichung abschließend durch tschechische Rechtsberatung geprüft werden."
   },
   "admin": {
     "title": "Administration",
