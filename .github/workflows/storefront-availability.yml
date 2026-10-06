@@ -14,7 +14,7 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 3
     steps:
       - name: Check public storefront and checkout configuration
         shell: bash
@@ -54,5 +54,28 @@ jobs:
             }
             if (!ok) { console.error("::error::Availability check failed for " + path); failed = true; }
           }
+          // Public pickup validation only: never create an order or shipment.
+          let pickupOk = false;
+          for (let attempt = 1; attempt <= 2; attempt++) {
+            try {
+              const response = await fetch("https://amaree.cz/api/shipping/packeta/validate", {
+                method: "POST", redirect: "error", signal: AbortSignal.timeout(12000),
+                headers: { "Content-Type": "application/json", "User-Agent": "Amaree-Availability/1.0" },
+                body: JSON.stringify({ locale: "cs", point: {
+                  id: "79", name: "Bioobchod KOPRETINA", street: "Na Pankráci 969/97",
+                  city: "Praha", zip: "140 00", country: "cz", type: "pickup-point"
+                } })
+              });
+              const value = await response.json();
+              if (response.status !== 200 || value.valid !== true || value.mode !== "remote" ||
+                  value.point?.id !== "79" || value.point?.country !== "cz") throw new Error("pickup validation failed");
+              console.log(JSON.stringify({ check: "pickup-validation", ok: true, attempt }));
+              pickupOk = true; break;
+            } catch {
+              console.log(JSON.stringify({ check: "pickup-validation", ok: false, attempt }));
+              if (attempt === 1) await new Promise(resolve => setTimeout(resolve, 3000));
+            }
+          }
+          if (!pickupOk) { console.error("::error::Packeta pickup validation failed"); failed = true; }
           if (failed) process.exitCode = 1;
           NODE
